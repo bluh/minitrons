@@ -7,6 +7,8 @@ class Button implements Tronic, Clickable, OutFlow{
     final int WIDTH = 48;
     final int HEIGHT = 48;
     
+    Node outNode;
+    
     public Button(int x, int y){
         this(0, x, y);
     }
@@ -16,6 +18,7 @@ class Button implements Tronic, Clickable, OutFlow{
         this.x = x;
         this.y = y;
         sprite = loadImage("assets/rbutton.png");
+        outNode = new Node(this, 3, 48, 21, 1, 0);
     }
     
     public void clicked(int x, int y){
@@ -36,6 +39,14 @@ class Button implements Tronic, Clickable, OutFlow{
     
     public void renderTronic(int screenX, int screenY){
         image(sprite, x - screenX, y - screenY);
+    }
+    
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
+        outNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
+    }
+    
+    public Node[] getNodes(){
+        return new Node[]{outNode};
     }
     
     public int getX(){
