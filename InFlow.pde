@@ -1,0 +1,3 @@
+interface InFlow{
+    void getFlow();
+}

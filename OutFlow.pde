@@ -1,0 +1,3 @@
+interface OutFlow{
+    void sendFlow();
+}
