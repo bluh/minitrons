@@ -1,8 +1,8 @@
-class Button implements Tronic, Clickable, OutFlow{
+class Button implements Tronic, Clickable{
     int x;
     int y;
     PImage sprite;
-    int type;
+    //int type;
     InFlow nextTronic;
     final int WIDTH = 48;
     final int HEIGHT = 48;
@@ -14,10 +14,17 @@ class Button implements Tronic, Clickable, OutFlow{
     }
     
     public Button(int type, int x, int y){
-        this.type = type;
+        //this.type = type;
         this.x = x;
         this.y = y;
-        sprite = loadImage("assets/rbutton.png");
+        switch(type){
+            case 0:
+                sprite = loadImage("assets/rbutton.png");
+                break;
+            default:
+                sprite = loadImage("assets/rbutton.png");
+                break;
+        }
         outNode = new Node(this, 3, 48, 21, 1, 0);
     }
     

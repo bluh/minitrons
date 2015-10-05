@@ -29,7 +29,10 @@ void keyPressed(){
         Button newTronic = new Button(screenX + mouseX - 24, screenY + mouseY - 24);
         tronics.add(newTronic);
     }else if(key == 'e'){
-        AddTronic newTronic = new AddTronic(screenX + mouseX - 24, screenY + mouseY - 24);
+        OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24);
+        tronics.add(newTronic);
+    }else if(key == 'z'){
+        Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24);
         tronics.add(newTronic);
     }
 }
@@ -68,8 +71,21 @@ void mousePressed(){
                     println("Connecting to: " + node);
                     if(wireStart.canConnectTo(node)){
                         println("Compatable!");
-                        Wire newWire = new Wire(wireStart.getFirstPoint(), node, #00FF00);
+                        color wireColor = #FF0000;
+                        if(wireStart.getFirstPoint().getType() == 3 || node.getType() == 3){
+                            wireColor = #FF0000;
+                            println("Red");
+                        }else if(wireStart.getFirstPoint().getType() == 0 || node.getType() == 0){
+                            wireColor = #0000FF;
+                            println("gren");
+                        }else if(wireStart.getFirstPoint().getType() == 1 || node.getType() == 1){
+                            wireColor = #00FF00;
+                            println("Blie");
+                        }
+                        Wire newWire = new Wire(wireStart.getFirstPoint(), node, wireColor);
                         wires.add(newWire);
+                        wireStart.getFirstPoint().addWire(newWire);
+                        node.addWire(newWire);
                     }
                     mode = 0;
                     return;
@@ -106,19 +122,20 @@ void draw(){
         line(0, y, width, y);
     }
     
-    for(Tronic tron: tronics){
-        tron.renderTronic(screenX, screenY);
-        tron.renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
-    }
     for(Wire wire: wires){
         wire.render(screenX, screenY);
     }
     if(mode == 2 && wireStart != null){
         wireStart.render(mouseX, mouseY, screenX, screenY);
     }
+    for(Tronic tron: tronics){
+        tron.renderTronic(screenX, screenY);
+        tron.renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
+    }
         
     
     stroke(#404040);
+    strokeWeight(1);
     fill(#606060);
     rect(0,height - 16, width - 1, 16);
     fill(#FFFFFF);

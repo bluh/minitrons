@@ -25,7 +25,24 @@ class MouseWire{
     }
     
     public boolean canConnectTo(Node nextPoint){
-        return true; //yeah!!! FUCK 'EM!!!
+        int type1 = firstPoint.getType();
+        int type2 = nextPoint.getType();
+        println("Starting at: " + type1 + " node (" + firstPoint.getNumWires());
+        println("Next at: " + type2 + " node (" + nextPoint.getNumWires());
+        if(type1 == 3 && type2 == 2){ //flowout -> flowin
+            return firstPoint.getNumWires() == 0;
+        }else if(type1 == 2 && type2 == 3){ //flowin -> flowout
+            return nextPoint.getNumWires() == 0;
+        }else if(type1 == 0 && type2 == 4){ //dataout -> data
+            return true; //infinite wires!!!!!!!!!! :-)
+        }else if(type1 == 4 && type2 == 0){ //data -> dataout
+            return true;
+        }else if(type1 == 1 && type2 == 4){ //datain -> data
+            return firstPoint.getNumWires() == 0;
+        }else if(type1 == 4 && type2 == 1){ //data -> datain
+            return nextPoint.getNumWires() == 0;
+        }
+        return false; //yeah!!! FUCK 'EM!!!
     }
     
     public Node getFirstPoint(){

@@ -1,7 +1,8 @@
-class AddTronic implements Tronic, InFlow, OutFlow{
+class OperatorTronic implements Tronic, InFlow{
     int x;
     int y;
     PImage sprite;
+    int type;
     InFlow nextTronic;
     final int WIDTH = 48;
     final int HEIGHT = 48;
@@ -12,10 +13,31 @@ class AddTronic implements Tronic, InFlow, OutFlow{
     Node bNode;
     Node dataNode;
     
-    public AddTronic(int x, int y){
+    public OperatorTronic(int x, int y){
+        this(0, x, y);
+    }
+    
+    public OperatorTronic(int type, int x, int y){
         this.x = x;
         this.y = y;
-        sprite = loadImage("/assets/add.png");
+        this.type = type;
+        switch(type){
+            case 0:
+                sprite = loadImage("assets/add.png");
+                break;
+            case 1:
+                sprite = loadImage("assets/subtract.png");
+                break;
+            case 2:
+                sprite = loadImage("assets/multi.png");
+                break;
+            case 3:
+                sprite = loadImage("assets/divide.png");
+                break;
+            default:
+                sprite = loadImage("assets/add.png");
+                break;
+        }
         inNode = new Node(this, 2, -6, 21, -1, 0);
         outNode = new Node(this, 3, 48, 21, 1, 0);
         aNode = new Node(this, 1, 12, -6, 0, -1);

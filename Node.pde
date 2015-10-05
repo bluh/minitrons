@@ -7,6 +7,7 @@ class Node{
     final int HEIGHT = 6;
     int type;
     Tronic parent;
+    ArrayList<Wire> wires;
     //0: Data out
     //1: Data in
     //2: Flow in
@@ -23,6 +24,7 @@ class Node{
         this.y = y;
         this.dirX = dirX;
         this.dirY = dirY;
+        wires = new ArrayList<Wire>();
     }
     
     public boolean containsPoint(int x, int y, int tronicX, int tronicY){
@@ -41,8 +43,8 @@ class Node{
                 fill(251, 251, 30);
             }else if(type == 3){
                 fill(179,1,1);
-            //}else if(type == 4){
-            //    fill(72,215,254);
+            }else if(type == 4){
+               fill(72,215,254);
             }
         }
         //rect(tronicX + x,tronicY + y,tronicX + x + WIDTH, tronicY + y + HEIGHT);
@@ -68,5 +70,17 @@ class Node{
     
     public int getDirY(){
         return dirY;
+    }
+    
+    public int getType(){
+        return type;
+    }
+    
+    public void addWire(Wire wire){
+        wires.add(wire);
+    }
+    
+    public int getNumWires(){
+        return wires.size();
     }
 }
