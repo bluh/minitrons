@@ -4,6 +4,7 @@ int mode;
 String[] MODES;
 ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
+ArrayList<QueuedWrapper> events;
 Tronic dragTronic;
 MouseWire wireStart;
 
@@ -17,6 +18,7 @@ void setup(){
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE"};
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
+    events = new ArrayList<QueuedWrapper>();
 }
 
 void keyPressed(){
@@ -33,6 +35,7 @@ void keyPressed(){
         tronics.add(newTronic);
     }else if(key == 'z'){
         Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24);
+        newTronic.setData(Float.toString(random(1,3)));
         tronics.add(newTronic);
     }
 }
@@ -42,17 +45,16 @@ void mousePressed(){
         for(Tronic tron: tronics){
             if(tron instanceof Clickable){
                 if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
-                    ((Clickable)tron).clicked(mouseX, mouseY);
+                    ((Clickable) tron).clicked(mouseX, mouseY);
+                }
+            }else if(tron instanceof Data){
+                if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
+                    println("Data: " + ((Data) tron).getData());
                 }
             }
         }
     }else if(mode == 0){
         for(Tronic tron: tronics){
-            if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
-                //println("Clicked: " + tron);
-                dragTronic = tron;
-                return; //only get the first
-            }
             for(Node node: tron.getNodes()){
                 if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
                     println("Got node on " + tron + " : " + node);
@@ -60,6 +62,10 @@ void mousePressed(){
                     wireStart = new MouseWire(node, #000000);
                     return;
                 }
+            }
+            if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
+                dragTronic = tron;
+                return;
             }
         }
     }else if(mode == 2 && wireStart != null){
@@ -74,13 +80,10 @@ void mousePressed(){
                         color wireColor = #FF0000;
                         if(wireStart.getFirstPoint().getType() == 3 || node.getType() == 3){
                             wireColor = #FF0000;
-                            println("Red");
                         }else if(wireStart.getFirstPoint().getType() == 0 || node.getType() == 0){
                             wireColor = #0000FF;
-                            println("gren");
                         }else if(wireStart.getFirstPoint().getType() == 1 || node.getType() == 1){
                             wireColor = #00FF00;
-                            println("Blie");
                         }
                         Wire newWire = new Wire(wireStart.getFirstPoint(), node, wireColor);
                         wires.add(newWire);
@@ -103,8 +106,12 @@ void mouseReleased(){
     }
 }
 
+void addEvent(QueuedEvent evt){
+    events.add(new QueuedWrapper(evt));
+}
+
 void draw(){
-    background(#FFFFFF);
+    background(#E5E5E5);
     if(mousePressed && mouseButton == RIGHT){
         screenX += pmouseX - mouseX;
         screenY += pmouseY - mouseY;
@@ -128,11 +135,18 @@ void draw(){
     if(mode == 2 && wireStart != null){
         wireStart.render(mouseX, mouseY, screenX, screenY);
     }
-    for(Tronic tron: tronics){
-        tron.renderTronic(screenX, screenY);
-        tron.renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
+    for(int i = tronics.size() - 1; i >= 0; i--){
+        tronics.get(i).renderTronic(screenX, screenY);
+        tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
     }
-        
+    
+    double dt = 1.0 / frameRate;
+    for(int i = 0; i < events.size(); i++){
+        if(events.get(i).tick(dt)){
+            events.remove(i);
+            i--;
+        }
+    }
     
     stroke(#404040);
     strokeWeight(1);

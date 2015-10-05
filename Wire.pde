@@ -4,6 +4,8 @@ class Wire{
     Node lastNode;
     Tronic lastTronic;
     color wireColor;
+    boolean activated;
+    InFlow activatedEnd;
     
     public Wire(Node firstNode, Node lastNode, color wireColor){
         this.firstNode = firstNode;
@@ -14,7 +16,11 @@ class Wire{
     }
     
     public void render(int screenX, int screenY){
-        stroke(wireColor);
+        if(activated){
+            stroke(#FFFFFF);
+        }else{
+            stroke(wireColor);
+        }
         strokeWeight(6);
         strokeCap(SQUARE);
         noFill();
@@ -32,5 +38,38 @@ class Wire{
         int dirX2 = lastNode.getDirX() * distance;
         int dirY2 = lastNode.getDirY() * distance;
         bezier(tronicX1 + pointX1, tronicY1 + pointY1, tronicX1 + pointX1 + dirX1, tronicY1 + pointY1 + dirY1, tronicX2 + pointX2 + dirX2, tronicY2 + pointY2 + dirY2, tronicX2 + pointX2, tronicY2 + pointY2);
+    }
+    
+    public Node getOtherNode(Node thisNode){
+        if(thisNode.equals(firstNode)){
+            return lastNode;
+        }else if(thisNode.equals(lastNode)){
+            return firstNode;
+        }
+        return null;
+    }
+    
+    public void activateWire(Node start){
+        if(getOtherNode(start).getParent() instanceof InFlow){
+            activated = true;
+            activatedEnd = (InFlow)getOtherNode(start).getParent();
+            addEvent(new QueuedEvent(){
+                public double getDelay(){
+                    return 0.5;
+                }
+                public void invoke(){
+                    if(activatedEnd != null){
+                        activatedEnd.getFlow();
+                        activatedEnd = null;
+                        activated = false;
+                    }
+                }
+            });
+        }
+    }
+    
+    public void deleteWire(){
+        firstNode.deleteWire(this);
+        lastNode.deleteWire(this);
     }
 }

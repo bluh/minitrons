@@ -47,14 +47,73 @@ class OperatorTronic implements Tronic, InFlow{
     
     public void getFlow(){
         println("Got flow.");
-        //it would do stuff with data
+        double a;
+        double b;
+        if(dataNode.getNumWires() > 0){
+            if(aNode.getNumWires() == 0){
+                a = 0;
+            }else{
+                Tronic endNode = aNode.getWire(0).getOtherNode(aNode).getParent();
+                if(endNode instanceof Data){
+                    try{
+                        a = Double.valueOf(((Data) endNode).getData());
+                    }catch(NumberFormatException e){
+                        println("Data was not able to convert from A to int");
+                        a = 0;
+                    }
+                }else{
+                    a = 0;
+                }
+            }
+            if(bNode.getNumWires() == 0){
+                b = 0;
+            }else{
+                Tronic endNode = bNode.getWire(0).getOtherNode(bNode).getParent();
+                if(endNode instanceof Data){
+                    try{
+                        b = Double.valueOf(((Data) endNode).getData());
+                    }catch(NumberFormatException e){
+                        println("Data was not able to convert from B to int");
+                        b = 0;
+                    }
+                }else{
+                    b = 0;
+                }
+            }
+            double result;
+            switch(type){
+                case 0:
+                    result = a + b;
+                    break;
+                case 1:
+                    result = a - b;
+                    break;
+                case 2:
+                    result = a * b;
+                    break;
+                case 3:
+                    if(b != 0){
+                        result = a / b;
+                    }else{
+                        println("Attempted to divide by 0! Ending flow.");
+                        return;
+                    }
+                    break;
+                default:
+                    result = a + b;
+            }
+            Tronic endNode = dataNode.getWire(0).getOtherNode(dataNode).getParent();
+            if(endNode instanceof Data){
+                ((Data)endNode).setData(String.valueOf(result));
+            }
+        }
         sendFlow();
     }
     
     public void sendFlow(){
         println("Sending flow.");
-        if(nextTronic != null){
-            nextTronic.getFlow();
+        if(outNode.getNumWires() > 0){
+            outNode.getWire(0).activateWire(outNode);
         }
     }
     

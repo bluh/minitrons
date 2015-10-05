@@ -2,8 +2,7 @@ class Button implements Tronic, Clickable{
     int x;
     int y;
     PImage sprite;
-    //int type;
-    InFlow nextTronic;
+    boolean cooldown;
     final int WIDTH = 48;
     final int HEIGHT = 48;
     
@@ -20,28 +19,35 @@ class Button implements Tronic, Clickable{
         switch(type){
             case 0:
                 sprite = loadImage("assets/rbutton.png");
-                break;
+                break; //TODO: add more buttons
             default:
                 sprite = loadImage("assets/rbutton.png");
                 break;
         }
+        cooldown = false;
         outNode = new Node(this, 3, 48, 21, 1, 0);
     }
     
     public void clicked(int x, int y){
-        println("Got a click");
-        sendFlow();
+        if(!cooldown){
+            cooldown = true;
+            sendFlow();
+            addEvent(new QueuedEvent(){
+                public double getDelay(){
+                    return 1.0;
+                }
+                public void invoke(){
+                    cooldown = false;
+                }
+            });
+        }
     }
     
     public void sendFlow(){
         println("Sending flow.");
-        if(nextTronic != null){
-            nextTronic.getFlow();
+        if(outNode.getNumWires() > 0){
+            outNode.getWire(0).activateWire(outNode);
         }
-    }
-    
-    public void setNextFlow(InFlow next){
-        this.nextTronic = next;
     }
     
     public void renderTronic(int screenX, int screenY){

@@ -28,7 +28,7 @@ class Node{
     }
     
     public boolean containsPoint(int x, int y, int tronicX, int tronicY){
-        return x >= this.x + tronicX && x <= this.x + WIDTH + tronicX && y >= this.y + tronicY && y <= this.y + HEIGHT + tronicY;
+        return x >= this.x + tronicX - 5 && x <= this.x + WIDTH + tronicX + 5 && y >= this.y + tronicY - 5 && y <= this.y + HEIGHT + tronicY + 5;
     }
     
     public void render(int mouseX, int mouseY, int screenX, int screenY, int tronicX, int tronicY, boolean highlight){
@@ -78,6 +78,14 @@ class Node{
     
     public void addWire(Wire wire){
         wires.add(wire);
+    }
+    
+    public Wire getWire(int index){
+        return wires.get(index);
+    }
+    
+    public void deleteWire(Wire wire){
+        wires.remove(wire);
     }
     
     public int getNumWires(){
