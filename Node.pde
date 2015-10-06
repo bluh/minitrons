@@ -3,6 +3,7 @@ class Node{
     int y;
     int dirX;
     int dirY;
+    color nodeColor;
     final int WIDTH = 6;
     final int HEIGHT = 6;
     int type;
@@ -24,6 +25,26 @@ class Node{
         this.y = y;
         this.dirX = dirX;
         this.dirY = dirY;
+        switch(type){
+            case 0:
+                nodeColor = color(18, 14, 253);
+                break;
+            case 1:
+                nodeColor = color(67, 251, 29);
+                break;
+            case 2:
+                nodeColor = color(251, 251, 30);
+                break;
+            case 3:
+                nodeColor = color(179, 1, 1);
+                break;
+            case 4:
+                nodeColor = color(72, 215, 254);
+                break;
+            default:
+                nodeColor = #000000;
+                break;
+        }
         wires = new ArrayList<Wire>();
     }
     
@@ -35,17 +56,7 @@ class Node{
         if(highlight && containsPoint(mouseX, mouseY, tronicX, tronicY)){
             fill(#D0D0D0);
         }else{
-            if(type == 0){
-                fill(18,14,253);
-            }else if(type == 1){
-                fill(67,251,29);
-            }else if(type == 2){
-                fill(251, 251, 30);
-            }else if(type == 3){
-                fill(179,1,1);
-            }else if(type == 4){
-               fill(72,215,254);
-            }
+            fill(nodeColor);
         }
         //rect(tronicX + x,tronicY + y,tronicX + x + WIDTH, tronicY + y + HEIGHT);
         noStroke();
@@ -70,6 +81,10 @@ class Node{
     
     public int getDirY(){
         return dirY;
+    }
+    
+    public color getNodeColor(){
+        return nodeColor;
     }
     
     public int getType(){

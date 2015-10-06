@@ -16,12 +16,11 @@ class Wire{
     }
     
     public void render(int screenX, int screenY){
-        if(activated){
-            stroke(#FFFFFF);
-        }else{
-            stroke(wireColor);
-        }
-        strokeWeight(6);
+        render(screenX, screenY, wireColor);
+    }
+    
+    public void render(int screenX, int screenY, color thisColor){
+        stroke(thisColor);
         strokeCap(SQUARE);
         noFill();
         int tronicX1 = firstTronic.getX() - screenX;
@@ -58,7 +57,7 @@ class Wire{
                     return 0.5;
                 }
                 public void invoke(){
-                    if(activatedEnd != null){
+                    if(activatedEnd != null){ //TODO: bug where two wires are activated at once
                         activatedEnd.getFlow();
                         activatedEnd = null;
                         activated = false;
@@ -66,6 +65,14 @@ class Wire{
                 }
             });
         }
+    }
+    
+    public boolean getActivated(){
+        return activated;
+    }
+    
+    public color getWireColor(){
+        return wireColor;
     }
     
     public void deleteWire(){

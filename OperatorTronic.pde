@@ -102,9 +102,11 @@ class OperatorTronic implements Tronic, InFlow{
                 default:
                     result = a + b;
             }
-            Tronic endNode = dataNode.getWire(0).getOtherNode(dataNode).getParent();
-            if(endNode instanceof Data){
-                ((Data)endNode).setData(String.valueOf(result));
+            for(int i = 0; i < dataNode.getNumWires(); i++){
+                Tronic endNode = dataNode.getWire(i).getOtherNode(dataNode).getParent();
+                if(endNode instanceof Data){
+                    ((Data)endNode).setData(String.valueOf(result));
+                }
             }
         }
         sendFlow();
