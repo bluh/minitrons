@@ -27,8 +27,6 @@ class MouseWire{
     public boolean canConnectTo(Node nextPoint){
         int type1 = firstPoint.getType();
         int type2 = nextPoint.getType();
-        println("Starting at: " + type1 + " node (" + firstPoint.getNumWires());
-        println("Next at: " + type2 + " node (" + nextPoint.getNumWires());
         if(type1 == 3 && type2 == 2){ //flowout -> flowin
             return firstPoint.getNumWires() == 0;
         }else if(type1 == 2 && type2 == 3){ //flowin -> flowout

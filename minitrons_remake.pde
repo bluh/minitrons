@@ -77,7 +77,13 @@ void mousePressed(){
                     return;
                 }else if(action == "DELETE"){
                     for(Tronic tron: menu.getSelected()){
-                        tron.deleteTronic();
+                        //tron.deleteTronic();
+                        for(Node node: tron.getNodes()){
+                            while(node.getNumWires() > 0){
+                                wires.remove(node.getWire(0));
+                                node.getWire(0).deleteWire();
+                            }
+                        }
                         tronics.remove(tron);
                     }
                     menu.deselectAll();
@@ -92,7 +98,6 @@ void mousePressed(){
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
                 if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
-                    println("Got node on " + tron + " : " + node);
                     mode = 2;
                     wireStart = new MouseWire(node, node.getNodeColor());
                     return;
@@ -132,7 +137,6 @@ void mousePressed(){
             for(Node node: tron.getNodes()){
                 if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
                     //make a wire connecting two nodes
-                    println("Connecting to: " + node);
                     if(wireStart.canConnectTo(node)){
                         color wireColor = #FF0000;
                         if(wireStart.getFirstPoint().getType() == 3 || node.getType() == 3){

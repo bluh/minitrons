@@ -39,6 +39,7 @@ public abstract class Tronic{
             }
         }
     }
+    
     abstract void renderTronic(int screenX, int screenY);
     abstract void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight);
     abstract Node[] getNodes();
