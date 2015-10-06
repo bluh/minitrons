@@ -82,5 +82,13 @@ class Button implements Tronic, Clickable{
         this.x = x;
         this.y = y;
     }
+    
+    public void deleteTronic(){
+        for(Node node: getNodes()){
+            for(int i = 0; i < node.getNumWires(); i++){
+                node.getWire(i).deleteWire();
+            }
+        }
+    }
 }
         

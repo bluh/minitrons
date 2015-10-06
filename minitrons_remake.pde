@@ -64,6 +64,31 @@ void keyReleased(){
 
 void mousePressed(){
     if(mouseButton == LEFT && mode == 0){
+        if(menu.getSelected().size() > 0){
+            int mouseIndex = menu.containsPoint(mouseX + screenX, mouseY + screenY);
+            MenuDisplay.MenuItem[] items = menu.getItems();
+            if(mouseIndex >= 0 && items.length > mouseIndex){
+                String action = items[mouseIndex].getAction();
+                if(action == "DESELECT"){
+                    menu.deselectAll();
+                    return;
+                }else if(action == "MOVE"){
+                    dragTronic = menu.getSelected().get(0);
+                    return;
+                }else if(action == "DELETE"){
+                    for(Tronic tron: menu.getSelected()){
+                        tron.deleteTronic();
+                        tronics.remove(tron);
+                    }
+                    menu.deselectAll();
+                }else if(action == "DECOUPLE"){
+                    for(Wire wire: menu.getWires()){
+                        wire.deleteWire();
+                        wires.remove(wire);
+                    }
+                }
+            }
+        }
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
                 if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
@@ -134,7 +159,7 @@ void mousePressed(){
 
 void mouseReleased(){
     if(dragTronic != null){
-        //dragTronic.moveTronic((screenX + mouseX - 24) - (screenX + mouseX - 24) % 8, (screenY + mouseY - 24) - (screenY + mouseY - 24) % 8);
+        menu.calculatePosition();
         dragTronic = null;
     }
 }
@@ -160,7 +185,7 @@ void draw(){
         }
         dragTronic.moveTronic((screenX + mouseX - 24) - (screenX + mouseX - 24) % 8, (screenY + mouseY - 24) - (screenY + mouseY - 24) % 8);
     }
-    menu.render(dt, screenX, screenY);
+    menu.renderHighlights(dt, screenX, screenY);
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);
@@ -183,9 +208,12 @@ void draw(){
         tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
     }
     
-    double dt = 1.0 / frameRate;
+    if(mode == 0 && dragTronic == null){
+        menu.renderMenu(screenX, screenY, mouseX, mouseY);
+    }
+    
     for(int i = 0; i < events.size(); i++){
-        if(events.get(i).tick(dt)){
+        if(events.get(i).tick(1.0 / frameRate)){
             events.remove(i);
             i--;
         }

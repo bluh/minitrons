@@ -7,4 +7,5 @@ interface Tronic{
     void renderTronic(int screenX, int screenY);
     void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight);
     Node[] getNodes();
+    void deleteTronic();
 }

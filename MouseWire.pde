@@ -34,8 +34,20 @@ class MouseWire{
         }else if(type1 == 2 && type2 == 3){ //flowin -> flowout
             return nextPoint.getNumWires() == 0;
         }else if(type1 == 0 && type2 == 4){ //dataout -> data
+            for(int i = 0; i < firstPoint.getNumWires(); i++){
+                if(firstPoint.getWire(i).getOtherNode(firstPoint) == nextPoint){
+                    println("Caught.");
+                    return false; //maybe... not so infinite
+                }
+            }
             return true; //infinite wires!!!!!!!!!! :-)
         }else if(type1 == 4 && type2 == 0){ //data -> dataout
+            for(int i = 0; i < nextPoint.getNumWires(); i++){
+                if(nextPoint.getWire(i).getOtherNode(nextPoint) == firstPoint){
+                    println("Caught.");
+                    return false; //maybe... not so infinite
+                }
+            }
             return true;
         }else if(type1 == 1 && type2 == 4){ //datain -> data
             return firstPoint.getNumWires() == 0;
