@@ -36,7 +36,6 @@ class MouseWire{
         }else if(type1 == 0 && type2 == 4){ //dataout -> data
             for(int i = 0; i < firstPoint.getNumWires(); i++){
                 if(firstPoint.getWire(i).getOtherNode(firstPoint) == nextPoint){
-                    println("Caught.");
                     return false; //maybe... not so infinite
                 }
             }
@@ -44,8 +43,7 @@ class MouseWire{
         }else if(type1 == 4 && type2 == 0){ //data -> dataout
             for(int i = 0; i < nextPoint.getNumWires(); i++){
                 if(nextPoint.getWire(i).getOtherNode(nextPoint) == firstPoint){
-                    println("Caught.");
-                    return false; //maybe... not so infinite
+                    return false;
                 }
             }
             return true;

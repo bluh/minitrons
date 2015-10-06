@@ -1,11 +1,7 @@
-class OperatorTronic implements Tronic, InFlow{
-    int x;
-    int y;
+class OperatorTronic extends Tronic implements InFlow{
     PImage sprite;
     int type;
     InFlow nextTronic;
-    final int WIDTH = 48;
-    final int HEIGHT = 48;
     
     Node inNode;
     Node outNode;
@@ -18,8 +14,7 @@ class OperatorTronic implements Tronic, InFlow{
     }
     
     public OperatorTronic(int type, int x, int y){
-        this.x = x;
-        this.y = y;
+        super(x, y, 48, 48);
         this.type = type;
         switch(type){
             case 0:
@@ -120,47 +115,18 @@ class OperatorTronic implements Tronic, InFlow{
     }
     
     public void renderTronic(int screenX, int screenY){
-        image(sprite, x - screenX, y - screenY);
+        image(sprite, getX() - screenX, getY() - screenY);
     }
     
     public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
-        outNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
-        aNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
-        bNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, x, y, highlight);
+        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+        aNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+        bNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
     }
     
     public Node[] getNodes(){
         return new Node[]{inNode, outNode, aNode, bNode, dataNode};
-    }
-    
-    public int getX(){
-        return this.x;
-    }
-    
-    public int getY(){
-        return this.y;
-    }
-    
-    public int getWidth(){
-        return this.WIDTH;
-    }
-    
-    public int getHeight(){
-        return this.HEIGHT;
-    }
-    
-    public void moveTronic(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-    
-    public void deleteTronic(){
-        for(Node node: getNodes()){
-            for(int i = 0; i < node.getNumWires(); i++){
-                node.getWire(i).deleteWire();
-            }
-        }
     }
 }
