@@ -13,7 +13,16 @@ class Button extends Tronic implements Clickable{
         switch(type){
             case 0:
                 sprite = loadImage("assets/rbutton.png");
-                break; //TODO: add more buttons
+                break;
+            case 1:
+                sprite = loadImage("assets/gbutton.png");
+                break;
+            case 2:
+                sprite = loadImage("assets/ybutton.png");
+                break;
+            case 3:
+                sprite = loadImage("assets/bbutton.png");
+                break;
             default:
                 sprite = loadImage("assets/rbutton.png");
                 break;

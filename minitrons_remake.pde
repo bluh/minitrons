@@ -9,6 +9,7 @@ ArrayList<QueuedWrapper> events;
 Tronic dragTronic;
 MouseWire wireStart;
 MenuDisplay menu;
+DataEntry dataEntry;
 boolean shiftDown;
 boolean ctrlDown;
 
@@ -27,6 +28,18 @@ void setup(){
     wires = new ArrayList<Wire>();
     events = new ArrayList<QueuedWrapper>();
     menu = new MenuDisplay();
+    dataEntry = new DataEntry();
+    dataEntry.addWindowListener(new java.awt.event.WindowListener() {
+       public void windowOpened(java.awt.event.WindowEvent e) {}
+       public void windowIconified(java.awt.event.WindowEvent e) {}
+       public void windowDeiconified(java.awt.event.WindowEvent e) {}
+       public void windowDeactivated(java.awt.event.WindowEvent e) {}
+       public void windowClosing(java.awt.event.WindowEvent e) {
+           dataEntry.setVisible(false);
+       }
+       public void windowClosed(java.awt.event.WindowEvent e) {}
+       public void windowActivated(java.awt.event.WindowEvent e) {}
+    });
 }
 
 void keyPressed(){
@@ -37,7 +50,7 @@ void keyPressed(){
         mode = (mode + 1) % 2;
         menu.deselectAll();
     }else if(key == 'q'){
-        Button newTronic = new Button(screenX + mouseX - 24, screenY + mouseY - 24);
+        Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24);
         tronics.add(newTronic);
     }else if(key == 'e'){
         OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24);
@@ -91,6 +104,11 @@ void mousePressed(){
                     for(Wire wire: menu.getWires()){
                         wire.deleteWire();
                         wires.remove(wire);
+                    }
+                }else if(action == "DATAENTRY"){
+                    if(menu.getSelected().get(0) instanceof Data){
+                        dataEntry.setTronic((Data)menu.getSelected().get(0));
+                        dataEntry.showWindow();
                     }
                 }
             }
@@ -190,6 +208,10 @@ void draw(){
         dragTronic.moveTronic((screenX + mouseX - 24) - (screenX + mouseX - 24) % 8, (screenY + mouseY - 24) - (screenY + mouseY - 24) % 8);
     }
     menu.renderHighlights(dt, screenX, screenY);
+    fill(#FF0000);
+    if(dataEntry.getTronic() != null){
+        rect(dataEntry.getTronic().getX() - 3, dataEntry.getTronic().getY() - 3, dataEntry.getTronic().getWidth() + 6, dataEntry.getTronic().getHeight() + 6);
+    }
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);

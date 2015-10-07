@@ -51,7 +51,8 @@ class MenuDisplay{
             items = new MenuItem[]{
                 new MenuItem(0, "  -    Deselect", #FF0000, "DESELECT"),
                 new MenuItem(1, "  ↑    Pick Up", #0000FF, "MOVE"),
-                new MenuItem(2, "  X    Delete", color(255, 0 ,76), "DELETE")
+                new MenuItem(2, "  X    Delete", color(255, 0 ,76), "DELETE"),
+                new MenuItem(3, "  »    Data Entry", #00FF00, "DATAENTRY")
             };
         }else if(tronics.size() > 1){
             items = new MenuItem[]{
