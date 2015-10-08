@@ -36,6 +36,7 @@ void setup(){
        public void windowDeactivated(java.awt.event.WindowEvent e) {}
        public void windowClosing(java.awt.event.WindowEvent e) {
            dataEntry.setVisible(false);
+           dataEntry.setTronic(null);
        }
        public void windowClosed(java.awt.event.WindowEvent e) {}
        public void windowActivated(java.awt.event.WindowEvent e) {}
@@ -209,8 +210,9 @@ void draw(){
     }
     menu.renderHighlights(dt, screenX, screenY);
     fill(#FF0000);
+    strokeWeight(0);
     if(dataEntry.getTronic() != null){
-        rect(dataEntry.getTronic().getX() - 3, dataEntry.getTronic().getY() - 3, dataEntry.getTronic().getWidth() + 6, dataEntry.getTronic().getHeight() + 6);
+        rect(dataEntry.getTronic().getX() - 2, dataEntry.getTronic().getY() - 2, dataEntry.getTronic().getWidth() + 4, dataEntry.getTronic().getHeight() + 4);
     }
     fill(#000000);
     stroke(#000000);
