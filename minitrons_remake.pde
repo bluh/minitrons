@@ -71,6 +71,10 @@ void keyPressed(){
         tronicsId++;
         Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
         tronics.add(newTronic);
+    }else if(key == 'w' && mode == 0){
+        tronicsId++;
+        Keyboard newTronic = new Keyboard(screenX + mouseX - 48, screenY + mouseY - 24, "Keboard"+tronicsId);
+        tronics.add(newTronic);
     }else if(key == 'e' && mode == 0){
         tronicsId++;
         OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
