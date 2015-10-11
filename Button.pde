@@ -1,4 +1,5 @@
 class Button extends Tronic implements Clickable{
+    int type;
     PImage sprite;
     boolean cooldown;
     
@@ -10,6 +11,7 @@ class Button extends Tronic implements Clickable{
     
     public Button(int type, int x, int y, String name){
         super(x, y, 48, 48, name);
+        this.type = type;
         switch(type){
             case 0:
                 sprite = loadImage("assets/rbutton.png");
@@ -53,6 +55,10 @@ class Button extends Tronic implements Clickable{
         }
     }
     
+    
+    public int getType(){
+        return type;
+    }
     public void renderTronic(int screenX, int screenY){
         image(sprite, getX() - screenX, getY() - screenY);
     }

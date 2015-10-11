@@ -10,6 +10,10 @@ class SmallTextEntry extends JFrame{
     SmallTextEntryEvent textEvent;
     
     public SmallTextEntry(String def, SmallTextEntryEvent event){
+        this(def, "Save", event);
+    }
+    
+    public SmallTextEntry(String def, String action, SmallTextEntryEvent event){
         super();
         this.textEvent = event;
         setAlwaysOnTop(true);
@@ -76,7 +80,7 @@ class SmallTextEntry extends JFrame{
             public void mouseClicked(java.awt.event.MouseEvent arg0) {}
         });
         JButton cancelData = new JButton("Cancel");
-        JButton saveData = new JButton("Save");
+        JButton saveData = new JButton(action);
         JButton clearData = new JButton("Clear");
         
         cancelData.addActionListener(new ActionListener() {
@@ -97,6 +101,19 @@ class SmallTextEntry extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 textArea.setText("");
             }
+        });
+        addWindowListener(new WindowListener() {
+           public void windowOpened(WindowEvent e) {}
+           public void windowIconified(WindowEvent e) {}
+           public void windowDeiconified(WindowEvent e) {}
+           public void windowDeactivated(WindowEvent e) {}
+           public void windowClosing(WindowEvent e) {
+               textEvent.canceled();
+               setVisible(false);
+               dispose();
+           }
+           public void windowClosed(WindowEvent e) {}
+           public void windowActivated(WindowEvent e) {}
         });
         
         GroupLayout layout = new GroupLayout(getContentPane());

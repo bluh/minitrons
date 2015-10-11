@@ -33,17 +33,9 @@ class Monitor extends Tronic implements InFlow{
             text[lines] = "";
         }
     }
-            
     
-    public void getFlow(){
-        String result = "";
-        if(dataNode.getNumWires() > 0){
-            Tronic endTronic = dataNode.getWire(0).getOtherNode(dataNode).getParent();
-            if(endTronic instanceof Data){ //UH SHOULD BE???
-                result = ((Data) endTronic).getData();
-            }
-        }
-        for(String bit: result.split("\n|(/n)")){
+    public void processString(String input){
+        for(String bit: input.split("\n|(/n)")){
             String tempBit = new String(bit);
             while(tempBit.length() > 31){
                 text[lines] += tempBit.substring(0, 30);
@@ -53,9 +45,29 @@ class Monitor extends Tronic implements InFlow{
             text[lines] += tempBit + " ";
             addLine();
         }
+    }
+        
+    
+    public void getFlow(){
+        String result = "";
+        if(dataNode.getNumWires() > 0){
+            Tronic endTronic = dataNode.getWire(0).getOtherNode(dataNode).getParent();
+            if(endTronic instanceof Data){ //UH SHOULD BE???
+                result = ((Data) endTronic).getData();
+            }
+        }
+        processString(result);
         if(outNode.getNumWires() > 0){
             outNode.getWire(0).activateWire(outNode);
         }
+    }
+    
+    public String[] getTextLines(){
+        return text;
+    }
+    
+    public int getTextLineNumber(){
+        return lines;
     }
     
     public void renderTronic(int screenX, int screenY){

@@ -5,6 +5,8 @@ int tronicsId;
 float dt;
 float mouseTime;
 String[] MODES;
+String messageText;
+String fileName;
 ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
 ArrayList<QueuedWrapper> events;
@@ -30,7 +32,9 @@ void setup(){
     shiftDown = false;
     ctrlDown = false;
     altDown = false;
-    MODES = new String[]{"EDIT", "COMPUTE", "WIRE"};
+    MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
+    messageText = "NEW FILE";
+    fileName = "";
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
     events = new ArrayList<QueuedWrapper>();
@@ -52,29 +56,180 @@ void setup(){
 
 void keyPressed(){
     mouseTime = 0;
+    //println(keyCode);
     if(key == 'r'){
         screenX = 0;
         screenY = 0;
     }else if(key == ' '){
         mode = (mode + 1) % 2;
         menu.deselectAll();
-    }else if(key == 'q'){
+    }else if(key == 'c'){
+        menu.deselectAll();
+        tronics.clear();
+        wire.clear();
+    }else if(key == 'q' && mode == 0){
         tronicsId++;
         Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
         tronics.add(newTronic);
-    }else if(key == 'e'){
+    }else if(key == 'e' && mode == 0){
         tronicsId++;
         OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
         tronics.add(newTronic);
-    }else if(key == 'z'){
+    }else if(key == 'z' && mode == 0){
         tronicsId++;
         Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
         newTronic.setData(Float.toString(random(1,3)));
         tronics.add(newTronic);
-    }else if(key == 'x'){
+    }else if(key == 'x' && mode == 0){
         tronicsId++;
         Monitor newTronic = new Monitor(screenX + mouseX - 128, screenY + mouseY - 112,"Monitor"+tronicsId);
         tronics.add(newTronic);
+    }else if((keyCode == 83 || key == 's') && ctrlDown && mode == 0){
+        messageText = "SAVING...";
+        mode = 3;
+        menu.deselectAll();
+        new SmallTextEntry(fileName, new SmallTextEntryEvent(){
+            public void canceled(){
+                messageText = "SAVING CANCELED.";
+                mode = 0;
+            }
+            
+            public void saved(String contents){
+                if(!contents.equals("")){
+                    JSONArray output = new JSONArray();
+                    JSONArray tronicsOutput = new JSONArray();
+                    int objs = 0;
+                    HashMap<Wire, Integer[]> wireDetails = new HashMap<Wire, Integer[]>();
+                    messageText = "SAVING... (TRONICS)";
+                    for(Tronic tron: tronics){
+                        JSONObject tronObj = new JSONObject();
+                        tronObj.setString("type", tron.getClass().getSimpleName());
+                        tronObj.setString("name", tron.toString());
+                        tronObj.setInt("objIndex", objs);
+                        tronObj.setInt("posX", tron.getX());
+                        tronObj.setInt("posY", tron.getY());
+                        if(tron instanceof Button){
+                            tronObj.setInt("buttonType", ((Button)tron).getType());
+                        }else if(tron instanceof Data){
+                            tronObj.setString("dataContents", ((Data)tron).getData());
+                        }else if(tron instanceof OperatorTronic){
+                            tronObj.setInt("operatorType", ((OperatorTronic)tron).getType());
+                        }else if(tron instanceof Monitor){
+                            tronObj.setInt("monitorLineNumber", ((Monitor)tron).getTextLineNumber());
+                            String[] text = ((Monitor)tron).getTextLines();
+                            JSONArray textLines = new JSONArray();
+                            for(int i = 0; i < text.length; i++){
+                                textLines.setString(i, text[i]);
+                            }
+                            tronObj.setJSONArray("monitorLines", textLines);
+                        }
+                        for(int n = 0; n < tron.getNodes().length; n++){
+                            for(int w = 0; w < tron.getNodes()[n].getNumWires(); w++){
+                                Wire wire = tron.getNodes()[n].getWire(w);
+                                if(!wireDetails.containsKey(wire)){
+                                    wireDetails.put(wire, new Integer[] {objs, n});
+                                }else if(wireDetails.containsKey(wire)){
+                                    int t1Id = wireDetails.get(wire)[0];
+                                    int t1node = wireDetails.get(wire)[1];
+                                    wireDetails.put(wire, new Integer[] {t1Id, t1node, objs, n, wire.getWireColor()});
+                                }
+                            }
+                        }
+                        tronicsOutput.setJSONObject(objs, tronObj);
+                        objs++;
+                    }
+                    messageText = "SAVING... (WIRES)";
+                    JSONArray wiresOutput = new JSONArray();
+                    int wires = 0;
+                    for(Integer[] dets: wireDetails.values()){
+                        if(dets.length == 5){
+                            JSONArray thisSet = new JSONArray();
+                            for(int i = 0; i < dets.length; i++){
+                                thisSet.setInt(i, dets[i]);
+                            }
+                            wiresOutput.setJSONArray(wires, thisSet);
+                            wires++;
+                        }else{
+                            println("Invalid wire array?");
+                        }
+                    }
+                    output.setJSONArray(0, tronicsOutput);
+                    output.setJSONArray(1, wiresOutput);
+                    saveJSONArray(output, "/saves/" + contents + ".json");
+                    messageText = "SAVED";
+                    fileName = contents;
+                    mode = 0;
+                }else{
+                    messageText = "SAVING CANCELED";
+                    mode = 0;
+                }
+            }
+        }).showWindow();
+        
+    }else if((keyCode == 79 || key == 'o') && ctrlDown && mode == 0){
+        messageText = "LOADING...";
+        mode = 3;
+        menu.deselectAll();
+        new SmallTextEntry(fileName, "Load", new SmallTextEntryEvent(){
+            public void canceled(){
+                messageText = "LOADING CANCELED.";
+                mode = 0;
+            }
+            
+            public void saved(String contents){
+                if(!contents.equals("")){
+                    JSONArray input = null;
+                    try{
+                        input = loadJSONArray("/saves/" + contents + ".json");
+                    }catch(Exception e){
+                        messageText = "FILE DOES NOT EXIST";
+                        mode = 0;
+                        return;
+                    }
+                    JSONArray tronicsInput = input.getJSONArray(0);
+                    JSONArray wiresInput = input.getJSONArray(1);
+                    HashMap<Integer, Tronic> tronicDetails = new HashMap<Integer, Tronic>();
+                    tronicsId = 0;
+                    messageText = "LOADING... (TRONICS)";
+                    for(int i = 0; i < tronicsInput.size(); i++){
+                        JSONObject tronObj = tronicsInput.getJSONObject(i);
+                        Tronic newTronic = null;
+                        if(tronObj.getString("type").equals("Button")){
+                            newTronic = new Button(tronObj.getInt("buttonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        }else if(tronObj.getString("type").equals("Data")){
+                            newTronic = new Data(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                            ((Data)newTronic).setData(tronObj.getString("dataContents"));
+                        }else if(tronObj.getString("type").equals("OperatorTronic")){
+                            newTronic = new OperatorTronic(tronObj.getInt("operatorType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        }else if(tronObj.getString("type").equals("Monitor")){
+                            newTronic = new Monitor(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                            JSONArray lines = tronObj.getJSONArray("monitorLines");
+                            for(int x = 0; x < tronObj.getInt("monitorLineNumber"); x++){
+                                ((Monitor)newTronic).processString(lines.getString(x));
+                            }
+                        }
+                        tronics.add(newTronic);
+                        tronicDetails.put(tronObj.getInt("objIndex"), newTronic);
+                        tronicsId++;
+                    }
+                    messageText = "LOADING... (WIRES)";
+                    for(int i = 0; i < wiresInput.size(); i++){
+                        JSONArray thisWire = wiresInput.getJSONArray(i);
+                        Tronic tron1 = tronicDetails.get(thisWire.getInt(0));
+                        Tronic tron2 = tronicDetails.get(thisWire.getInt(2));
+                        Wire newWire = new Wire(tron1.getNodes()[thisWire.getInt(1)],tron2.getNodes()[thisWire.getInt(3)], thisWire.getInt(4));
+                        wires.add(newWire);
+                        tron1.getNodes()[thisWire.getInt(1)].addWire(newWire);
+                        tron2.getNodes()[thisWire.getInt(3)].addWire(newWire);
+                    }
+                    messageText = "LOADED";
+                    mode = 0;
+                }else{
+                    messageText = "LOADING CANCELED";
+                    mode = 0;
+                }
+            }
+        }).showWindow();
     }else if(keyCode == SHIFT){
         shiftDown = true;
     }else if(keyCode == CONTROL){
@@ -318,4 +473,5 @@ void draw(){
     text("(" + screenX + ", " + screenY + ")", 4, height - 4); 
     text("MODE: " + MODES[mode] + "", 204, height - 4);
     text("TOTAL: " + tronics.size() + "", 404, height - 4);
+    text(messageText, 604, height - 4);
 }
