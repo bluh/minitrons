@@ -1,17 +1,21 @@
+import java.awt.Dimension;
 import java.awt.event.*;
+
 import javax.swing.*;
 
-class DataEntry extends JFrame{
-    Data tronic;
-    JTextArea textArea;
+class SmallTextEntry extends JFrame{
+    JTextField textArea;
     JPopupMenu popup;
     java.awt.Font psn;
+    SmallTextEntryEvent textEvent;
     
-    public DataEntry(){
-        super("Data Entry");
+    public SmallTextEntry(String def, SmallTextEntryEvent event){
+        super();
+        this.textEvent = event;
         setAlwaysOnTop(true);
+        setResizable(false);
         try {
-            psn = (java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(dataPath("neverfont.ttf")))).deriveFont(8f);
+           psn = (java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(dataPath("neverfont.ttf")))).deriveFont(8f);
         } catch (Exception e) {
             psn = new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12);
             e.printStackTrace();
@@ -21,7 +25,7 @@ class DataEntry extends JFrame{
         }catch(Exception e){
             //whatever jeez....
         };
-        textArea = new JTextArea();
+        textArea = new JTextField(def);
         textArea.setFont(psn);
         textArea.setEditable(true);
         textArea.setEnabled(true);
@@ -71,21 +75,22 @@ class DataEntry extends JFrame{
             public void mouseEntered(java.awt.event.MouseEvent arg0) {}
             public void mouseClicked(java.awt.event.MouseEvent arg0) {}
         });
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        JButton getData = new JButton("Get Data");
-        JButton setData = new JButton("Set Data");
+        JButton cancelData = new JButton("Cancel");
+        JButton saveData = new JButton("Save");
         JButton clearData = new JButton("Clear");
         
-        getData.addActionListener(new ActionListener() {
+        cancelData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                textArea.setText(tronic.getData());
+                textEvent.canceled();
+                setVisible(false);
+                dispose();
             }
         });
-        setData.addActionListener(new ActionListener() {
+        saveData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tronic.setData(textArea.getText());
+                textEvent.saved(textArea.getText());
+                setVisible(false);
+                dispose();
             }
         });
         clearData.addActionListener(new ActionListener() {
@@ -98,43 +103,30 @@ class DataEntry extends JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup()
             .addGroup(layout.createSequentialGroup()
-                .addComponent(getData, 100, 100, 100)
-                .addComponent(setData, 100, 100, 100)
-                .addComponent(clearData, 100, 100, 100)
+                .addComponent(cancelData)
+                .addComponent(saveData)
+                .addComponent(clearData)
                 )
-            .addComponent(scrollPane)
+            .addComponent(textArea)
         );
         layout.setVerticalGroup(
             layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup()
-                .addComponent(getData, 20, 20, 20)
-                .addComponent(setData, 20, 20, 20)
-                .addComponent(clearData, 20, 20, 20)
+                .addComponent(cancelData)
+                .addComponent(saveData)
+                .addComponent(clearData)
             )
-            .addComponent(scrollPane)
+            .addComponent(textArea)
         );
         getContentPane().setLayout(layout);
         
         pack();
-        setSize(500, 600);
+        setMaximumSize(new Dimension(300, 20));
     }
     
     public void showWindow(){
         setVisible(true);
         toFront();
         textArea.grabFocus();
-    }
-    
-    public void setTronic(Data tronic){
-        this.tronic = tronic;
-        if(tronic != null){
-            setTitle("Data Entry: " + tronic);
-        }else{
-            setTitle("Data Entry: Disconnected");
-        }
-    }
-    
-    public Data getTronic(){
-        return tronic;
     }
 }

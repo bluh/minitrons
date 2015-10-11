@@ -52,14 +52,16 @@ class MenuDisplay{
                 new MenuItem(0, " -   Deselect", #FF0000, "DESELECT"),
                 new MenuItem(1, " †   Pick Up", #0000FF, "MOVE"),
                 new MenuItem(2, " X   Delete", color(255, 0 ,76), "DELETE"),
-                new MenuItem(3, " »   Data Entry", #00FF00, "DATAENTRY")
+                new MenuItem(3, " œ   Rename", #00FF00, "RENAME"),
+                new MenuItem(4, " »   Data Entry", #00FF00, "DATAENTRY")
             };
         }else if(tronics.size() > 1){
             items = new MenuItem[]{
                 new MenuItem(0, " -   Deselect", #FF0000, "DESELECT"),
                 new MenuItem(1, " †   Pick Up", #0000FF, "MOVE"),
                 new MenuItem(2, " X   Delete", color(255, 0 ,76), "DELETE"),
-                new MenuItem(3, " #   Decouple", #00FF00, "DECOUPLE")
+                new MenuItem(3, " œ   Rename", #00FF00, "RENAME"),
+                new MenuItem(4, " #   Decouple", #00FF00, "DECOUPLE")
             };
         }   
     }

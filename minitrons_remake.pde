@@ -3,6 +3,7 @@ int screenY;
 int mode;
 int tronicsId;
 float dt;
+float mouseTime;
 String[] MODES;
 ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
@@ -24,6 +25,7 @@ void setup(){
     screenY = 0;
     mode = 0;
     dt = 0;
+    mouseTime = 0;
     tronicsId = 0;
     shiftDown = false;
     ctrlDown = false;
@@ -49,6 +51,7 @@ void setup(){
 }
 
 void keyPressed(){
+    mouseTime = 0;
     if(key == 'r'){
         screenX = 0;
         screenY = 0;
@@ -93,6 +96,7 @@ void keyReleased(){
     
 
 void mousePressed(){
+    mouseTime = 0;
     if(mouseButton == LEFT && mode == 0){
         if(menu.getSelected().size() > 0){
             int mouseIndex = menu.containsPoint(mouseX + screenX, mouseY + screenY);
@@ -108,6 +112,9 @@ void mousePressed(){
                 }else if(action == "DELETE"){
                     for(Tronic tron: menu.getSelected()){
                         //tron.deleteTronic();
+                        if(dataEntry.getTronic() == tron){
+                            dataEntry.setTronic(null);
+                        }
                         for(Node node: tron.getNodes()){
                             while(node.getNumWires() > 0){
                                 wires.remove(node.getWire(0));
@@ -127,6 +134,27 @@ void mousePressed(){
                         dataEntry.setTronic((Data)menu.getSelected().get(0));
                         dataEntry.showWindow();
                     }
+                }else if(action == "RENAME"){
+                    String ref = "";
+                    if(menu.getSelected().size() == 1){
+                        ref = menu.getSelected().get(0).toString();
+                    }
+                    new SmallTextEntry(ref,new SmallTextEntryEvent(){
+                        public void canceled(){
+                            //sucks to suck
+                            menu.deselectAll();
+                        }
+                        
+                        public void saved(String contents){
+                            if(!contents.equals("")){
+                                for(Tronic tron: menu.getSelected()){
+                                    tron.setName(contents);
+                                    menu.deselectAll();
+                                }
+                            }
+                        }
+                    }).showWindow();
+                    return;
                 }
             }
         }
@@ -138,7 +166,7 @@ void mousePressed(){
                     return;
                 }
             }
-            if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
+            if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
                 if(ctrlDown){
                     if(!menu.contains(tron)){
                         menu.deselectAll();
@@ -157,11 +185,11 @@ void mousePressed(){
     }else if(mode == 1){
         for(Tronic tron: tronics){
             if(tron instanceof Clickable){
-                if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
+                if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
                     ((Clickable) tron).clicked(mouseX, mouseY);
                 }
             }else if(tron instanceof Data){
-                if(screenX + mouseX < (tron.getX() + tron.getWidth()) && screenX + mouseX > tron.getX() && screenY + mouseY < (tron.getY() + tron.getHeight()) && screenY + mouseY > tron.getY()){
+                if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
                     println("Data: " + ((Data) tron).getData());
                 }
             }
@@ -260,6 +288,25 @@ void draw(){
         if(events.get(i).tick(1.0 / frameRate)){
             events.remove(i);
             i--;
+        }
+    }
+    if(pmouseX == mouseX && pmouseY == mouseY){
+        if(mouseTime < .5){
+            mouseTime += (1.0/frameRate);
+        }
+    }else{
+        mouseTime = 0;
+    }
+    if(mouseTime > .5){
+        for(Tronic tron: tronics){
+            if(tron.containsPoint(mouseX + screenX, mouseY + screenY)){
+                noStroke();
+                fill(#FFFFFF, 200);
+                rect(mouseX + 10, mouseY - 10, textWidth("Name: " + tron) + 4, 12);
+                fill(#000000);
+                text("Name: " + tron, mouseX + 13, mouseY);
+                break;
+            }
         }
     }
     

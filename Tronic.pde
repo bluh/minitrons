@@ -42,8 +42,16 @@ public abstract class Tronic{
         }
     }
     
+    public boolean containsPoint(int px, int py){
+        return px > x && px < x + WIDTH && py > y && py < y + HEIGHT;
+    }
+    
     public String toString(){
         return name;
+    }
+    
+    public void setName(String name){
+        this.name = name;
     }
     
     abstract void renderTronic(int screenX, int screenY);
