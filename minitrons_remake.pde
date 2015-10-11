@@ -66,14 +66,14 @@ void keyPressed(){
     }else if(key == 'c'){
         menu.deselectAll();
         tronics.clear();
-        wire.clear();
+        wires.clear();
     }else if(key == 'q' && mode == 0){
         tronicsId++;
         Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
         tronics.add(newTronic);
     }else if(key == 'e' && mode == 0){
         tronicsId++;
-        OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
+        OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
         tronics.add(newTronic);
     }else if(key == 'z' && mode == 0){
         tronicsId++;

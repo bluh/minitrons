@@ -37,7 +37,7 @@ class Monitor extends Tronic implements InFlow{
     public void processString(String input){
         for(String bit: input.split("\n|(/n)")){
             String tempBit = new String(bit);
-            while(tempBit.length() > 31){
+            while(tempBit.length() >= 31){
                 text[lines] += tempBit.substring(0, 30);
                 tempBit = tempBit.substring(30);
                 addLine();

@@ -29,6 +29,9 @@ class OperatorTronic extends Tronic implements InFlow{
             case 3:
                 sprite = loadImage("assets/divide.png");
                 break;
+            case 4:
+                sprite = loadImage("assets/and.png");
+                break;
             default:
                 sprite = loadImage("assets/add.png");
                 break;
@@ -42,65 +45,73 @@ class OperatorTronic extends Tronic implements InFlow{
     
     public void getFlow(){
         println("Got flow.");
-        double a;
-        double b;
+        String a;
+        double numA;
+        String b;
+        double numB;
         if(dataNode.getNumWires() > 0){
             if(aNode.getNumWires() == 0){
-                a = 0;
+                a = "";
+                numA = 0;
             }else{
                 Tronic endNode = aNode.getWire(0).getOtherNode(aNode).getParent();
                 if(endNode instanceof Data){
+                    a = ((Data) endNode).getData();
                     try{
-                        a = Double.valueOf(((Data) endNode).getData());
+                        numA = Double.valueOf(a);
                     }catch(NumberFormatException e){
-                        println("Data was not able to convert from A to int");
-                        a = 0;
+                        numA = 0;
                     }
                 }else{
-                    a = 0;
+                    a = "";
+                    numA = 0;
                 }
             }
             if(bNode.getNumWires() == 0){
-                b = 0;
+                b = "";
+                numB = 0;
             }else{
                 Tronic endNode = bNode.getWire(0).getOtherNode(bNode).getParent();
                 if(endNode instanceof Data){
+                    b = ((Data) endNode).getData();
                     try{
-                        b = Double.valueOf(((Data) endNode).getData());
+                        numB = Double.valueOf(b);
                     }catch(NumberFormatException e){
-                        println("Data was not able to convert from B to int");
-                        b = 0;
+                        numB = 0;
                     }
                 }else{
-                    b = 0;
+                    b = "";
+                    numB = 0;
                 }
             }
-            double result;
+            String result;
             switch(type){
                 case 0:
-                    result = a + b;
+                    result = Double.toString(numA + numB);
                     break;
                 case 1:
-                    result = a - b;
+                    result = Double.toString(numA - numB);
                     break;
                 case 2:
-                    result = a * b;
+                    result = Double.toString(numA * numB);
                     break;
                 case 3:
-                    if(b != 0){
-                        result = a / b;
+                    if(numB != 0){
+                        result = Double.toString(numA / numB);
                     }else{
                         println("Attempted to divide by 0! Ending flow.");
                         return;
                     }
                     break;
+                case 4:
+                    result = a + b;
                 default:
                     result = a + b;
             }
             for(int i = 0; i < dataNode.getNumWires(); i++){
                 Tronic endNode = dataNode.getWire(i).getOtherNode(dataNode).getParent();
                 if(endNode instanceof Data){
-                    ((Data)endNode).setData(String.valueOf(result));
+                    ((Data)endNode).setData(result);
                 }
             }
         }
