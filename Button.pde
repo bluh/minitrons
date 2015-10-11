@@ -4,12 +4,12 @@ class Button extends Tronic implements Clickable{
     
     Node outNode;
     
-    public Button(int x, int y){
-        this(0, x, y);
+    public Button(int x, int y, String name){
+        this(0, x, y, name);
     }
     
-    public Button(int type, int x, int y){
-        super(x, y, 48, 48);
+    public Button(int type, int x, int y, String name){
+        super(x, y, 48, 48, name);
         switch(type){
             case 0:
                 sprite = loadImage("assets/rbutton.png");

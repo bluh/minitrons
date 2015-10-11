@@ -6,7 +6,7 @@ class MenuDisplay{
     MenuItem[] items;
     
     final int OFFSET = 16;
-    final int WIDTH = 100;
+    final int WIDTH = 125;
     final int HEIGHT = 16;
     
     public MenuDisplay(){
@@ -49,17 +49,17 @@ class MenuDisplay{
             items = new MenuItem[0];
         }else if(tronics.size() == 1){
             items = new MenuItem[]{
-                new MenuItem(0, "  -    Deselect", #FF0000, "DESELECT"),
-                new MenuItem(1, "  ↑    Pick Up", #0000FF, "MOVE"),
-                new MenuItem(2, "  X    Delete", color(255, 0 ,76), "DELETE"),
-                new MenuItem(3, "  »    Data Entry", #00FF00, "DATAENTRY")
+                new MenuItem(0, " -   Deselect", #FF0000, "DESELECT"),
+                new MenuItem(1, " †   Pick Up", #0000FF, "MOVE"),
+                new MenuItem(2, " X   Delete", color(255, 0 ,76), "DELETE"),
+                new MenuItem(3, " »   Data Entry", #00FF00, "DATAENTRY")
             };
         }else if(tronics.size() > 1){
             items = new MenuItem[]{
-                new MenuItem(0, "  -    Deselect", #FF0000, "DESELECT"),
-                new MenuItem(1, "  ↑    Pick Up", #0000FF, "MOVE"),
-                new MenuItem(2, "  X    Delete", color(255, 0 ,76), "DELETE"),
-                new MenuItem(3, "  #    Decouple", #00FF00, "DECOUPLE")
+                new MenuItem(0, " -   Deselect", #FF0000, "DESELECT"),
+                new MenuItem(1, " †   Pick Up", #0000FF, "MOVE"),
+                new MenuItem(2, " X   Delete", color(255, 0 ,76), "DELETE"),
+                new MenuItem(3, " #   Decouple", #00FF00, "DECOUPLE")
             };
         }   
     }

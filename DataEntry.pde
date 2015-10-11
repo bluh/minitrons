@@ -72,7 +72,7 @@ class DataEntry extends JFrame{
             public void mouseClicked(java.awt.event.MouseEvent arg0) {}
         });
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         JButton getData = new JButton("Get Data");
         JButton setData = new JButton("Set Data");
@@ -127,6 +127,7 @@ class DataEntry extends JFrame{
     
     public void setTronic(Data tronic){
         this.tronic = tronic;
+        setTitle("Data Entry: " + tronic);
     }
     
     public Data getTronic(){

@@ -54,7 +54,7 @@ class Wire{
             activatedEnd = (InFlow)getOtherNode(start).getParent();
             addEvent(new QueuedEvent(){
                 public double getDelay(){
-                    return 0.5;
+                    return 0.25;
                 }
                 public void invoke(){
                     if(activatedEnd != null){ //TODO: bug where two wires are activated at once

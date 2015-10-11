@@ -1,6 +1,7 @@
 int screenX;
 int screenY;
 int mode;
+int tronicsId;
 float dt;
 String[] MODES;
 ArrayList<Tronic> tronics;
@@ -12,17 +13,21 @@ MenuDisplay menu;
 DataEntry dataEntry;
 boolean shiftDown;
 boolean ctrlDown;
+boolean altDown;
 
 void setup(){
     size(800,600,P2D);
     surface.setResizable(true);
+    textFont(loadFont("neverfont8.vlw"),8);
     println("Loaded.");
     screenX = 0;
     screenY = 0;
     mode = 0;
     dt = 0;
+    tronicsId = 0;
     shiftDown = false;
     ctrlDown = false;
+    altDown = false;
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE"};
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
@@ -51,19 +56,28 @@ void keyPressed(){
         mode = (mode + 1) % 2;
         menu.deselectAll();
     }else if(key == 'q'){
-        Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24);
+        tronicsId++;
+        Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
         tronics.add(newTronic);
     }else if(key == 'e'){
-        OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24);
+        tronicsId++;
+        OperatorTronic newTronic = new OperatorTronic((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
         tronics.add(newTronic);
     }else if(key == 'z'){
-        Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24);
+        tronicsId++;
+        Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
         newTronic.setData(Float.toString(random(1,3)));
+        tronics.add(newTronic);
+    }else if(key == 'x'){
+        tronicsId++;
+        Monitor newTronic = new Monitor(screenX + mouseX - 128, screenY + mouseY - 112,"Monitor"+tronicsId);
         tronics.add(newTronic);
     }else if(keyCode == SHIFT){
         shiftDown = true;
     }else if(keyCode == CONTROL){
         ctrlDown = true;
+    }else if(keyCode == ALT){
+        altDown = true;
     }
 }
 
@@ -72,6 +86,8 @@ void keyReleased(){
         shiftDown = false;
     }else if(keyCode == CONTROL){
         ctrlDown = false;
+    }else if(keyCode == ALT){
+        altDown = false;
     }
 }
     
@@ -81,7 +97,7 @@ void mousePressed(){
         if(menu.getSelected().size() > 0){
             int mouseIndex = menu.containsPoint(mouseX + screenX, mouseY + screenY);
             MenuDisplay.MenuItem[] items = menu.getItems();
-            if(mouseIndex >= 0 && items.length > mouseIndex){
+            if(!altDown && mouseIndex >= 0 && items.length > mouseIndex){
                 String action = items[mouseIndex].getAction();
                 if(action == "DESELECT"){
                     menu.deselectAll();
@@ -203,16 +219,16 @@ void draw(){
             if(tron != dragTronic){
                 int relX = tron.getX() - dragTronic.getX();
                 int relY = tron.getY() - dragTronic.getY();
-                tron.moveTronic((screenX + mouseX - 24) - (screenX + mouseX - 24) % 8 + relX, (screenY + mouseY - 24) - (screenY + mouseY - 24) % 8 + relY);
+                tron.moveTronic((screenX + mouseX - dragTronic.getWidth() / 2) - (screenX + mouseX - dragTronic.getWidth() / 2) % 8 + relX, (screenY + mouseY - dragTronic.getHeight() / 2) - (screenY + mouseY - dragTronic.getHeight() / 2) % 8 + relY);
             }
         }
-        dragTronic.moveTronic((screenX + mouseX - 24) - (screenX + mouseX - 24) % 8, (screenY + mouseY - 24) - (screenY + mouseY - 24) % 8);
+        dragTronic.moveTronic((screenX + mouseX - dragTronic.getWidth() / 2) - (screenX + mouseX - dragTronic.getWidth() / 2) % 8, (screenY + mouseY - dragTronic.getHeight() / 2) - (screenY + mouseY - dragTronic.getHeight() / 2) % 8);
     }
     menu.renderHighlights(dt, screenX, screenY);
     fill(#FF0000);
     strokeWeight(0);
     if(dataEntry.getTronic() != null){
-        rect(dataEntry.getTronic().getX() - 2, dataEntry.getTronic().getY() - 2, dataEntry.getTronic().getWidth() + 4, dataEntry.getTronic().getHeight() + 4);
+        rect(dataEntry.getTronic().getX() - 2 - screenX, dataEntry.getTronic().getY() - 2 - screenY, dataEntry.getTronic().getWidth() + 4, dataEntry.getTronic().getHeight() + 4);
     }
     fill(#000000);
     stroke(#000000);
@@ -236,7 +252,7 @@ void draw(){
         tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
     }
     
-    if(mode == 0 && dragTronic == null){
+    if(mode == 0 && dragTronic == null && !altDown){
         menu.renderMenu(screenX, screenY, mouseX, mouseY);
     }
     

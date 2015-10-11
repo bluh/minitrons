@@ -3,12 +3,14 @@ public abstract class Tronic{
     int y;
     final int WIDTH;
     final int HEIGHT;
+    String name;
     
-    public Tronic(int x, int y, int w, int h){
+    public Tronic(int x, int y, int w, int h, String name){
         this.x = x;
         this.y = y;
         this.WIDTH = w;
         this.HEIGHT = h;
+        this.name = name;
     }
     
     int getX(){
@@ -38,6 +40,10 @@ public abstract class Tronic{
                 node.getWire(i).deleteWire();
             }
         }
+    }
+    
+    public String toString(){
+        return name;
     }
     
     abstract void renderTronic(int screenX, int screenY);
