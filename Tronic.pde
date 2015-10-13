@@ -4,6 +4,7 @@ public abstract class Tronic{
     final int WIDTH;
     final int HEIGHT;
     String name;
+    boolean enabled;
     
     public Tronic(int x, int y, int w, int h, String name){
         this.x = x;
@@ -11,6 +12,7 @@ public abstract class Tronic{
         this.WIDTH = w;
         this.HEIGHT = h;
         this.name = name;
+        this.enabled = true;
     }
     
     int getX(){
@@ -44,6 +46,18 @@ public abstract class Tronic{
     
     public boolean containsPoint(int px, int py){
         return px > x && px < x + WIDTH && py > y && py < y + HEIGHT;
+    }
+    
+    public void setEnabled(){
+        enabled = true;
+    }
+    
+    public void setDisabled(){
+        enabled = false;
+    }
+    
+    public boolean isEnabled(){
+        return enabled;
     }
     
     public String toString(){

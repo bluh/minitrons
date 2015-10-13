@@ -15,26 +15,26 @@ class Keyboard extends Tronic implements Clickable{
     
     public void clicked(int x, int y){
         if(ste == null){
-            ste = new SmallTextEntry(memory, "Send", new SmallTextEntryEvent(){
+            ste = new SmallTextEntry(memory, "Send", (new SmallTextEntryEvent(){
+                Tronic thisTronic;
+                
+                public SmallTextEntryEvent setTronic(Tronic thisTronic){
+                    this.thisTronic = thisTronic;
+                    return this;
+                }
+                
                 public void canceled(){
-                    //etc
+                    ste = null;
                 }
                 public void saved(String contents){
-                    for(int i = 0; i < dataNode.getNumWires(); i++){
-                        Tronic otherTron = dataNode.getWire(i).getOtherNode(dataNode).getParent();
-                        if(otherTron instanceof Data){
-                            ((Data) otherTron).setData(contents);
-                        }
+                    if(isEnabled()){
+                        FlowDetails newFlow = new FlowDetails();
+                        newFlow.setData(dataNode, contents);
+                        startFlow(outNode, thisTronic, newFlow);
                     }
-                    memory = contents;
-                    if(outNode.getNumWires() > 0){
-                        Tronic otherTron = outNode.getWire(0).getOtherNode(outNode).getParent();
-                        if(otherTron instanceof InFlow){
-                            ((InFlow) otherTron).getFlow();
-                        }
-                    }
+                    ste = null;
                 }
-            });
+            }).setTronic(this));
         }
         ste.showWindow();
     }

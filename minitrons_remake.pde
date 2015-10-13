@@ -79,6 +79,10 @@ void keyPressed(){
         tronicsId++;
         OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
         tronics.add(newTronic);
+    }else if(key == 'd' && mode == 0){
+        tronicsId++;
+        FDat newTronic = new FDat(screenX + mouseX - 24, screenY + mouseY - 24,"FDat"+tronicsId);
+        tronics.add(newTronic);
     }else if(key == 'z' && mode == 0){
         tronicsId++;
         Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
@@ -211,6 +215,10 @@ void keyPressed(){
                             for(int x = 0; x < tronObj.getInt("monitorLineNumber"); x++){
                                 ((Monitor)newTronic).processString(lines.getString(x));
                             }
+                        }else if(tronObj.getString("type").equals("Keyboard")){
+                            newTronic = new Keyboard(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        }else if(tronObj.getString("type").equals("FDat")){
+                            newTronic = new FDat(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
                         }
                         tronics.add(newTronic);
                         tronicDetails.put(tronObj.getInt("objIndex"), newTronic);
@@ -227,6 +235,7 @@ void keyPressed(){
                         tron2.getNodes()[thisWire.getInt(3)].addWire(newWire);
                     }
                     messageText = "LOADED";
+                    fileName = contents;
                     mode = 0;
                 }else{
                     messageText = "LOADING CANCELED";
@@ -392,6 +401,54 @@ void mouseReleased(){
 
 void addEvent(QueuedEvent evt){
     events.add(new QueuedWrapper(evt));
+}
+
+void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
+    if(outNode.getNumWires() > 0){
+        startingTronic.setDisabled();
+        Wire nextWire = outNode.getWire(0);
+        nextWire.addPending();
+        addEvent((new QueuedEvent(){
+            Node thisNode;
+            Wire thisWire;
+            Tronic startingTronic;
+            FlowDetails thisDetails;
+            
+            public QueuedEvent setNextDetails(Node thisNode, Wire thisWire, Tronic startingTronic, FlowDetails thisDetails){
+                this.thisNode = thisNode;
+                this.thisWire = thisWire;
+                this.startingTronic = startingTronic;
+                this.thisDetails = thisDetails;
+                return this;
+            }
+            
+            public double getDelay(){
+                return 0.25;
+            }
+            
+            public void invoke(){
+                thisWire.subPending();
+                Tronic nextTronic = thisWire.getOtherNode(thisNode).getParent();
+                Node nextNode;
+                if(nextTronic instanceof InFlow){
+                    nextNode = ((InFlow) nextTronic).getFlow(thisDetails);
+                    if(nextNode != null){
+                        println("Sending flow: " + nextNode.getParent() + " S: " + startingTronic);
+                        startFlow(nextNode, startingTronic, thisDetails);
+                    }else{
+                        println("Ending flow");
+                        startingTronic.setEnabled();
+                    }
+                }else{
+                    println("Ending flow");
+                    startingTronic.setEnabled();
+                }
+            }
+        }).setNextDetails(outNode, nextWire, startingTronic, flow));
+    }else{
+        println("Ending flow");
+        startingTronic.setEnabled();
+    }
 }
 
 void draw(){

@@ -43,44 +43,29 @@ class OperatorTronic extends Tronic implements InFlow{
         dataNode = new Node(this, 0, 21, 48, 0, 1);
     }
     
-    public void getFlow(){
-        println("Got flow.");
+    public Node getFlow(FlowDetails flow){
         String a;
         double numA;
         String b;
         double numB;
         if(dataNode.getNumWires() > 0){
-            if(aNode.getNumWires() == 0){
-                a = "";
+            a = flow.getData(aNode);
+            if(a.equals("")){
                 numA = 0;
             }else{
-                Tronic endNode = aNode.getWire(0).getOtherNode(aNode).getParent();
-                if(endNode instanceof Data){
-                    a = ((Data) endNode).getData();
-                    try{
-                        numA = Double.valueOf(a);
-                    }catch(NumberFormatException e){
-                        numA = 0;
-                    }
-                }else{
-                    a = "";
+                try{
+                    numA = Double.valueOf(a);
+                }catch(NumberFormatException e){
                     numA = 0;
                 }
             }
-            if(bNode.getNumWires() == 0){
-                b = "";
+            b = flow.getData(bNode);
+            if(b.equals("")){
                 numB = 0;
             }else{
-                Tronic endNode = bNode.getWire(0).getOtherNode(bNode).getParent();
-                if(endNode instanceof Data){
-                    b = ((Data) endNode).getData();
-                    try{
-                        numB = Double.valueOf(b);
-                    }catch(NumberFormatException e){
-                        numB = 0;
-                    }
-                }else{
-                    b = "";
+                try{
+                    numB = Double.valueOf(b);
+                }catch(NumberFormatException e){
                     numB = 0;
                 }
             }
@@ -100,7 +85,7 @@ class OperatorTronic extends Tronic implements InFlow{
                         result = Double.toString(numA / numB);
                     }else{
                         println("Attempted to divide by 0! Ending flow.");
-                        return;
+                        return null;
                     }
                     break;
                 case 4:
@@ -108,21 +93,9 @@ class OperatorTronic extends Tronic implements InFlow{
                 default:
                     result = a + b;
             }
-            for(int i = 0; i < dataNode.getNumWires(); i++){
-                Tronic endNode = dataNode.getWire(i).getOtherNode(dataNode).getParent();
-                if(endNode instanceof Data){
-                    ((Data)endNode).setData(result);
-                }
-            }
+            flow.setData(dataNode, result);
         }
-        sendFlow();
-    }
-    
-    public void sendFlow(){
-        println("Sending flow.");
-        if(outNode.getNumWires() > 0){
-            outNode.getWire(0).activateWire(outNode);
-        }
+        return outNode;
     }
     
     public int getType(){

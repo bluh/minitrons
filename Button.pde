@@ -49,9 +49,8 @@ class Button extends Tronic implements Clickable{
     }
     
     public void sendFlow(){
-        println("Sending flow.");
-        if(outNode.getNumWires() > 0){
-            outNode.getWire(0).activateWire(outNode);
+        if(isEnabled()){
+            startFlow(outNode, this, new FlowDetails());
         }
     }
     

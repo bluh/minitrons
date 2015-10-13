@@ -4,8 +4,7 @@ class Wire{
     Node lastNode;
     Tronic lastTronic;
     color wireColor;
-    boolean activated;
-    InFlow activatedEnd;
+    int pending;
     
     public Wire(Node firstNode, Node lastNode, color wireColor){
         this.firstNode = firstNode;
@@ -48,27 +47,16 @@ class Wire{
         return null;
     }
     
-    public void activateWire(Node start){
-        if(getOtherNode(start).getParent() instanceof InFlow){
-            activated = true;
-            activatedEnd = (InFlow)getOtherNode(start).getParent();
-            addEvent(new QueuedEvent(){
-                public double getDelay(){
-                    return 0.25;
-                }
-                public void invoke(){
-                    if(activatedEnd != null){ //TODO: bug where two wires are activated at once
-                        activatedEnd.getFlow();
-                        activatedEnd = null;
-                        activated = false;
-                    }
-                }
-            });
-        }
+    public void addPending(){
+        pending++;
+    }
+    
+    public void subPending(){
+        pending--;
     }
     
     public boolean getActivated(){
-        return activated;
+        return pending > 0;
     }
     
     public color getWireColor(){

@@ -48,18 +48,10 @@ class Monitor extends Tronic implements InFlow{
     }
         
     
-    public void getFlow(){
-        String result = "";
-        if(dataNode.getNumWires() > 0){
-            Tronic endTronic = dataNode.getWire(0).getOtherNode(dataNode).getParent();
-            if(endTronic instanceof Data){ //UH SHOULD BE???
-                result = ((Data) endTronic).getData();
-            }
-        }
+    public Node getFlow(FlowDetails flow){
+        String result = flow.getData(dataNode);
         processString(result);
-        if(outNode.getNumWires() > 0){
-            outNode.getWire(0).activateWire(outNode);
-        }
+        return outNode;
     }
     
     public String[] getTextLines(){

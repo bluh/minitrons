@@ -1,3 +1,3 @@
 interface InFlow{
-    void getFlow();
+    public Node getFlow(FlowDetails flow);
 }
