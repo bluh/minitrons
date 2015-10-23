@@ -12,7 +12,7 @@ class Monitor extends Tronic implements InFlow{
 
     public Monitor(int x, int y, String name){
         super(x, y, 256, 224, name);
-        sprite = loadImage("assets/monitor2.png");
+        sprite = loadImage("assets/monitor.png");
         inNode = new Node(this, 2, 113, 218, -1, 0);
         outNode = new Node(this, 3, 137, 218, 1, 0);
         dataNode = new Node(this, 1, 125, 224, 0, 1);
