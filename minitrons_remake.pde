@@ -79,6 +79,10 @@ void keyPressed(){
         tronicsId++;
         OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
         tronics.add(newTronic);
+    }else if(key == 'a' && mode == 0){
+        tronicsId++;
+        ComparisonTronic newTronic = new ComparisonTronic(0, screenX + mouseX - 24, screenY + mouseY - 24, "Comparison"+tronicsId);
+        tronics.add(newTronic);
     }else if(key == 'd' && mode == 0){
         tronicsId++;
         FDat newTronic = new FDat(screenX + mouseX - 24, screenY + mouseY - 24,"FDat"+tronicsId);
@@ -130,6 +134,8 @@ void keyPressed(){
                                 textLines.setString(i, text[i]);
                             }
                             tronObj.setJSONArray("monitorLines", textLines);
+                        }else if(tron instanceof ComparisonTronic){
+                            tronObj.setInt("comparisonType", ((ComparisonTronic)tron).getType());
                         }
                         for(int n = 0; n < tron.getNodes().length; n++){
                             for(int w = 0; w < tron.getNodes()[n].getNumWires(); w++){
@@ -219,6 +225,8 @@ void keyPressed(){
                             newTronic = new Keyboard(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
                         }else if(tronObj.getString("type").equals("FDat")){
                             newTronic = new FDat(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        }else if(tronObj.getString("type").equals("ComparisonTronic")){
+                            newTronic = new ComparisonTronic(tronObj.getInt("comparisonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
                         }
                         tronics.add(newTronic);
                         tronicDetails.put(tronObj.getInt("objIndex"), newTronic);

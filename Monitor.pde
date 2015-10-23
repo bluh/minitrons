@@ -6,13 +6,13 @@ class Monitor extends Tronic implements InFlow{
     Node outNode;
     Node dataNode;
     //N8: 17 rows
-    //mt: 21 rows
+    //mt: 30 rows
     //N8: 30 columns
     //mt: 21 columns
 
     public Monitor(int x, int y, String name){
         super(x, y, 256, 224, name);
-        sprite = loadImage("assets/monitor.png");
+        sprite = loadImage("assets/monitor2.png");
         inNode = new Node(this, 2, 113, 218, -1, 0);
         outNode = new Node(this, 3, 137, 218, 1, 0);
         dataNode = new Node(this, 1, 125, 224, 0, 1);
@@ -50,6 +50,9 @@ class Monitor extends Tronic implements InFlow{
     
     public Node getFlow(FlowDetails flow){
         String result = flow.getData(dataNode);
+        if(result.length() > (30 * 21)){
+            result = result.substring(result.length() - (21 * 21));
+        }
         processString(result);
         return outNode;
     }
@@ -66,7 +69,7 @@ class Monitor extends Tronic implements InFlow{
         image(sprite, getX() - screenX, getY() - screenY);
         fill(#FFFFFF);
         for(int i = 0; i < lines; i++){
-            text(text[i], 8 + getX() - screenX, 12 + i * 10 + getY() - screenY);
+            text(text[i], 9 + getX() - screenX, 12 + i * 10 + getY() - screenY);
         }
     }
     
