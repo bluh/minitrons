@@ -2,9 +2,11 @@ int screenX;
 int screenY;
 int mode;
 int tronicsId;
+int menuX;
 float dt;
 float mouseTime;
 String[] MODES;
+PImage[] TRONICS;
 String messageText;
 String fileName;
 ArrayList<Tronic> tronics;
@@ -17,6 +19,7 @@ DataEntry dataEntry;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
+boolean menuOpen;
 
 void setup(){
     size(800,600,P2D);
@@ -29,10 +32,13 @@ void setup(){
     dt = 0;
     mouseTime = 0;
     tronicsId = 0;
+    menuX = 16;
     shiftDown = false;
     ctrlDown = false;
     altDown = false;
+    menuOpen = false;
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
+    TRONICS = new PImage[]{img("add"),img("subtract"),img("multi"),img("divide"),img("rbutton"),img("data")};
     messageText = "NEW FILE";
     fileName = "";
     tronics = new ArrayList<Tronic>();
@@ -52,6 +58,10 @@ void setup(){
        public void windowClosed(java.awt.event.WindowEvent e) {}
        public void windowActivated(java.awt.event.WindowEvent e) {}
     });
+}
+
+PImage img(String file){ ///im...lazy????
+    return loadImage("assets/icons/" + file + ".png");
 }
 
 void keyPressed(){
@@ -76,9 +86,10 @@ void keyPressed(){
         Keyboard newTronic = new Keyboard(screenX + mouseX - 48, screenY + mouseY - 24, "Keboard"+tronicsId);
         tronics.add(newTronic);
     }else if(key == 'e' && mode == 0){
-        tronicsId++;
-        OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
-        tronics.add(newTronic);
+        menuOpen = !menuOpen;
+        //tronicsId++;
+        //OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
+        //tronics.add(newTronic);
     }else if(key == 'a' && mode == 0){
         tronicsId++;
         ComparisonTronic newTronic = new ComparisonTronic(0, screenX + mouseX - 24, screenY + mouseY - 24, "Comparison"+tronicsId);
@@ -536,8 +547,19 @@ void draw(){
     
     stroke(#404040);
     strokeWeight(1);
+    
     fill(#606060);
     rect(0,height - 16, width - 1, 16);
+    if(menuOpen){
+        menuX = min(menuX + 20, 200);
+    }else{
+        menuX = max(menuX - 20, 16);
+    }
+    rect(0, 0, menuX, height - 16);
+    for(int i = 0; i < TRONICS.length; i++){
+        image(TRONICS[i], (-188 + menuX) + i * 32, 16);
+    }
+    
     fill(#FFFFFF);
     text("(" + screenX + ", " + screenY + ")", 4, height - 4); 
     text("MODE: " + MODES[mode] + "", 204, height - 4);
