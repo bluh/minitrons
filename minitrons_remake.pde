@@ -41,8 +41,8 @@ void setup(){
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
-        "divide", "ybutton", "bbutton", "gbutton", "rbutton", "keyboard",
-        "monitor"
+        "divide", "ifelse", "ybutton", "bbutton", "gbutton", "rbutton",
+        "keyboard", "monitor"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     for(int i = 0; i < TRONICS.length;i++){
@@ -278,20 +278,23 @@ void mousePressed(){
                 case "fdat":
                     newTronic = new FDat(screenX + mouseX - 24, screenY + mouseY - 24,"FDat"+tronicsId);
                     break;
+                case "ifelse":
+                    newTronic = new ComparisonTronic(0, screenX + mouseX - 24, screenY + mouseY - 24,"IfElse"+tronicsId);
+                    break;
                 case "and":
                     newTronic = new OperatorTronic(4, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
                     break;
                 case "add":
-                    newTronic = new OperatorTronic(0, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    newTronic = new OperatorTronic(0, screenX + mouseX - 24, screenY + mouseY - 24,"Add"+tronicsId);
                     break;
                 case "subtract":
-                    newTronic = new OperatorTronic(1, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    newTronic = new OperatorTronic(1, screenX + mouseX - 24, screenY + mouseY - 24,"Sub"+tronicsId);
                     break;
                 case "multi":
-                    newTronic = new OperatorTronic(2, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    newTronic = new OperatorTronic(2, screenX + mouseX - 24, screenY + mouseY - 24,"Multi"+tronicsId);
                     break;
                 case "divide":
-                    newTronic = new OperatorTronic(3, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    newTronic = new OperatorTronic(3, screenX + mouseX - 24, screenY + mouseY - 24,"Div"+tronicsId);
                     break;
                 case "rbutton":
                     newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
