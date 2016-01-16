@@ -6,7 +6,8 @@ int menuX;
 float dt;
 float mouseTime;
 String[] MODES;
-PImage[] TRONICS;
+String[] TRONICS;
+PImage[] TRONICSIMG;
 String messageText;
 String fileName;
 ArrayList<Tronic> tronics;
@@ -38,7 +39,15 @@ void setup(){
     altDown = false;
     menuOpen = false;
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
-    TRONICS = new PImage[]{img("add"),img("subtract"),img("multi"),img("divide"),img("rbutton"),img("data")};
+    TRONICS = new String[]{
+        "data", "fdat", "and", "add", "subtract", "multi",
+        "divide", "ybutton", "bbutton", "gbutton", "rbutton", "keyboard",
+        "monitor"
+    };
+    TRONICSIMG = new PImage[TRONICS.length];
+    for(int i = 0; i < TRONICS.length;i++){
+        TRONICSIMG[i] = img(TRONICS[i]);
+    }
     messageText = "NEW FILE";
     fileName = "";
     tronics = new ArrayList<Tronic>();
@@ -77,36 +86,8 @@ void keyPressed(){
         menu.deselectAll();
         tronics.clear();
         wires.clear();
-    }else if(key == 'q' && mode == 0){
-        tronicsId++;
-        Button newTronic = new Button((int)random(0,4), screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
-        tronics.add(newTronic);
-    }else if(key == 'w' && mode == 0){
-        tronicsId++;
-        Keyboard newTronic = new Keyboard(screenX + mouseX - 48, screenY + mouseY - 24, "Keboard"+tronicsId);
-        tronics.add(newTronic);
     }else if(key == 'e' && mode == 0){
         menuOpen = !menuOpen;
-        //tronicsId++;
-        //OperatorTronic newTronic = new OperatorTronic((int)random(0,5), screenX + mouseX - 24, screenY + mouseY - 24,"Operator"+tronicsId);
-        //tronics.add(newTronic);
-    }else if(key == 'a' && mode == 0){
-        tronicsId++;
-        ComparisonTronic newTronic = new ComparisonTronic(0, screenX + mouseX - 24, screenY + mouseY - 24, "Comparison"+tronicsId);
-        tronics.add(newTronic);
-    }else if(key == 'd' && mode == 0){
-        tronicsId++;
-        FDat newTronic = new FDat(screenX + mouseX - 24, screenY + mouseY - 24,"FDat"+tronicsId);
-        tronics.add(newTronic);
-    }else if(key == 'z' && mode == 0){
-        tronicsId++;
-        Data newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
-        newTronic.setData(Float.toString(random(1,3)));
-        tronics.add(newTronic);
-    }else if(key == 'x' && mode == 0){
-        tronicsId++;
-        Monitor newTronic = new Monitor(screenX + mouseX - 128, screenY + mouseY - 112,"Monitor"+tronicsId);
-        tronics.add(newTronic);
     }else if((keyCode == 83 || key == 's') && ctrlDown && mode == 0){
         messageText = "SAVING...";
         mode = 3;
@@ -284,6 +265,61 @@ void keyReleased(){
 
 void mousePressed(){
     mouseTime = 0;
+    if(menuOpen && mouseX < 200){
+        int index = (mouseY / 32) * 6 + (mouseX / 32);
+        if(index < TRONICS.length){
+            String tronic = TRONICS[index];
+            Tronic newTronic;
+            tronicsId++;
+            switch(tronic){
+                case "data":
+                    newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
+                    break;
+                case "fdat":
+                    newTronic = new FDat(screenX + mouseX - 24, screenY + mouseY - 24,"FDat"+tronicsId);
+                    break;
+                case "and":
+                    newTronic = new OperatorTronic(4, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    break;
+                case "add":
+                    newTronic = new OperatorTronic(0, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    break;
+                case "subtract":
+                    newTronic = new OperatorTronic(1, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    break;
+                case "multi":
+                    newTronic = new OperatorTronic(2, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    break;
+                case "divide":
+                    newTronic = new OperatorTronic(3, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);
+                    break;
+                case "rbutton":
+                    newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
+                    break;
+                case "gbutton":
+                    newTronic = new Button(1, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
+                    break;
+                case "ybutton":
+                    newTronic = new Button(2, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
+                    break;
+                case "bbutton":
+                    newTronic = new Button(3, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
+                    break;
+                case "keyboard":
+                    newTronic = new Keyboard(screenX + mouseX - 48, screenY + mouseY - 24, "Keboard"+tronicsId);
+                    break;
+                case "monitor":
+                    newTronic = new Monitor(screenX + mouseX - 128, screenY + mouseY - 112,"Monitor"+tronicsId);
+                    break;
+                default:
+                    newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
+                    break;
+            }
+            dragTronic = newTronic;
+            menuOpen = false;
+            tronics.add(newTronic);
+        }
+    }
     if(mouseButton == LEFT && mode == 0){
         if(menu.getSelected().size() > 0){
             int mouseIndex = menu.containsPoint(mouseX + screenX, mouseY + screenY);
@@ -553,14 +589,17 @@ void draw(){
     if(menuOpen){
         menuX = min(menuX + 20, 200);
     }else{
-        menuX = max(menuX - 20, 16);
+        menuX = max(menuX - 20, 8);
     }
     rect(0, 0, menuX, height - 16);
     for(int i = 0; i < TRONICS.length; i++){
-        image(TRONICS[i], (-188 + menuX) + i * 32, 16);
+        if(TRONICSIMG[i] != null){
+            image(TRONICSIMG[i], (-188 + menuX) + (i % 6) * 32, 16 + 32 * (i / 6));
+        }
     }
     
     fill(#FFFFFF);
+    text((menuOpen ? "<\n<\n<" : ">\n>\n>"),-8 + menuX,height / 2 - 16);
     text("(" + screenX + ", " + screenY + ")", 4, height - 4); 
     text("MODE: " + MODES[mode] + "", 204, height - 4);
     text("TOTAL: " + tronics.size() + "", 404, height - 4);
