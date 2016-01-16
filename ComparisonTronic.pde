@@ -20,6 +20,12 @@ class ComparisonTronic extends Tronic implements InFlow{
             case 0:
                 sprite = loadImage("assets/ifequals.png");
                 break;
+            case 1:
+                sprite = loadImage("assets/ifgt.png");
+                break;
+            case 2:
+                sprite = loadImage("assets/ifcontains.png");
+                break;
             default:
                 sprite = loadImage("assets/ifequals.png");
                 break;
@@ -32,10 +38,49 @@ class ComparisonTronic extends Tronic implements InFlow{
     }
     
     public Node getFlow(FlowDetails flow){
-        if(flow.getData(aNode).equals(flow.getData(bNode))){
-            return trueNode;
-        }else{
-            return falseNode;
+        switch(type){
+            case 0:
+                if(flow.getData(aNode).equals(flow.getData(bNode))){
+                    return trueNode;
+                }else{
+                    return falseNode;
+                }
+            case 1:
+                String a,b;
+                double numA, numB;
+                a = flow.getData(aNode);
+                if(a.equals("")){
+                    numA = 0;
+                }else{
+                    try{
+                        numA = Double.valueOf(a);
+                    }catch(NumberFormatException e){
+                        numA = 0;
+                    }
+                }
+                b = flow.getData(bNode);
+                if(b.equals("")){
+                    numB = 0;
+                }else{
+                    try{
+                        numB = Double.valueOf(b);
+                    }catch(NumberFormatException e){
+                        numB = 0;
+                    }
+                }
+                if(numA > numB){
+                    return trueNode;
+                }else{
+                    return falseNode;
+                }
+            case 2:
+                if(flow.getData(aNode).contains(flow.getData(bNode))){
+                    return trueNode;
+                }else{
+                    return falseNode;
+                }
+            default:
+                return falseNode;
         }
     }
     

@@ -41,8 +41,8 @@ void setup(){
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
-        "divide", "ifelse", "ybutton", "bbutton", "gbutton", "rbutton",
-        "keyboard", "monitor"
+        "divide", "ifelse", "ifgt", "ifcontains", "ybutton", "bbutton",
+        "gbutton", "rbutton", "keyboard", "monitor"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     for(int i = 0; i < TRONICS.length;i++){
@@ -171,7 +171,6 @@ void keyPressed(){
                 }
             }
         }).showWindow();
-        
     }else if((keyCode == 79 || key == 'o') && ctrlDown && mode == 0){
         messageText = "LOADING...";
         mode = 3;
@@ -280,6 +279,12 @@ void mousePressed(){
                     break;
                 case "ifelse":
                     newTronic = new ComparisonTronic(0, screenX + mouseX - 24, screenY + mouseY - 24,"IfElse"+tronicsId);
+                    break;
+                case "ifgt":
+                    newTronic = new ComparisonTronic(1, screenX + mouseX - 24, screenY + mouseY - 24,"IfGT"+tronicsId);
+                    break;
+                case "ifcontains":
+                    newTronic = new ComparisonTronic(2, screenX + mouseX - 24, screenY + mouseY - 24,"IfContains"+tronicsId);
                     break;
                 case "and":
                     newTronic = new OperatorTronic(4, screenX + mouseX - 24, screenY + mouseY - 24,"And"+tronicsId);

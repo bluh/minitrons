@@ -6,6 +6,7 @@ class Data extends Tronic{
     
     public Data(int x, int y, String name){
         super(x, y, 48, 48, name);
+        data = "";
         sprite = loadImage("assets/data.png");
         dataNode = new Node(this, 4, 48, 21, 1, 0);
     }
