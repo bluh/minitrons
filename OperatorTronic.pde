@@ -32,6 +32,12 @@ class OperatorTronic extends Tronic implements InFlow{
             case 4:
                 sprite = loadImage("assets/and.png");
                 break;
+            case 5:
+                sprite = loadImage("assets/random.png");
+                break;
+            case 6:
+                sprite = loadImage("assets/modulo.png");
+                break;
             default:
                 sprite = loadImage("assets/add.png");
                 break;
@@ -90,8 +96,19 @@ class OperatorTronic extends Tronic implements InFlow{
                     break;
                 case 4:
                     result = a + b;
+                    break;
+                case 5:
+                    if(a.equals("") && b.equals("")){
+                        result = Double.toString(random(1.0));
+                    }else{
+                        result = Double.toString(random((float) numA,(float)  numB));
+                    }
+                    break;
+                case 6:
+                    result = Double.toString(numA % numB);
                 default:
                     result = a + b;
+                    break;
             }
             flow.setData(dataNode, result);
         }

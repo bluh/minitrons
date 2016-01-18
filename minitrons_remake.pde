@@ -41,8 +41,8 @@ void setup(){
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
-        "divide", "ifelse", "ifgt", "ifcontains", "ybutton", "bbutton",
-        "gbutton", "rbutton", "keyboard", "monitor"
+        "divide", "modulo", "random", "ifelse", "ifgt", "ifcontains",
+        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     for(int i = 0; i < TRONICS.length;i++){
@@ -300,6 +300,12 @@ void mousePressed(){
                     break;
                 case "divide":
                     newTronic = new OperatorTronic(3, screenX + mouseX - 24, screenY + mouseY - 24,"Div"+tronicsId);
+                    break;
+                case "random":
+                    newTronic = new OperatorTronic(5, screenX + mouseX - 24, screenY + mouseY - 24,"Random"+tronicsId);
+                    break;
+                case "modulo":
+                    newTronic = new OperatorTronic(6, screenX + mouseX - 24, screenY + mouseY - 24,"Random"+tronicsId);
                     break;
                 case "rbutton":
                     newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
