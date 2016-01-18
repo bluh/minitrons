@@ -106,6 +106,7 @@ class OperatorTronic extends Tronic implements InFlow{
                     break;
                 case 6:
                     result = Double.toString(numA % numB);
+                    break;
                 default:
                     result = a + b;
                     break;

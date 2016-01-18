@@ -36,14 +36,6 @@ public abstract class Tronic{
         this.y = y;
     }
     
-    public void deleteTronic(){
-        for(Node node: getNodes()){
-            for(int i = 0; i < node.getNumWires(); i++){
-                node.getWire(i).deleteWire();
-            }
-        }
-    }
-    
     public boolean containsPoint(int px, int py){
         return px > x && px < x + WIDTH && py > y && py < y + HEIGHT;
     }

@@ -46,7 +46,7 @@ void setup(){
     };
     TRONICSIMG = new PImage[TRONICS.length];
     for(int i = 0; i < TRONICS.length;i++){
-        TRONICSIMG[i] = img(TRONICS[i]);
+        TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
     messageText = "NEW FILE";
     fileName = "";
@@ -69,10 +69,6 @@ void setup(){
     });
 }
 
-PImage img(String file){ ///im...lazy????
-    return loadImage("assets/icons/" + file + ".png");
-}
-
 void keyPressed(){
     mouseTime = 0;
     //println(keyCode);
@@ -81,6 +77,9 @@ void keyPressed(){
         screenY = 0;
     }else if(key == ' '){
         mode = (mode + 1) % 2;
+        if(mode != 0){
+            menuOpen = false;
+        }
         menu.deselectAll();
     }else if(key == 'c'){
         menu.deselectAll();
@@ -348,7 +347,6 @@ void mousePressed(){
                     return;
                 }else if(action == "DELETE"){
                     for(Tronic tron: menu.getSelected()){
-                        //tron.deleteTronic();
                         if(dataEntry.getTronic() == tron){
                             dataEntry.setTronic(null);
                         }
