@@ -403,7 +403,7 @@ void mousePressed(){
         }
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
-                if(node.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tron.getX(), tron.getY(), zoom)){
+                if(node.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tron.getX(), tron.getY())){
                     mode = 2;
                     wireStart = new MouseWire(node, node.getNodeColor());
                     return;
@@ -441,7 +441,7 @@ void mousePressed(){
         //wire time...
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
-                if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY(), zoom)){
+                if(node.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tron.getX(), tron.getY())){
                     //make a wire connecting two nodes
                     if(wireStart.canConnectTo(node)){
                         color wireColor = #FF0000;
@@ -547,10 +547,10 @@ void draw(){
             if(tron != dragTronic){
                 int relX = tron.getX() - dragTronic.getX();
                 int relY = tron.getY() - dragTronic.getY();
-                tron.moveTronic((int)(((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) - ((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) % 8) + relX, (int)(((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) - ((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) % 8) + relY);
+                tron.moveTronic((int)((screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) - (screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) % 8) + relX, (int)((screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) - (screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) % 8) + relY);
             }
         }
-        dragTronic.moveTronic((int)(((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) - ((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)(((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) - ((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
+        dragTronic.moveTronic((int)((screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) - (screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)((screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) - (screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
     }
     menu.renderHighlights(dt, screenX, screenY, zoom);
     fill(#FF0000);
@@ -576,7 +576,7 @@ void draw(){
         wire.render(screenX, screenY, (wire.getActivated() ? #FFFFFF : wire.getWireColor()));
     }
     if(mode == 2 && wireStart != null){
-        wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), (int)(screenX / zoom), (int)(screenY / zoom));
+        wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), screenX, screenY);
     }
     pushMatrix();
     if(zoom == 1.0){
@@ -589,7 +589,7 @@ void draw(){
         tronics.get(i).renderTronic(screenX, screenY);
         pushMatrix();
         scale(2);
-        tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, zoom, (mode != 1));
+        tronics.get(i).renderNodes(mouseX, mouseY, screenX, screenY, zoom, (mode != 1));
         popMatrix();
     }
     textFont(font8, 8);
