@@ -18,17 +18,18 @@ class SmallTextEntry extends JFrame{
         this.textEvent = event;
         setAlwaysOnTop(true);
         setResizable(false);
-        try {
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        try{
            psn = (java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(dataPath("neverfont.ttf")))).deriveFont(8f);
-        } catch (Exception e) {
+        }catch(Exception e){
             psn = new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12);
             e.printStackTrace();
-        };
+        }
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }catch(Exception e){
             //whatever jeez....
-        };
+        }
         textArea = new JTextField(def);
         textArea.setFont(psn);
         textArea.setEditable(true);
@@ -101,19 +102,6 @@ class SmallTextEntry extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 textArea.setText("");
             }
-        });
-        addWindowListener(new WindowListener() {
-           public void windowOpened(WindowEvent e) {}
-           public void windowIconified(WindowEvent e) {}
-           public void windowDeiconified(WindowEvent e) {}
-           public void windowDeactivated(WindowEvent e) {}
-           public void windowClosing(WindowEvent e) {
-               textEvent.canceled();
-               setVisible(false);
-               dispose();
-           }
-           public void windowClosed(WindowEvent e) {}
-           public void windowActivated(WindowEvent e) {}
         });
         
         GroupLayout layout = new GroupLayout(getContentPane());

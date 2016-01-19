@@ -304,7 +304,7 @@ void mousePressed(){
                     newTronic = new OperatorTronic(5, screenX + mouseX - 24, screenY + mouseY - 24,"Random"+tronicsId);
                     break;
                 case "modulo":
-                    newTronic = new OperatorTronic(6, screenX + mouseX - 24, screenY + mouseY - 24,"Random"+tronicsId);
+                    newTronic = new OperatorTronic(6, screenX + mouseX - 24, screenY + mouseY - 24,"Modulo"+tronicsId);
                     break;
                 case "rbutton":
                     newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
@@ -384,8 +384,8 @@ void mousePressed(){
                             if(!contents.equals("")){
                                 for(Tronic tron: menu.getSelected()){
                                     tron.setName(contents);
-                                    menu.deselectAll();
                                 }
+                                menu.deselectAll();
                             }
                         }
                     }).showWindow();

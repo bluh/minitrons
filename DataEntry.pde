@@ -80,12 +80,16 @@ class DataEntry extends JFrame{
         
         getData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                textArea.setText(tronic.getData());
+                if(tronic != null){
+                    textArea.setText(tronic.getData());
+                }
             }
         });
         setData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tronic.setData(textArea.getText());
+                if(tronic != null){
+                    tronic.setData(textArea.getText());
+                }
             }
         });
         clearData.addActionListener(new ActionListener() {
