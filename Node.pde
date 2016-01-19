@@ -49,11 +49,11 @@ class Node{
     }
     
     public boolean containsPoint(int x, int y, int tronicX, int tronicY){
-        return x >= this.x + tronicX - 5 && x <= this.x + WIDTH + tronicX + 5 && y >= this.y + tronicY - 5 && y <= this.y + HEIGHT + tronicY + 5;
+        return x >= (this.x + tronicX) - 5 && x <= (this.x + WIDTH + tronicX) + 5 && y >= (this.y + tronicY) - 5 && y <= (this.y + HEIGHT + tronicY) + 5;
     }
     
-    public void render(int mouseX, int mouseY, int screenX, int screenY, int tronicX, int tronicY, boolean highlight){
-        if(highlight && containsPoint(mouseX, mouseY, tronicX, tronicY)){
+    public void render(int mouseX, int mouseY, int screenX, int screenY, int tronicX, int tronicY, float zoom, boolean highlight){
+        if(highlight && containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tronicX, tronicY)){
             fill(#D0D0D0);
         }else{
             fill(nodeColor);

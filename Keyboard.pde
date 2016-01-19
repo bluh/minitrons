@@ -13,7 +13,7 @@ class Keyboard extends Tronic implements Clickable{
         memory = "";
     }
     
-    public void clicked(int x, int y){
+    public void clicked(int x, int y, float zoom){
         if(ste == null){
             ste = new SmallTextEntry(memory, "Send", (new SmallTextEntryEvent(){
                 Tronic thisTronic;
@@ -40,12 +40,12 @@ class Keyboard extends Tronic implements Clickable{
     }
     
     public void renderTronic(int screenX, int screenY){
-        image(sprite, getX() - screenX, getY() - screenY);
+        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
     }
     
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

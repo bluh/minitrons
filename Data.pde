@@ -12,11 +12,11 @@ class Data extends Tronic{
     }
     
     public void renderTronic(int screenX, int screenY){
-        image(sprite, x - screenX, y - screenY);
+        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
     }
     
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public void setData(String data){

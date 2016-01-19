@@ -37,7 +37,7 @@ public abstract class Tronic{
     }
     
     public boolean containsPoint(int px, int py){
-        return px > x && px < x + WIDTH && py > y && py < y + HEIGHT;
+        return px >= x && px <= x + WIDTH && py >= y && py <= y + HEIGHT;
     }
     
     public void setEnabled(){
@@ -61,6 +61,6 @@ public abstract class Tronic{
     }
     
     abstract void renderTronic(int screenX, int screenY);
-    abstract void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight);
+    abstract void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight);
     abstract Node[] getNodes();
 }

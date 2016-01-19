@@ -1,6 +1,3 @@
-import java.awt.Dimension;
-import java.awt.event.*;
-
 import javax.swing.*;
 
 class SmallTextEntry extends JFrame{
@@ -18,9 +15,8 @@ class SmallTextEntry extends JFrame{
         this.textEvent = event;
         setAlwaysOnTop(true);
         setResizable(false);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         try{
-           psn = (java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(dataPath("neverfont.ttf")))).deriveFont(8f);
+            psn = (java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(dataPath("neverfont.ttf")))).deriveFont(8f);
         }catch(Exception e){
             psn = new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12);
             e.printStackTrace();
@@ -40,26 +36,26 @@ class SmallTextEntry extends JFrame{
         
         popup = new JPopupMenu();
         JMenuItem cutItem = new JMenuItem("Cut");
-        cutItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        cutItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.cut();
             }
         });
         JMenuItem copyItem = new JMenuItem("Copy");
-        copyItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        copyItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.copy();
             }
         });
         JMenuItem pasteItem = new JMenuItem("Paste");
-        pasteItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        pasteItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.paste();
             }
         });
         JMenuItem selectItem = new JMenuItem("Select All");
-        selectItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        selectItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.selectAll();
             }
         });
@@ -69,7 +65,7 @@ class SmallTextEntry extends JFrame{
         popup.addSeparator();
         popup.add(selectItem);
         
-        textArea.addMouseListener(new MouseListener() {
+        textArea.addMouseListener(new java.awt.event.MouseListener() {
             public void mouseReleased(java.awt.event.MouseEvent arg0) {
                 if(arg0.isPopupTrigger()){
                     popup.show(textArea, arg0.getX(), arg0.getY());
@@ -84,24 +80,38 @@ class SmallTextEntry extends JFrame{
         JButton saveData = new JButton(action);
         JButton clearData = new JButton("Clear");
         
-        cancelData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        cancelData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textEvent.canceled();
                 setVisible(false);
                 dispose();
             }
         });
-        saveData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        saveData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textEvent.saved(textArea.getText());
                 setVisible(false);
                 dispose();
             }
         });
-        clearData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        clearData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.setText("");
             }
+        });
+        
+        addWindowListener(new java.awt.event.WindowListener() {
+           public void windowOpened(java.awt.event.WindowEvent e) {}
+           public void windowIconified(java.awt.event.WindowEvent e) {}
+           public void windowDeiconified(java.awt.event.WindowEvent e) {}
+           public void windowDeactivated(java.awt.event.WindowEvent e) {}
+           public void windowClosing(java.awt.event.WindowEvent e) {
+               textEvent.canceled();
+               setVisible(false);
+               dispose();
+           }
+           public void windowClosed(java.awt.event.WindowEvent e) {}
+           public void windowActivated(java.awt.event.WindowEvent e) {}
         });
         
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -126,7 +136,7 @@ class SmallTextEntry extends JFrame{
         getContentPane().setLayout(layout);
         
         pack();
-        setMaximumSize(new Dimension(300, 20));
+        setMaximumSize(new java.awt.Dimension(300, 20));
     }
     
     public void showWindow(){

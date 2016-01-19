@@ -116,15 +116,17 @@ class MenuDisplay{
         return items;
     }
     
-    public int containsPoint(int x, int y){
-        if(x > this.x + OFFSET && x < this.x + OFFSET + WIDTH && y > this.y + OFFSET){
-            return (y - (this.y + OFFSET)) / 17;
+    public int containsPoint(int x, int y, int screenX, int screenY, float zoom){
+        if(x > (this.x * zoom) + OFFSET - (screenX * zoom) && x < (this.x * zoom) + OFFSET + WIDTH - (screenX * zoom) && y > (this.y * zoom) + OFFSET - (screenY * zoom)){
+            return (int) (y - (this.y * zoom + OFFSET - screenY * zoom)) / 17;
         }
         return -1;
     }
     
-    public void renderHighlights(float dt, int screenX, int screenY){
+    public void renderHighlights(float dt, int screenX, int screenY, float zoom){
         if(tronics.size() > 0){
+            pushMatrix();
+            scale(zoom);
             noStroke();
             fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
             for(Tronic tron: tronics){
@@ -134,15 +136,16 @@ class MenuDisplay{
             for(Wire wire: wires){
                 wire.render(screenX, screenY, color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
             }
+            popMatrix();
         }
     }
     
-    public void renderMenu(int screenX, int screenY, int mouseX, int mouseY){
+    public void renderMenu(int screenX, int screenY, int mouseX, int mouseY, float zoom){
         if(tronics.size() > 0){
             strokeWeight(1);
-            int mousePoint = containsPoint(mouseX + screenX, mouseY + screenY);
+            int mousePoint = containsPoint(mouseX, mouseY, screenX, screenY, zoom);
             for(MenuItem item: items){
-                item.render(x, y, screenX, screenY, mousePoint);
+                item.render((int) (x * zoom), (int) (y * zoom), (int) (screenX * zoom), (int) (screenY * zoom), mousePoint);
             }
         }
     }
@@ -169,7 +172,7 @@ class MenuDisplay{
             stroke(itemColor);
             rect(menuX + OFFSET - screenX, menuY + OFFSET + (17 * index) - screenY, WIDTH, HEIGHT);
             fill(#FFFFFF);
-            text(title, menuX + OFFSET - screenX, y + OFFSET + (17 * index) + 12 - screenY);
+            text(title, menuX + OFFSET - screenX, menuY + OFFSET + (17 * index) + 12 - screenY);
         }
         
         public String getAction(){

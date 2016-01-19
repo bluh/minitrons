@@ -5,11 +5,14 @@ int tronicsId;
 int menuX;
 float dt;
 float mouseTime;
+float zoom;
 String[] MODES;
 String[] TRONICS;
 PImage[] TRONICSIMG;
 String messageText;
 String fileName;
+PFont font8;
+PFont font16;
 ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
 ArrayList<QueuedWrapper> events;
@@ -25,7 +28,8 @@ boolean menuOpen;
 void setup(){
     size(800,600,P2D);
     surface.setResizable(true);
-    textFont(loadFont("neverfont8.vlw"),8);
+    font8 = loadFont("neverfont8.vlw");
+    font16 = loadFont("neverfont16.vlw");
     println("Loaded.");
     screenX = 0;
     screenY = 0;
@@ -34,6 +38,7 @@ void setup(){
     mouseTime = 0;
     tronicsId = 0;
     menuX = 16;
+    zoom = 1;
     shiftDown = false;
     ctrlDown = false;
     altDown = false;
@@ -75,6 +80,7 @@ void keyPressed(){
     if(key == 'r'){
         screenX = 0;
         screenY = 0;
+        zoom = 1.0;
     }else if(key == ' '){
         mode = (mode + 1) % 2;
         if(mode != 0){
@@ -328,14 +334,16 @@ void mousePressed(){
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
                     break;
             }
+            menu.deselectAll();
             dragTronic = newTronic;
             menuOpen = false;
             tronics.add(newTronic);
+            return;
         }
     }
     if(mouseButton == LEFT && mode == 0){
         if(menu.getSelected().size() > 0){
-            int mouseIndex = menu.containsPoint(mouseX + screenX, mouseY + screenY);
+            int mouseIndex = menu.containsPoint(mouseX, mouseY, screenX, screenY, zoom);
             MenuDisplay.MenuItem[] items = menu.getItems();
             if(!altDown && mouseIndex >= 0 && items.length > mouseIndex){
                 String action = items[mouseIndex].getAction();
@@ -395,13 +403,13 @@ void mousePressed(){
         }
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
-                if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
+                if(node.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tron.getX(), tron.getY(), zoom)){
                     mode = 2;
                     wireStart = new MouseWire(node, node.getNodeColor());
                     return;
                 }
             }
-            if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
+            if(tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
                 if(ctrlDown){
                     if(!menu.contains(tron)){
                         menu.deselectAll();
@@ -420,11 +428,11 @@ void mousePressed(){
     }else if(mode == 1){
         for(Tronic tron: tronics){
             if(tron instanceof Clickable){
-                if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
-                    ((Clickable) tron).clicked(mouseX, mouseY);
+                if(tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
+                    ((Clickable) tron).clicked(mouseX, mouseY, zoom);
                 }
             }else if(tron instanceof Data){
-                if(tron.containsPoint(screenX + mouseX, screenY + mouseY)){
+                if(tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
                     println("Data: " + ((Data) tron).getData());
                 }
             }
@@ -433,7 +441,7 @@ void mousePressed(){
         //wire time...
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
-                if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY())){
+                if(node.containsPoint(mouseX + screenX, mouseY + screenY, tron.getX(), tron.getY(), zoom)){
                     //make a wire connecting two nodes
                     if(wireStart.canConnectTo(node)){
                         color wireColor = #FF0000;
@@ -456,6 +464,15 @@ void mousePressed(){
             }
         }
         mode = 0;
+    }
+}
+
+void mouseWheel(MouseEvent evt){
+    float oldZoom = zoom;
+    zoom = max(min(2.0, zoom * abs(pow(2.0,-evt.getCount()))),0.5);
+    if(zoom != oldZoom){
+        screenX = (int) (mouseX - (width / 2) / zoom);
+        screenY = (int) (mouseY - (height / 2) / zoom);
     }
 }
 
@@ -522,20 +539,20 @@ void draw(){
     dt += (1.0/frameRate) % 2.5;
     background(#E5E5E5);
     if(mousePressed && mouseButton == RIGHT){
-        screenX += pmouseX - mouseX;
-        screenY += pmouseY - mouseY;
+        screenX += (pmouseX - mouseX) / zoom;
+        screenY += (pmouseY - mouseY) / zoom;
     }
     if(dragTronic != null){
         for(Tronic tron: menu.getSelected()){
             if(tron != dragTronic){
                 int relX = tron.getX() - dragTronic.getX();
                 int relY = tron.getY() - dragTronic.getY();
-                tron.moveTronic((screenX + mouseX - dragTronic.getWidth() / 2) - (screenX + mouseX - dragTronic.getWidth() / 2) % 8 + relX, (screenY + mouseY - dragTronic.getHeight() / 2) - (screenY + mouseY - dragTronic.getHeight() / 2) % 8 + relY);
+                tron.moveTronic((int)(((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) - ((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) % 8) + relX, (int)(((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) - ((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) % 8) + relY);
             }
         }
-        dragTronic.moveTronic((screenX + mouseX - dragTronic.getWidth() / 2) - (screenX + mouseX - dragTronic.getWidth() / 2) % 8, (screenY + mouseY - dragTronic.getHeight() / 2) - (screenY + mouseY - dragTronic.getHeight() / 2) % 8);
+        dragTronic.moveTronic((int)(((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) - ((screenX + mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)(((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) - ((screenY + mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
     }
-    menu.renderHighlights(dt, screenX, screenY);
+    menu.renderHighlights(dt, screenX, screenY, zoom);
     fill(#FF0000);
     strokeWeight(0);
     if(dataEntry.getTronic() != null){
@@ -544,27 +561,44 @@ void draw(){
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);
-    for(int x = -screenX % 16; x < width; x += 16){
+    for(int x = (int) ((-screenX % 16) * zoom); x < width; x += (16 * zoom)){
         line(x,0,x,height);
     }
-    for(int y = -screenY % 16; y < height; y += 16){
+    for(int y = (int) ((-screenY % 16) * zoom); y < height; y += (16 * zoom)){
         line(0, y, width, y);
     }
+    
+    pushMatrix();
+    scale(zoom);
     
     strokeWeight(6);
     for(Wire wire: wires){
         wire.render(screenX, screenY, (wire.getActivated() ? #FFFFFF : wire.getWireColor()));
     }
     if(mode == 2 && wireStart != null){
-        wireStart.render(mouseX, mouseY, screenX, screenY);
+        wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), (int)(screenX / zoom), (int)(screenY / zoom));
     }
+    pushMatrix();
+    if(zoom == 1.0){
+        textFont(font8, 16);
+    }else{
+        textFont(font16, 16);
+    }
+    scale(.5);
     for(int i = tronics.size() - 1; i >= 0; i--){
         tronics.get(i).renderTronic(screenX, screenY);
-        tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, (mode != 1));
+        pushMatrix();
+        scale(2);
+        tronics.get(i).renderNodes(screenX + mouseX, screenY + mouseY, screenX, screenY, zoom, (mode != 1));
+        popMatrix();
     }
+    textFont(font8, 8);
+    popMatrix();
+    
+    popMatrix();
     
     if(mode == 0 && dragTronic == null && !altDown){
-        menu.renderMenu(screenX, screenY, mouseX, mouseY);
+        menu.renderMenu(screenX, screenY, mouseX, mouseY, zoom);
     }
     
     for(int i = 0; i < events.size(); i++){
@@ -582,7 +616,7 @@ void draw(){
     }
     if(mouseTime > .5){
         for(Tronic tron: tronics){
-            if(tron.containsPoint(mouseX + screenX, mouseY + screenY)){
+            if(tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
                 noStroke();
                 fill(#FFFFFF, 200);
                 rect(mouseX + 10, mouseY - 10, textWidth("Name: " + tron) + 4, 12);
@@ -609,7 +643,6 @@ void draw(){
             image(TRONICSIMG[i], (-188 + menuX) + (i % 6) * 32, 16 + 32 * (i / 6));
         }
     }
-    
     fill(#FFFFFF);
     text((menuOpen ? "<\n<\n<" : ">\n>\n>"),-8 + menuX,height / 2 - 16);
     text("(" + screenX + ", " + screenY + ")", 4, height - 4); 

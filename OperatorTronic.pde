@@ -121,15 +121,15 @@ class OperatorTronic extends Tronic implements InFlow{
     }
     
     public void renderTronic(int screenX, int screenY){
-        image(sprite, getX() - screenX, getY() - screenY);
+        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
     }
     
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
-        aNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
-        bNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        aNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        bNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

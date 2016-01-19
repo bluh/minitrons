@@ -1,4 +1,3 @@
-import java.awt.event.*;
 import javax.swing.*;
 
 class DataEntry extends JFrame{
@@ -31,26 +30,26 @@ class DataEntry extends JFrame{
         
         popup = new JPopupMenu();
         JMenuItem cutItem = new JMenuItem("Cut");
-        cutItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        cutItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.cut();
             }
         });
         JMenuItem copyItem = new JMenuItem("Copy");
-        copyItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        copyItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.copy();
             }
         });
         JMenuItem pasteItem = new JMenuItem("Paste");
-        pasteItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        pasteItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.paste();
             }
         });
         JMenuItem selectItem = new JMenuItem("Select All");
-        selectItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        selectItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.selectAll();
             }
         });
@@ -60,7 +59,7 @@ class DataEntry extends JFrame{
         popup.addSeparator();
         popup.add(selectItem);
         
-        textArea.addMouseListener(new MouseListener() {
+        textArea.addMouseListener(new java.awt.event.MouseListener() {
             public void mouseReleased(java.awt.event.MouseEvent arg0) {
                 if(arg0.isPopupTrigger()){
                     popup.show(textArea, arg0.getX(), arg0.getY());
@@ -78,22 +77,22 @@ class DataEntry extends JFrame{
         JButton setData = new JButton("Set Data");
         JButton clearData = new JButton("Clear");
         
-        getData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        getData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 if(tronic != null){
                     textArea.setText(tronic.getData());
                 }
             }
         });
-        setData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        setData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 if(tronic != null){
                     tronic.setData(textArea.getText());
                 }
             }
         });
-        clearData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        clearData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
                 textArea.setText("");
             }
         });

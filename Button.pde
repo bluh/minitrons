@@ -33,7 +33,7 @@ class Button extends Tronic implements Clickable{
         outNode = new Node(this, 3, 48, 21, 1, 0);
     }
     
-    public void clicked(int x, int y){
+    public void clicked(int x, int y, float zoom){
         if(!cooldown){
             cooldown = true;
             sendFlow();
@@ -59,11 +59,11 @@ class Button extends Tronic implements Clickable{
         return type;
     }
     public void renderTronic(int screenX, int screenY){
-        image(sprite, getX() - screenX, getY() - screenY);
+        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
     }
     
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, boolean highlight){
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), highlight);
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){
