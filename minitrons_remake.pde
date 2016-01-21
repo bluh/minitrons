@@ -98,7 +98,7 @@ void keyPressed(){
     }else if(mode == 1 && (key == '1' || key == '2' || key == '3' || key == '4')){
         int type = Character.getNumericValue(key) - 1;
         for(Tronic tron: tronics){
-            if(tron instanceof Button && ((Button)tron).getType() == type && abs((tron.getX() + tron.getWidth()/2) - (mouseX/zoom + screenX)) <= 150 && abs((tron.getY() + tron.getHeight()/2) - (mouseY/zoom + screenY)) <= 150){
+            if(tron instanceof Button && ((Button)tron).getType() == type && sqrt(pow((tron.getX() + tron.getWidth()/2) - (mouseX/zoom + screenX), 2) + pow((tron.getY() + tron.getHeight()/2) - (mouseY/zoom + screenY), 2)) <= 150){
                 ((Clickable)tron).clicked(mouseX, mouseY, zoom);
             }
         }
