@@ -14,19 +14,19 @@ class Button extends Tronic implements Clickable{
         this.type = type;
         switch(type){
             case 0:
-                sprite = loadImage("assets/rbutton.png");
-                break;
-            case 1:
-                sprite = loadImage("assets/gbutton.png");
-                break;
-            case 2:
                 sprite = loadImage("assets/ybutton.png");
                 break;
-            case 3:
+            case 1:
                 sprite = loadImage("assets/bbutton.png");
                 break;
-            default:
+            case 2:
+                sprite = loadImage("assets/gbutton.png");
+                break;
+            case 3:
                 sprite = loadImage("assets/rbutton.png");
+                break;
+            default:
+                sprite = loadImage("assets/ybutton.png");
                 break;
         }
         cooldown = false;
@@ -39,7 +39,7 @@ class Button extends Tronic implements Clickable{
             sendFlow();
             addEvent(new QueuedEvent(){
                 public double getDelay(){
-                    return 1.0;
+                    return 0.5;
                 }
                 public void invoke(){
                     cooldown = false;

@@ -16,6 +16,7 @@ PFont font16;
 ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
 ArrayList<QueuedWrapper> events;
+ArrayList<Circle> circles;
 Tronic dragTronic;
 MouseWire wireStart;
 MenuDisplay menu;
@@ -58,6 +59,7 @@ void setup(){
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
     events = new ArrayList<QueuedWrapper>();
+    circles = new ArrayList<Circle>();
     menu = new MenuDisplay();
     dataEntry = new DataEntry();
     dataEntry.addWindowListener(new java.awt.event.WindowListener() {
@@ -93,6 +95,30 @@ void keyPressed(){
         wires.clear();
     }else if(key == 'e' && mode == 0){
         menuOpen = !menuOpen;
+    }else if(mode == 1 && (key == '1' || key == '2' || key == '3' || key == '4')){
+        int type = Character.getNumericValue(key) - 1;
+        for(Tronic tron: tronics){
+            if(tron instanceof Button && ((Button)tron).getType() == type && abs((tron.getX() + tron.getWidth()/2) - (mouseX/zoom + screenX)) <= 150 && abs((tron.getY() + tron.getHeight()/2) - (mouseY/zoom + screenY)) <= 150){
+                ((Clickable)tron).clicked(mouseX, mouseY, zoom);
+            }
+        }
+        color circleColor;
+        switch(type){
+            case 0:
+            default:
+                circleColor = #FFD919;
+                break;
+            case 1:
+                circleColor = #088DFF;
+                break;
+            case 2:
+                circleColor = #08FF19;
+                break;
+            case 3:
+                circleColor = #FB0302;
+                break;
+        }
+        circles.add(new Circle(circleColor, mouseX, mouseY));
     }else if((keyCode == 83 || key == 's') && ctrlDown && mode == 0){
         messageText = "SAVING...";
         mode = 3;
@@ -312,16 +338,16 @@ void mousePressed(){
                 case "modulo":
                     newTronic = new OperatorTronic(6, screenX + mouseX - 24, screenY + mouseY - 24,"Modulo"+tronicsId);
                     break;
-                case "rbutton":
+                case "ybutton":
                     newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
-                case "gbutton":
+                case "bbutton":
                     newTronic = new Button(1, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
-                case "ybutton":
+                case "gbutton":
                     newTronic = new Button(2, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
-                case "bbutton":
+                case "rbutton":
                     newTronic = new Button(3, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
                 case "keyboard":
@@ -570,6 +596,13 @@ void draw(){
     
     pushMatrix();
     scale(zoom);
+    
+    for(int c = 0; c < circles.size(); c++){
+        if(!circles.get(c).render(zoom)){
+            circles.remove(c);
+            c--;
+        }
+    }
     
     strokeWeight(6);
     for(Wire wire: wires){
