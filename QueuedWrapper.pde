@@ -8,11 +8,11 @@ class QueuedWrapper{
     }
     
     public boolean tick(double dt){
-        time += dt;
         if(time >= evt.getDelay()){
             evt.invoke();
             return true;
         }
+        time += dt;
         return false;
     }
 }

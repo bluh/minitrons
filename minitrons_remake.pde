@@ -50,7 +50,8 @@ void setup(){
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
         "divide", "modulo", "random", "ifelse", "ifgt", "ifcontains",
-        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor"
+        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor",
+        "delay"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -270,6 +271,8 @@ void keyPressed(){
                             newTronic = new FDat(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
                         }else if(tronObj.getString("type").equals("ComparisonTronic")){
                             newTronic = new ComparisonTronic(tronObj.getInt("comparisonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        }else if(tronObj.getString("type").equals("Delay")){
+                            newTronic = new Delay(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
                         }
                         tronics.add(newTronic);
                         tronicDetails.put(tronObj.getInt("objIndex"), newTronic);
@@ -376,6 +379,9 @@ void mousePressed(){
                     break;
                 case "monitor":
                     newTronic = new Monitor(screenX + mouseX - 128, screenY + mouseY - 112,"Monitor"+tronicsId);
+                    break;
+                case "delay":
+                    newTronic = new Delay(screenX + mouseX - 24, screenY + mouseY - 24,"Delay"+tronicsId);
                     break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
@@ -544,17 +550,20 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
             Wire thisWire;
             Tronic startingTronic;
             FlowDetails thisDetails;
+            double waitTime;
             
             public QueuedEvent setNextDetails(Node thisNode, Wire thisWire, Tronic startingTronic, FlowDetails thisDetails){
                 this.thisNode = thisNode;
                 this.thisWire = thisWire;
                 this.startingTronic = startingTronic;
                 this.thisDetails = thisDetails;
+                this.waitTime = (thisDetails.isLudus() ? 0 : (thisNode.getParent() instanceof Delay ? ((Delay) thisNode.getParent()).getDelay() : 0.25));
+                print(waitTime);
                 return this;
             }
             
             public double getDelay(){
-                return 0.25;
+                return waitTime;
             }
             
             public void invoke(){

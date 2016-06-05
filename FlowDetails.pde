@@ -1,8 +1,10 @@
 public class FlowDetails{
     HashMap<FDat, String> fdats;
+    boolean ludus;
     
     public FlowDetails(){
         fdats = new HashMap<FDat, String>();
+        ludus = false;
     }
     
     public String getData(Node dataNode){
@@ -30,5 +32,13 @@ public class FlowDetails{
                 }
             }
         }
+    }
+    
+    public boolean isLudus(){
+        return ludus;
+    }
+    
+    public void setLudus(boolean v){
+        ludus = v;
     }
 }
