@@ -79,17 +79,22 @@ void setup(){
        public void windowActivated(java.awt.event.WindowEvent e) {}
     });
     println("Loading config...");
-    String[] lines = loadStrings("config.txt");
-    for(String line: lines){
-        String[] split = line.split(":");
-        if(split[0].equals("showHint")){
-            if(split[1].equals("true")){
-                showHint = true;
+    try{
+        String[] lines = loadStrings("config.txt");
+        println("Config loaded:" + lines.length);
+        for(String line: lines){
+            String[] split = line.split(":");
+            if(split[0].equals("showHint")){
+                if(split[1].equals("true")){
+                    showHint = true;
+                    println("CONFIG: Showing hints...");
+                }
             }
         }
+    }catch(Exception e){
+        println("Could not load config.txt! Resorting to default configuration...");
     }
     println("All loaded!");
-    println(showHint);
 }
 
 void keyPressed(){
@@ -673,6 +678,34 @@ void draw(){
                 text("Name: " + tron, mouseX + 13, mouseY);
                 break;
             }
+        }
+        if(mode == 1 && showHint){
+            int charWidth = (int) textWidth("1") + 3;
+            pushMatrix();
+                noStroke();
+            fill(#FFD919);
+            rect(charWidth * -2 + mouseX, mouseY + 32, charWidth, charWidth);
+            fill(#088DFF);
+            rect(charWidth * -1 + mouseX + 1, mouseY + 32, charWidth, charWidth);
+            fill(#08FF19);
+            rect(mouseX + 2, mouseY + 32, charWidth, charWidth);
+            fill(#FB0302);
+            rect(charWidth + mouseX + 3, mouseY + 32, charWidth, charWidth);
+            fill(#FFFFFF);
+            text("1",charWidth * -2 + mouseX + 2, mouseY + charWidth + 30); 
+            text("2",charWidth * -1 + mouseX + 3, mouseY + charWidth + 30); 
+            text("3",mouseX + 4, mouseY + charWidth + 30); 
+            text("4",charWidth + mouseX + 5, mouseY + charWidth + 30); 
+            popMatrix();
+        }else if(mode == 0 && showHint){
+            pushMatrix();
+            noStroke();
+            fill(#FFFFFF, 200);
+            int charWidth = (int) textWidth("Ctrl + S: Save File");
+            rect(mouseX + 10, mouseY + 10, charWidth + 4, 64);
+            fill(#000000);
+            text("E: Open Menu\nSpace: Change Mode\nC: Clear Screen\nR: Reset Camera\nCtrl + O: Open File\nCtrl + S: Save File", mouseX + 13, mouseY + 20);
+            popMatrix();
         }
     }
     
