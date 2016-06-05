@@ -142,6 +142,7 @@ void keyPressed(){
         }
         circles.add(new Circle(circleColor, mouseX, mouseY));
     }else if((keyCode == 83 || key == 's') && ctrlDown && mode == 0){
+        ctrlDown = false;
         messageText = "SAVING...";
         mode = 3;
         menu.deselectAll();
@@ -225,6 +226,7 @@ void keyPressed(){
             }
         }).showWindow();
     }else if((keyCode == 79 || key == 'o') && ctrlDown && mode == 0){
+        ctrlDown = false;
         messageText = "LOADING...";
         mode = 3;
         menu.deselectAll();
@@ -557,8 +559,7 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
                 this.thisWire = thisWire;
                 this.startingTronic = startingTronic;
                 this.thisDetails = thisDetails;
-                this.waitTime = (thisDetails.isLudus() ? 0 : (thisNode.getParent() instanceof Delay ? ((Delay) thisNode.getParent()).getDelay() : 0.25));
-                print(waitTime);
+                this.waitTime = (thisNode.getParent() instanceof Delay ? ((Delay) thisNode.getParent()).getDelay() : (thisDetails.isLudus() ? 0 : 0.25));
                 return this;
             }
             

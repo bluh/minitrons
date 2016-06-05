@@ -25,8 +25,9 @@ class Delay extends Tronic implements InFlow{
             this.delay = 0.25;
         }else{
             try{
-                this.delay = Math.max(Double.valueOf(in), 0.25);
+                this.delay = Math.max(Double.valueOf(in), (flow.isLudus() ? 0.0 : 0.25));
                 if(Double.valueOf(in) == 0){
+                    println("Adding Ludus Flow...");
                     flow.setLudus(true);
                 }
             }catch(NumberFormatException e){
