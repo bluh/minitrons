@@ -21,6 +21,7 @@ Tronic dragTronic;
 MouseWire wireStart;
 MenuDisplay menu;
 DataEntry dataEntry;
+boolean showHint;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
@@ -29,9 +30,9 @@ boolean menuOpen;
 void setup(){
     size(800,600,P2D);
     surface.setResizable(true);
+    println("Loading fonts...");
     font8 = loadFont("neverfont8.vlw");
     font16 = loadFont("neverfont16.vlw");
-    println("Loaded.");
     screenX = 0;
     screenY = 0;
     mode = 0;
@@ -40,6 +41,7 @@ void setup(){
     tronicsId = 0;
     menuX = 16;
     zoom = 1;
+    showHint = false;
     shiftDown = false;
     ctrlDown = false;
     altDown = false;
@@ -51,11 +53,13 @@ void setup(){
         "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor"
     };
     TRONICSIMG = new PImage[TRONICS.length];
+    println("Loading tronic icons...");
     for(int i = 0; i < TRONICS.length;i++){
         TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
     messageText = "NEW FILE";
     fileName = "";
+    println("Initializing objects...");
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
     events = new ArrayList<QueuedWrapper>();
@@ -74,6 +78,18 @@ void setup(){
        public void windowClosed(java.awt.event.WindowEvent e) {}
        public void windowActivated(java.awt.event.WindowEvent e) {}
     });
+    println("Loading config...");
+    String[] lines = loadStrings("config.txt");
+    for(String line: lines){
+        String[] split = line.split(":");
+        if(split[0].equals("showHint")){
+            if(split[1].equals("true")){
+                showHint = true;
+            }
+        }
+    }
+    println("All loaded!");
+    println(showHint);
 }
 
 void keyPressed(){
