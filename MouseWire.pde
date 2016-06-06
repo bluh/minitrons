@@ -49,6 +49,8 @@ class MouseWire{
             return firstPoint.getNumWires() == 0;
         }else if(type1 == 4 && type2 == 1){ //data -> datain
             return nextPoint.getNumWires() == 0;
+        }else if((type1 == 5 && type2 == 6) || (type1 == 6 && type2 == 5)){ //chainin -> chainout || chainout -> chainin
+            return firstPoint.getNumWires() == 0 && nextPoint.getNumWires() == 0;
         }
         return false; //yeah!!! FUCK 'EM!!!
     }

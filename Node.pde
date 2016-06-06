@@ -13,6 +13,9 @@ class Node{
     //1: Data in
     //2: Flow in
     //3: Flow out
+    //4: Generic Data
+    //5: Chain in
+    //6: Chain out
     
     public Node(Tronic parent, int x, int y, int dirX, int dirY){
         this(parent, 0, x, y, dirX, dirY);
@@ -40,6 +43,12 @@ class Node{
                 break;
             case 4:
                 nodeColor = color(72, 215, 254);
+                break;
+            case 5:
+                nodeColor = color(25, 255, 255);
+                break;
+            case 6:
+                nodeColor = color(255, 25, 255);
                 break;
             default:
                 nodeColor = #000000;

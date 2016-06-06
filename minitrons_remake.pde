@@ -17,6 +17,7 @@ ArrayList<Tronic> tronics;
 ArrayList<Wire> wires;
 ArrayList<QueuedWrapper> events;
 ArrayList<Circle> circles;
+ArrayList<FStart> functions;
 Tronic dragTronic;
 MouseWire wireStart;
 MenuDisplay menu;
@@ -51,7 +52,7 @@ void setup(){
         "data", "fdat", "and", "add", "subtract", "multi",
         "divide", "modulo", "random", "ifelse", "ifgt", "ifcontains",
         "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor",
-        "delay"
+        "delay", "fchain", "fcall", "fstart", "fend"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -65,6 +66,7 @@ void setup(){
     wires = new ArrayList<Wire>();
     events = new ArrayList<QueuedWrapper>();
     circles = new ArrayList<Circle>();
+    functions = new ArrayList<FStart>();
     menu = new MenuDisplay();
     dataEntry = new DataEntry();
     dataEntry.addWindowListener(new java.awt.event.WindowListener() {
@@ -253,28 +255,54 @@ void keyPressed(){
                     messageText = "LOADING... (TRONICS)";
                     for(int i = 0; i < tronicsInput.size(); i++){
                         JSONObject tronObj = tronicsInput.getJSONObject(i);
+                        String type = tronObj.getString("type");
                         Tronic newTronic = null;
-                        if(tronObj.getString("type").equals("Button")){
-                            newTronic = new Button(tronObj.getInt("buttonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                        }else if(tronObj.getString("type").equals("Data")){
-                            newTronic = new Data(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                            ((Data)newTronic).setData(tronObj.getString("dataContents"));
-                        }else if(tronObj.getString("type").equals("OperatorTronic")){
-                            newTronic = new OperatorTronic(tronObj.getInt("operatorType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                        }else if(tronObj.getString("type").equals("Monitor")){
-                            newTronic = new Monitor(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                            JSONArray lines = tronObj.getJSONArray("monitorLines");
-                            for(int x = 0; x < tronObj.getInt("monitorLineNumber"); x++){
-                                ((Monitor)newTronic).processString(lines.getString(x));
-                            }
-                        }else if(tronObj.getString("type").equals("Keyboard")){
-                            newTronic = new Keyboard(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                        }else if(tronObj.getString("type").equals("FDat")){
-                            newTronic = new FDat(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                        }else if(tronObj.getString("type").equals("ComparisonTronic")){
-                            newTronic = new ComparisonTronic(tronObj.getInt("comparisonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
-                        }else if(tronObj.getString("type").equals("Delay")){
-                            newTronic = new Delay(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                        switch(type){
+                            case "Button":
+                                newTronic = new Button(tronObj.getInt("buttonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "Data":
+                                newTronic = new Data(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                ((Data)newTronic).setData(tronObj.getString("dataContents"));
+                                break;
+                            case "OperatorTronic":
+                                newTronic = new OperatorTronic(tronObj.getInt("operatorType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "Monitor":
+                                newTronic = new Monitor(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                JSONArray lines = tronObj.getJSONArray("monitorLines");
+                                for(int x = 0; x < tronObj.getInt("monitorLineNumber"); x++){
+                                    ((Monitor)newTronic).processString(lines.getString(x));
+                                }
+                                break;
+                            case "Keyboard":
+                                newTronic = new Keyboard(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "FDat":
+                                newTronic = new FDat(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "ComparisonTronic":
+                                newTronic = new ComparisonTronic(tronObj.getInt("comparisonType"), tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "Delay":
+                                newTronic = new Delay(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "DataChain":
+                                newTronic = new DataChain(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "Function":
+                                newTronic = new Function(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            case "FStart":
+                                newTronic = new FStart(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                functions.add((FStart)newTronic);
+                                break;
+                            case "FEnd":
+                                newTronic = new FEnd(tronObj.getInt("posX"), tronObj.getInt("posY"), tronObj.getString("name"));
+                                break;
+                            default:
+                                println("Invalid tronic!");
+                                return;
                         }
                         tronics.add(newTronic);
                         tronicDetails.put(tronObj.getInt("objIndex"), newTronic);
@@ -385,6 +413,19 @@ void mousePressed(){
                 case "delay":
                     newTronic = new Delay(screenX + mouseX - 24, screenY + mouseY - 24,"Delay"+tronicsId);
                     break;
+                case "fchain":
+                    newTronic = new DataChain(screenX + mouseX - 24, screenY + mouseY - 24,"FChain"+tronicsId);
+                    break;
+                case "fcall":
+                    newTronic = new Function(screenX + mouseX - 24, screenY + mouseY - 24,"FCall"+tronicsId);
+                    break;
+                case "fstart":
+                    newTronic = new FStart(screenX + mouseX - 24, screenY + mouseY - 24,"FStart"+tronicsId);
+                    functions.add((FStart)newTronic);
+                    break;
+                case "fend":
+                    newTronic = new FEnd(screenX + mouseX - 24, screenY + mouseY - 24,"FEnd"+tronicsId);
+                    break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
                     break;
@@ -418,6 +459,9 @@ void mousePressed(){
                                 wires.remove(node.getWire(0));
                                 node.getWire(0).deleteWire();
                             }
+                        }
+                        if(tron instanceof FStart){
+                            functions.remove((FStart)tron);
                         }
                         tronics.remove(tron);
                     }
@@ -506,6 +550,8 @@ void mousePressed(){
                             wireColor = #0000FF;
                         }else if(wireStart.getFirstPoint().getType() == 1 || node.getType() == 1){
                             wireColor = #00FF00;
+                        }else if(wireStart.getFirstPoint().getType() == 5 || wireStart.getFirstPoint().getType() == 6){
+                            wireColor = #00FF00;
                         }
                         Wire newWire = new Wire(wireStart.getFirstPoint(), node, wireColor);
                         wires.add(newWire);
@@ -536,6 +582,15 @@ void mouseReleased(){
         menu.calculatePosition();
         dragTronic = null;
     }
+}
+
+FStart findFunction(String name){
+    for(FStart tron: functions){
+        if(tron.toString().equals(name)){
+            return tron;
+        }
+    }
+    return null;
 }
 
 void addEvent(QueuedEvent evt){
