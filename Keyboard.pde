@@ -1,13 +1,11 @@
 class Keyboard extends Tronic implements Clickable{
-    PImage sprite;
     String memory;
     Node outNode;
     Node dataNode;
     SmallTextEntry ste;
     
     public Keyboard(int x, int y, String name){
-        super(x, y, 96, 48, name);
-        sprite = loadImage("assets/keyboard.png");
+        super(x, y, 96, 48, name, loadImage("assets/keyboard.png"));
         outNode = new Node(this, 3, 54, -6, 0, -1);
         dataNode = new Node(this, 0, 70, -6, 0 ,-1);
         memory = "";
@@ -37,15 +35,6 @@ class Keyboard extends Tronic implements Clickable{
             }).setTronic(this));
         }
         ste.showWindow();
-    }
-    
-    public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

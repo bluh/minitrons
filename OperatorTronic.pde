@@ -1,5 +1,4 @@
 class OperatorTronic extends Tronic implements InFlow{
-    PImage sprite;
     int type;
     InFlow nextTronic;
     
@@ -18,28 +17,28 @@ class OperatorTronic extends Tronic implements InFlow{
         this.type = type;
         switch(type){
             case 0:
-                sprite = loadImage("assets/add.png");
+                setSprite(loadImage("assets/add.png"));
                 break;
             case 1:
-                sprite = loadImage("assets/subtract.png");
+                setSprite(loadImage("assets/subtract.png"));
                 break;
             case 2:
-                sprite = loadImage("assets/multi.png");
+                setSprite(loadImage("assets/multi.png"));
                 break;
             case 3:
-                sprite = loadImage("assets/divide.png");
+                setSprite(loadImage("assets/divide.png"));
                 break;
             case 4:
-                sprite = loadImage("assets/and.png");
+                setSprite(loadImage("assets/and.png"));
                 break;
             case 5:
-                sprite = loadImage("assets/random.png");
+                setSprite(loadImage("assets/random.png"));
                 break;
             case 6:
-                sprite = loadImage("assets/modulo.png");
+                setSprite(loadImage("assets/modulo.png"));
                 break;
             default:
-                sprite = loadImage("assets/add.png");
+                setSprite(loadImage("assets/add.png"));
                 break;
         }
         inNode = new Node(this, 2, -6, 21, -1, 0);
@@ -122,14 +121,6 @@ class OperatorTronic extends Tronic implements InFlow{
     
     public void renderTronic(int screenX, int screenY){
         image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        aNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        bNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

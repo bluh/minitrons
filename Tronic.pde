@@ -1,4 +1,5 @@
 public abstract class Tronic{
+    PImage sprite;
     int x;
     int y;
     final int WIDTH;
@@ -7,12 +8,21 @@ public abstract class Tronic{
     boolean enabled;
     
     public Tronic(int x, int y, int w, int h, String name){
+        this(x, y, w, h, name, null);
+    }
+    
+    public Tronic(int x, int y, int w, int h, String name, PImage sprite){
+        this.sprite = sprite;
         this.x = x;
         this.y = y;
         this.WIDTH = w;
         this.HEIGHT = h;
         this.name = name;
         this.enabled = true;
+    }
+    
+    void setSprite(PImage sprite){
+        this.sprite = sprite;
     }
     
     int getX(){
@@ -60,7 +70,14 @@ public abstract class Tronic{
         this.name = name;
     }
     
-    abstract void renderTronic(int screenX, int screenY);
-    abstract void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight);
+    public void renderTronic(int screenX, int screenY){
+        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
+    }
+    
+    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+        for(Node node: getNodes()){
+            node.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+        }
+    }
     abstract Node[] getNodes();
 }

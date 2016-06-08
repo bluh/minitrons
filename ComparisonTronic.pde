@@ -1,5 +1,4 @@
 class ComparisonTronic extends Tronic implements InFlow{
-    PImage sprite;
     int type;
     InFlow nextTronic;
     
@@ -18,16 +17,16 @@ class ComparisonTronic extends Tronic implements InFlow{
         this.type = type;
         switch(type){
             case 0:
-                sprite = loadImage("assets/ifequals.png");
+                setSprite(loadImage("assets/ifequals.png"));
                 break;
             case 1:
-                sprite = loadImage("assets/ifgt.png");
+                setSprite(loadImage("assets/ifgt.png"));
                 break;
             case 2:
-                sprite = loadImage("assets/ifcontains.png");
+                setSprite(loadImage("assets/ifcontains.png"));
                 break;
             default:
-                sprite = loadImage("assets/ifequals.png");
+                setSprite(loadImage("assets/ifequals.png"));
                 break;
         }
         inNode = new Node(this, 2, -6, 21, -1, 0);
@@ -86,18 +85,6 @@ class ComparisonTronic extends Tronic implements InFlow{
     
     public int getType(){
         return type;
-    }
-    
-    public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        aNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        bNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        trueNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        falseNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

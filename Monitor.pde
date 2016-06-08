@@ -1,7 +1,6 @@
 class Monitor extends Tronic implements InFlow{
     String[] text;
     int lines;
-    PImage sprite;
     Node inNode;
     Node outNode;
     Node dataNode;
@@ -11,8 +10,7 @@ class Monitor extends Tronic implements InFlow{
     //mt: 21 columns
 
     public Monitor(int x, int y, String name){
-        super(x, y, 256, 224, name);
-        sprite = loadImage("assets/monitor.png");
+        super(x, y, 256, 224, name, loadImage("assets/monitor.png"));
         inNode = new Node(this, 2, 113, 218, -1, 0);
         outNode = new Node(this, 3, 137, 218, 1, 0);
         dataNode = new Node(this, 1, 125, 224, 0, 1);
@@ -66,17 +64,11 @@ class Monitor extends Tronic implements InFlow{
     }
     
     public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
+        super.renderTronic(screenX, screenY);
         fill(#FFFFFF);
         for(int i = 0; i < lines; i++){
             text(text[i], (9 + getX() - screenX) * 2, (12 + i * 10 + getY() - screenY) * 2);
         }
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        dataNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

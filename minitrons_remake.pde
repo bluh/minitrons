@@ -102,22 +102,21 @@ void setup(){
 
 void keyPressed(){
     mouseTime = 0;
-    //println(keyCode);
-    if(key == 'r'){
+    if(keyCode == 82){ //r = 82
         screenX = 0;
         screenY = 0;
         zoom = 1.0;
-    }else if(key == ' '){
+    }else if(keyCode == 32){ //space = 32
         mode = (mode + 1) % 2;
         if(mode != 0){
             menuOpen = false;
         }
         menu.deselectAll();
-    }else if(key == 'c'){
+    }else if(keyCode == 67){ //c = 67
         menu.deselectAll();
         tronics.clear();
         wires.clear();
-    }else if(key == 'e' && mode == 0){
+    }else if(keyCode == 69 && mode == 0){ //e = 69
         menuOpen = !menuOpen;
     }else if(mode == 1 && (key == '1' || key == '2' || key == '3' || key == '4')){
         int type = Character.getNumericValue(key) - 1;
@@ -143,7 +142,7 @@ void keyPressed(){
                 break;
         }
         circles.add(new Circle(circleColor, mouseX, mouseY));
-    }else if((keyCode == 83 || key == 's') && ctrlDown && mode == 0){
+    }else if(keyCode == 83 && ctrlDown && mode == 0){ //s = 83
         ctrlDown = false;
         messageText = "SAVING...";
         mode = 3;
@@ -227,7 +226,7 @@ void keyPressed(){
                 }
             }
         }).showWindow();
-    }else if((keyCode == 79 || key == 'o') && ctrlDown && mode == 0){
+    }else if(keyCode == 79 && ctrlDown && mode == 0){ //o = 79
         ctrlDown = false;
         messageText = "LOADING...";
         mode = 3;

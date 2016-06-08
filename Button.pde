@@ -1,6 +1,5 @@
 class Button extends Tronic implements Clickable{
     int type;
-    PImage sprite;
     boolean cooldown;
     
     Node outNode;
@@ -14,19 +13,19 @@ class Button extends Tronic implements Clickable{
         this.type = type;
         switch(type){
             case 0:
-                sprite = loadImage("assets/ybutton.png");
+                setSprite(loadImage("assets/ybutton.png"));
                 break;
             case 1:
-                sprite = loadImage("assets/bbutton.png");
+                setSprite(loadImage("assets/bbutton.png"));
                 break;
             case 2:
-                sprite = loadImage("assets/gbutton.png");
+                setSprite(loadImage("assets/gbutton.png"));
                 break;
             case 3:
-                sprite = loadImage("assets/rbutton.png");
+                setSprite(loadImage("assets/rbutton.png"));
                 break;
             default:
-                sprite = loadImage("assets/ybutton.png");
+                setSprite(loadImage("assets/ybutton.png"));
                 break;
         }
         cooldown = false;
@@ -54,16 +53,8 @@ class Button extends Tronic implements Clickable{
         }
     }
     
-    
     public int getType(){
         return type;
-    }
-    public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){

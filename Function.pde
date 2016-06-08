@@ -1,13 +1,11 @@
 class Function extends Tronic implements InFlow{
-    PImage sprite;
     Node inNode;
     Node outNode;
     Node chainInNode;
     Node chainOutNode;
     
     public Function(int x, int y, String name){
-        super(x, y, 48, 48, name);
-        sprite = loadImage("assets/fcall.png");
+        super(x, y, 48, 48, name, loadImage("assets/fcall.png"));
         inNode = new Node(this, 2, 21, 48, 0, 1);
         outNode = new Node(this, 3, 21, -6, 0, -1);
         chainInNode = new Node(this, 5, -6, 21, -1, 0);
@@ -39,17 +37,6 @@ class Function extends Tronic implements InFlow{
             }
             return funct.getOutNode();
         }
-    }
-    
-    public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
-        inNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        outNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        chainInNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
-        chainOutNode.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
     }
     
     public Node[] getNodes(){
