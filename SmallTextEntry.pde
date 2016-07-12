@@ -33,6 +33,13 @@ class SmallTextEntry extends JFrame{
         textArea.setBackground(java.awt.Color.BLACK);
         textArea.setForeground(java.awt.Color.GREEN);
         textArea.setCaretColor(java.awt.Color.GREEN);
+        textArea.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent e){
+                textEvent.saved(textArea.getText());
+                setVisible(false);
+                dispose();
+            }
+        });
         
         popup = new JPopupMenu();
         JMenuItem cutItem = new JMenuItem("Cut");
@@ -142,6 +149,6 @@ class SmallTextEntry extends JFrame{
     public void showWindow(){
         setVisible(true);
         toFront();
-        textArea.grabFocus();
+        textArea.requestFocusInWindow();
     }
 }

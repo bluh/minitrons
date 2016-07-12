@@ -37,6 +37,8 @@ class Keyboard extends Tronic implements Clickable{
         ste.showWindow();
     }
     
+    public void mouseNearby(int x, int y, float zoom){} //unimplemented yet
+    
     public Node[] getNodes(){
         return new Node[]{outNode, dataNode};
     }

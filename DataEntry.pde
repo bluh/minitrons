@@ -76,6 +76,16 @@ class DataEntry extends JFrame{
         JButton getData = new JButton("Get Data");
         JButton setData = new JButton("Set Data");
         JButton clearData = new JButton("Clear");
+        JCheckBox onTop = new JCheckBox("Always on Top?", true);
+        onTop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if(((JCheckBox)e.getSource()).isSelected() == true){
+                    setAlwaysOnTop(true);
+                }else{
+                    setAlwaysOnTop(false);
+                }
+            }
+        });
         
         getData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -104,6 +114,7 @@ class DataEntry extends JFrame{
                 .addComponent(getData, 100, 100, 100)
                 .addComponent(setData, 100, 100, 100)
                 .addComponent(clearData, 100, 100, 100)
+                .addComponent(onTop, 100, 100, 100)
                 )
             .addComponent(scrollPane)
         );
@@ -113,6 +124,7 @@ class DataEntry extends JFrame{
                 .addComponent(getData, 20, 20, 20)
                 .addComponent(setData, 20, 20, 20)
                 .addComponent(clearData, 20, 20, 20)
+                .addComponent(onTop, 20, 20, 20)
             )
             .addComponent(scrollPane)
         );
@@ -125,7 +137,7 @@ class DataEntry extends JFrame{
     public void showWindow(){
         setVisible(true);
         toFront();
-        textArea.grabFocus();
+        textArea.requestFocusInWindow();
     }
     
     public void setTronic(Data tronic){

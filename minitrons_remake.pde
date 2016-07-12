@@ -23,6 +23,7 @@ MouseWire wireStart;
 MenuDisplay menu;
 DataEntry dataEntry;
 boolean showHint;
+boolean showLoadWarnings;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
@@ -51,8 +52,8 @@ void setup(){
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
         "divide", "modulo", "random", "ifelse", "ifgt", "ifcontains",
-        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "monitor",
-        "delay", "fchain", "fcall", "fstart", "fend"
+        "ybutton", "bbutton", "gbutton", "rbutton", "proxy", "keyboard",
+        "monitor", "delay", "fchain", "fcall", "fstart", "fend"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -91,6 +92,11 @@ void setup(){
                 if(split[1].equals("true")){
                     showHint = true;
                     println("CONFIG: Showing hints...");
+                }
+            }else if(split[0].equals("supressLoadWarnings")){
+                if(split[1].equals("true")){
+                    showLoadWarnings = true;
+                    println("CONFIG: Showing loading warnings...");
                 }
             }
         }
@@ -403,6 +409,9 @@ void mousePressed(){
                 case "rbutton":
                     newTronic = new Button(3, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
+                case "proxy":
+                    newTronic = new Button(4, screenX + mouseX - 24, screenY + mouseY - 24,"Proxy"+tronicsId);
+                    break;
                 case "keyboard":
                     newTronic = new Keyboard(screenX + mouseX - 48, screenY + mouseY - 24, "Keboard"+tronicsId);
                     break;
@@ -583,6 +592,10 @@ void mouseReleased(){
     }
 }
 
+void addCircle(int x, int y, color circleColor, int size){
+        circles.add(new Circle(circleColor, x, y, size));
+}
+
 FStart findFunction(String name){
     for(FStart tron: functions){
         if(tron.toString().equals(name)){
@@ -705,6 +718,10 @@ void draw(){
     scale(.5);
     for(int i = tronics.size() - 1; i >= 0; i--){
         tronics.get(i).renderTronic(screenX, screenY);
+        if(tronics.get(i) instanceof Clickable
+            && sqrt(pow((screenX + mouseX / zoom) - (tronics.get(i).getX() + tronics.get(i).getWidth() * .5),2) + pow((screenY + mouseY / zoom) - (tronics.get(i).getY() + tronics.get(i).getHeight() * .5),2)) < 50){
+            ((Clickable)tronics.get(i)).mouseNearby(mouseX, mouseY, zoom);
+        }
         pushMatrix();
         scale(2);
         tronics.get(i).renderNodes(mouseX, mouseY, screenX, screenY, zoom, (mode != 1));

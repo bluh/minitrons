@@ -24,6 +24,9 @@ class Button extends Tronic implements Clickable{
             case 3:
                 setSprite(loadImage("assets/rbutton.png"));
                 break;
+            case 4:
+                setSprite(loadImage("assets/proxy.png"));
+                break;
             default:
                 setSprite(loadImage("assets/ybutton.png"));
                 break;
@@ -36,6 +39,10 @@ class Button extends Tronic implements Clickable{
         if(!cooldown){
             cooldown = true;
             sendFlow();
+            if(type == 4){
+                println(zoom);
+                addCircle((int)(-screenX * zoom + (getX() + getWidth() * .5)),(int)(-screenY * zoom + (getY() + getHeight() * .5)), #000000, 100); 
+            }
             addEvent(new QueuedEvent(){
                 public double getDelay(){
                     return 0.5;
@@ -44,6 +51,12 @@ class Button extends Tronic implements Clickable{
                     cooldown = false;
                 }
             });
+        }
+    }
+    
+    public void mouseNearby(int x, int y, float zoom){
+        if(type == 4 && mode == 1){
+            clicked(x, y, zoom);
         }
     }
     
