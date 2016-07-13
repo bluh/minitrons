@@ -32,7 +32,7 @@ class Button extends Tronic implements Clickable{
                 break;
         }
         cooldown = false;
-        outNode = new Node(this, 3, 48, 21, 1, 0);
+        outNode = new Node(this, 3, 48, 21, 1, 0, "FlowOut");
     }
     
     public void clicked(int x, int y, float zoom){
@@ -40,8 +40,7 @@ class Button extends Tronic implements Clickable{
             cooldown = true;
             sendFlow();
             if(type == 4){
-                println(zoom);
-                addCircle((int)(-screenX * zoom + (getX() + getWidth() * .5)),(int)(-screenY * zoom + (getY() + getHeight() * .5)), #000000, 100); 
+                addCircle((int)(-screenX * zoom + (getX() + getWidth() * .5) * zoom),(int)(-screenY * zoom + (getY() + getHeight() * .5) * zoom), #000000, 100); 
             }
             addEvent(new QueuedEvent(){
                 public double getDelay(){

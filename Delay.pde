@@ -11,9 +11,9 @@ class Delay extends Tronic implements InFlow{
     
     public Delay(int x, int y, String name){
         super(x, y, 48, 48, name, loadImage("assets/delay.png"));
-        inNode = new Node(this, 2, 21, 48, 0, 1);
-        dataNode = new Node(this, 1, -6, 21, -1, 0);
-        outNode = new Node(this, 3,  21, -6, 0, -1);
+        inNode = new Node(this, 2, 21, 48, 0, 1, "FlowIn");
+        dataNode = new Node(this, 1, -6, 21, -1, 0, "DelayAmount");
+        outNode = new Node(this, 3,  21, -6, 0, -1, "FlowOut");
         delay = 0.25;
     }
     

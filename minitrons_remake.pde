@@ -51,9 +51,9 @@ void setup(){
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi",
-        "divide", "modulo", "random", "ifelse", "ifgt", "ifcontains",
-        "ybutton", "bbutton", "gbutton", "rbutton", "proxy", "keyboard",
-        "monitor", "delay", "fchain", "fcall", "fstart", "fend"
+        "divide", "modulo", "ifelse", "ifgt", "random", "delay",
+        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "proxy",
+        "monitor","fcall", "fstart", "fend", "fchain", "ifcontains", "indexof"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -434,6 +434,9 @@ void mousePressed(){
                 case "fend":
                     newTronic = new FEnd(screenX + mouseX - 24, screenY + mouseY - 24,"FEnd"+tronicsId);
                     break;
+                case "indexof":
+                    newTronic = new OperatorTronic(7, screenX + mouseX - 24, screenY + mouseY - 24,"IndexOf"+tronicsId);
+                    break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
                     break;
@@ -750,8 +753,20 @@ void draw(){
         mouseTime = 0;
     }
     if(mouseTime > .5){
+        boolean stop = false;
         for(Tronic tron: tronics){
-            if(tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
+            for(Node node: tron.getNodes()){
+                if(!stop && node.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tron.getX(), tron.getY())){
+                    noStroke();
+                    fill(#FFFFFF, 200);
+                    rect(mouseX + 10, mouseY - 10, textWidth("Node: " + node.getName()) + 4, 12);
+                    fill(#000000);
+                    text("Node: " + node.getName(), mouseX + 13, mouseY);
+                    stop = true;
+                    break;
+                }
+            }
+            if(!stop && tron.containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom))){
                 noStroke();
                 fill(#FFFFFF, 200);
                 rect(mouseX + 10, mouseY - 10, textWidth("Name: " + tron) + 4, 12);

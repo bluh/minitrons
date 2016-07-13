@@ -3,6 +3,7 @@ class Node{
     int y;
     int dirX;
     int dirY;
+    String name;
     color nodeColor;
     final int WIDTH = 6;
     final int HEIGHT = 6;
@@ -17,15 +18,16 @@ class Node{
     //5: Chain in
     //6: Chain out
     
-    public Node(Tronic parent, int x, int y, int dirX, int dirY){
-        this(parent, 0, x, y, dirX, dirY);
+    public Node(Tronic parent, int x, int y, int dirX, int dirY, String name){
+        this(parent, 0, x, y, dirX, dirY, name);
     }
     
-    public Node(Tronic parent, int type, int x, int y, int dirX, int dirY){
+    public Node(Tronic parent, int type, int x, int y, int dirX, int dirY, String name){
         this.parent = parent;
         this.type = type;
         this.x = x;
         this.y = y;
+        this.name = name;
         this.dirX = dirX;
         this.dirY = dirY;
         switch(type){
@@ -90,6 +92,10 @@ class Node{
     
     public int getDirY(){
         return dirY;
+    }
+    
+    public String getName(){
+        return name;
     }
     
     public color getNodeColor(){

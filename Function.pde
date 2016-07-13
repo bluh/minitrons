@@ -6,10 +6,10 @@ class Function extends Tronic implements InFlow{
     
     public Function(int x, int y, String name){
         super(x, y, 48, 48, name, loadImage("assets/fcall.png"));
-        inNode = new Node(this, 2, 21, 48, 0, 1);
-        outNode = new Node(this, 3, 21, -6, 0, -1);
-        chainInNode = new Node(this, 5, -6, 21, -1, 0);
-        chainOutNode = new Node(this, 6, 48, 21, 1, 0);
+        inNode = new Node(this, 2, 21, 48, 0, 1, "FlowIn");
+        outNode = new Node(this, 3, 21, -6, 0, -1, "FlowOut");
+        chainInNode = new Node(this, 5, -6, 21, -1, 0, "ChainIn");
+        chainOutNode = new Node(this, 6, 48, 21, 1, 0, "ChainOut");
     }
     
     public Node getFlow(FlowDetails details){

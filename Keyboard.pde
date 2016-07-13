@@ -6,8 +6,8 @@ class Keyboard extends Tronic implements Clickable{
     
     public Keyboard(int x, int y, String name){
         super(x, y, 96, 48, name, loadImage("assets/keyboard.png"));
-        outNode = new Node(this, 3, 54, -6, 0, -1);
-        dataNode = new Node(this, 0, 70, -6, 0 ,-1);
+        outNode = new Node(this, 3, 54, -6, 0, -1, "FlowOut");
+        dataNode = new Node(this, 0, 70, -6, 0 ,-1, "TypedData");
         memory = "";
     }
     

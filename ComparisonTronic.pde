@@ -29,11 +29,11 @@ class ComparisonTronic extends Tronic implements InFlow{
                 setSprite(loadImage("assets/ifequals.png"));
                 break;
         }
-        inNode = new Node(this, 2, -6, 21, -1, 0);
-        aNode = new Node(this, 1, 21, -6, 0, -1);
-        bNode = new Node(this, 1, 21, 48, 0, 1);
-        trueNode = new Node(this, 3, 48, 30, 1, 0);
-        falseNode = new Node(this, 3, 48, 12, 1, 0);
+        inNode = new Node(this, 2, -6, 21, -1, 0, "FlowIn");
+        aNode = new Node(this, 1, 21, -6, 0, -1, "A");
+        bNode = new Node(this, 1, 21, 48, 0, 1, "B");
+        trueNode = new Node(this, 3, 48, 30, 1, 0, "IfTrue");
+        falseNode = new Node(this, 3, 48, 12, 1, 0, "IfFalse");
     }
     
     public Node getFlow(FlowDetails flow){

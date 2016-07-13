@@ -6,8 +6,8 @@ class FEnd extends Tronic implements InFlow{
     
     public FEnd(int x, int y, String name){
         super(x, y, 48, 48, name, loadImage("assets/fend.png"));
-        inNode = new Node(this, 2, 21, 48, 0, 1);
-        chainNode = new Node(this, 5, 48, 21, 1, 0);
+        inNode = new Node(this, 2, 21, 48, 0, 1, "InNode");
+        chainNode = new Node(this, 5, 48, 21, 1, 0, "ChainIn");
     }
     
     public Node getFlow(FlowDetails details){
