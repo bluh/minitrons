@@ -139,14 +139,14 @@ class OperatorTronic extends Tronic implements InFlow{
                     break;
                 case 7:
                     if(a.indexOf("|") > -1){
-                        String[] array = a.split("|");
-                        if((int)numB > array.length){
+                        String[] array = a.split("\\|");
+                        if((int)numB >= array.length){
                             result = "";
                         }else{
                             result = array[(int)numB];
                         }
                     }else{
-                        if((int) numB > a.length() || (int) numB < 0){
+                        if((int) numB >= a.length() || (int) numB < 0){
                             result = "";
                         }else{
                             result = a.substring((int) numB, (int) numB + 1);
