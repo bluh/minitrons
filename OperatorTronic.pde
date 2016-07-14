@@ -166,10 +166,6 @@ class OperatorTronic extends Tronic implements InFlow{
         return type;
     }
     
-    public void renderTronic(int screenX, int screenY){
-        image(sprite, (getX() - screenX) * 2, (getY() - screenY) * 2);
-    }
-    
     public Node[] getNodes(){
         return new Node[]{inNode, outNode, aNode, bNode, dataNode};
     }

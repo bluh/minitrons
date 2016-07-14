@@ -130,7 +130,29 @@ class MenuDisplay{
             noStroke();
             fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
             for(Tronic tron: tronics){
-                rect(tron.getX() - 6 - screenX, tron.getY() - 6 - screenY, tron.getWidth() + 12, tron.getHeight() + 12);
+                pushMatrix();
+                int x = tron.getX() - screenX - 6;
+                int y = tron.getY() - screenY - 6;
+                rotate(tron.getRotation() * (PI / 2.0));
+                switch(tron.getRotation()){
+                    case 0:
+                        rect(x, y, tron.getWidth() + 12, tron.getHeight() + 12);
+                        //image(sprite, x, y);
+                        break;
+                    case 1:
+                        rect(y, -x - (tron.getWidth() - tron.getHeight()), tron.getWidth() + 12, -(tron.getHeight() + 12));
+                        //image(sprite, y, -x - WIDTH * 2);
+                        break;
+                    case 2:
+                        rect(-x, -y, -(tron.getWidth() + 12), -(tron.getHeight() + 12));
+                        //image(sprite, -x - WIDTH * 2, -y - HEIGHT * 2);
+                        break;
+                    case 3:
+                        rect(-y + (tron.getWidth() - tron.getHeight()), x, -(tron.getWidth() + 12), tron.getHeight() + 12);
+                        //image(sprite, -y - HEIGHT * 2, x);
+                        break;
+                }
+                popMatrix();
             }
             strokeWeight(12);
             for(Wire wire: wires){

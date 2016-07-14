@@ -66,9 +66,33 @@ class Monitor extends Tronic implements InFlow{
     public void renderTronic(int screenX, int screenY){
         super.renderTronic(screenX, screenY);
         fill(#FFFFFF);
-        for(int i = 0; i < lines; i++){
-            text(text[i], (9 + getX() - screenX) * 2, (12 + i * 10 + getY() - screenY) * 2);
+        int x = (getX() - screenX) * 2;
+        int y = (getY() - screenY) * 2;
+        int thisX = x;
+        int thisY = y;
+        rotate(rotation * (PI / 2.0));
+        switch(rotation){
+            case 0:
+                thisX = x;
+                thisY = y;
+                break;
+            case 1:
+                thisX = y;
+                thisY = -x - WIDTH * 2;
+                break;
+            case 2:
+                thisX = -x - WIDTH * 2;
+                thisY = -y - HEIGHT * 2 + 1;
+                break;
+            case 3:
+                thisX = -y - HEIGHT * 2;
+                thisY = x;
+                break;
         }
+        for(int i = 0; i < lines; i++){
+            text(text[i], 18 + thisX, 24 + i * 20 + thisY);
+        }
+        rotate(rotation * (PI / -2.0));
     }
     
     public Node[] getNodes(){

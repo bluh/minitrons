@@ -60,7 +60,7 @@ class Node{
     }
     
     public boolean containsPoint(int x, int y, int tronicX, int tronicY){
-        return x >= (this.x + tronicX) - 5 && x <= (this.x + WIDTH + tronicX) + 5 && y >= (this.y + tronicY) - 5 && y <= (this.y + HEIGHT + tronicY) + 5;
+        return x >= (getX() + tronicX) - 5 && x <= (getX() + WIDTH + tronicX) + 5 && y >= (getY() + tronicY) - 5 && y <= (getY() + HEIGHT + tronicY) + 5;
     }
     
     public void render(int mouseX, int mouseY, int screenX, int screenY, int tronicX, int tronicY, float zoom, boolean highlight){
@@ -71,7 +71,7 @@ class Node{
         }
         //rect(tronicX + x,tronicY + y,tronicX + x + WIDTH, tronicY + y + HEIGHT);
         noStroke();
-        rect(-screenX + tronicX + x,-screenY + tronicY + y, WIDTH, HEIGHT);
+        rect(-screenX + tronicX + getX(),-screenY + tronicY + getY(), WIDTH, HEIGHT);
     }
     
     public Tronic getParent(){
@@ -79,19 +79,59 @@ class Node{
     }
     
     public int getX(){
+        switch(parent.getRotation()){
+            case 0:
+                return x;
+            case 1:
+                return parent.getWidth() - WIDTH - y;
+            case 2:
+                return parent.getWidth() - WIDTH - x;
+            case 3:
+                return y;
+        }
         return x;
     }
     
     public int getY(){
+        switch(parent.getRotation()){
+            case 0:
+                return y;
+            case 1:
+                return x;
+            case 2:
+                return parent.getHeight() - HEIGHT - y;
+            case 3:
+                return parent.getHeight() - HEIGHT - x;
+        }
         return y;
     }
     
     public int getDirX(){
+        switch(parent.getRotation()){
+            case 0:
+                return dirX;
+            case 1:
+                return -dirY;
+            case 2:
+                return -dirX;
+            case 3:
+                return dirY;
+        }
         return dirX;
     }
     
     public int getDirY(){
-        return dirY;
+        switch(parent.getRotation()){
+            case 0:
+                return dirY;
+            case 1:
+                return dirX;
+            case 2:
+                return -dirY;
+            case 3:
+                return -dirX;
+        }
+        return dirX;
     }
     
     public String getName(){

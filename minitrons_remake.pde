@@ -173,6 +173,7 @@ void keyPressed(){
                         tronObj.setInt("objIndex", objs);
                         tronObj.setInt("posX", tron.getX());
                         tronObj.setInt("posY", tron.getY());
+                        tronObj.setInt("rotation", tron.getRotation());
                         if(tron instanceof Button){
                             tronObj.setInt("buttonType", ((Button)tron).getType());
                         }else if(tron instanceof Data){
@@ -309,6 +310,7 @@ void keyPressed(){
                                 println("Invalid tronic!");
                                 return;
                         }
+                        newTronic.setRotation(tronObj.getInt("rotation"));
                         tronics.add(newTronic);
                         tronicDetails.put(tronObj.getInt("objIndex"), newTronic);
                         tronicsId++;
@@ -527,6 +529,8 @@ void mousePressed(){
                     dragTronic = tron;
                 }else if(shiftDown){
                     menu.toggle(tron);
+                }else if(altDown){
+                    tron.rotateTronic();
                 }else{
                     menu.deselectAll();
                     menu.toggle(tron);
