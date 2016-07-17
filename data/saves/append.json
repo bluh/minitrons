@@ -1,0 +1,336 @@
+[
+  [
+    {
+      "posX": 96,
+      "posY": 40,
+      "objIndex": 0,
+      "monitorLines": [
+        "foo ",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 1,
+      "name": "Monitor1",
+      "type": "Monitor"
+    },
+    {
+      "posX": 136,
+      "posY": 368,
+      "objIndex": 1,
+      "name": "Data2",
+      "type": "Data",
+      "dataContents": "foo"
+    },
+    {
+      "posX": 288,
+      "posY": 424,
+      "objIndex": 2,
+      "name": "Keboard5",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 304,
+      "posY": 312,
+      "objIndex": 3,
+      "name": "FCall7",
+      "type": "Function"
+    },
+    {
+      "posX": 232,
+      "posY": 368,
+      "objIndex": 4,
+      "name": "FDat8",
+      "type": "FDat"
+    },
+    {
+      "posX": 248,
+      "posY": 272,
+      "objIndex": 5,
+      "name": "FChain9",
+      "type": "DataChain"
+    },
+    {
+      "posX": 144,
+      "posY": 272,
+      "objIndex": 6,
+      "name": "FChain10",
+      "type": "DataChain"
+    },
+    {
+      "posX": 408,
+      "posY": 280,
+      "objIndex": 7,
+      "name": "FChain11",
+      "type": "DataChain"
+    },
+    {
+      "posX": 648,
+      "posY": 432,
+      "objIndex": 8,
+      "name": "FStart12",
+      "type": "FStart"
+    },
+    {
+      "posX": 712,
+      "posY": 432,
+      "objIndex": 9,
+      "name": "FChain13",
+      "type": "DataChain"
+    },
+    {
+      "posX": 784,
+      "posY": 432,
+      "objIndex": 10,
+      "name": "FChain14",
+      "type": "DataChain"
+    },
+    {
+      "posX": 704,
+      "posY": 360,
+      "objIndex": 11,
+      "name": "FDat15",
+      "type": "FDat"
+    },
+    {
+      "posX": 800,
+      "posY": 360,
+      "objIndex": 12,
+      "name": "FDat16",
+      "type": "FDat"
+    },
+    {
+      "posX": 632,
+      "posY": 312,
+      "objIndex": 13,
+      "name": "And17",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 568,
+      "posY": 248,
+      "objIndex": 14,
+      "name": "Data18",
+      "type": "Data",
+      "dataContents": "|"
+    },
+    {
+      "posX": 760,
+      "posY": 296,
+      "objIndex": 15,
+      "name": "And19",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 824,
+      "posY": 224,
+      "objIndex": 16,
+      "name": "FEnd20",
+      "type": "FEnd"
+    },
+    {
+      "posX": 704,
+      "posY": 240,
+      "objIndex": 17,
+      "name": "FChain21",
+      "type": "DataChain"
+    }
+  ],
+  [
+    [
+      11,
+      0,
+      13,
+      2,
+      -16711936
+    ],
+    [
+      11,
+      0,
+      13,
+      4,
+      -16776961
+    ],
+    [
+      13,
+      3,
+      14,
+      0,
+      -16711936
+    ],
+    [
+      5,
+      1,
+      6,
+      2,
+      -16711936
+    ],
+    [
+      11,
+      0,
+      15,
+      4,
+      -16776961
+    ],
+    [
+      2,
+      0,
+      3,
+      0,
+      -65536
+    ],
+    [
+      3,
+      3,
+      7,
+      1,
+      -16711936
+    ],
+    [
+      11,
+      0,
+      15,
+      2,
+      -16711936
+    ],
+    [
+      4,
+      0,
+      5,
+      0,
+      -16711936
+    ],
+    [
+      9,
+      2,
+      10,
+      1,
+      -16711936
+    ],
+    [
+      1,
+      0,
+      6,
+      0,
+      -16711936
+    ],
+    [
+      0,
+      0,
+      3,
+      1,
+      -65536
+    ],
+    [
+      1,
+      0,
+      7,
+      0,
+      -16711936
+    ],
+    [
+      13,
+      1,
+      15,
+      0,
+      -65536
+    ],
+    [
+      2,
+      1,
+      4,
+      0,
+      -16776961
+    ],
+    [
+      12,
+      0,
+      15,
+      3,
+      -16711936
+    ],
+    [
+      15,
+      1,
+      16,
+      0,
+      -65536
+    ],
+    [
+      9,
+      0,
+      11,
+      0,
+      -16711936
+    ],
+    [
+      16,
+      1,
+      17,
+      2,
+      -16711936
+    ],
+    [
+      11,
+      0,
+      17,
+      0,
+      -16711936
+    ],
+    [
+      3,
+      2,
+      5,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      2,
+      1,
+      0,
+      -16711936
+    ],
+    [
+      8,
+      0,
+      13,
+      0,
+      -65536
+    ],
+    [
+      10,
+      0,
+      12,
+      0,
+      -16711936
+    ],
+    [
+      8,
+      1,
+      9,
+      1,
+      -16711936
+    ]
+  ]
+]

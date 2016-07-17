@@ -1,0 +1,73 @@
+[
+  [
+    {
+      "posX": 16,
+      "posY": 16,
+      "objIndex": 0,
+      "monitorLines": [
+        "test1 ",
+        "test2 ",
+        "test3 ",
+        "test4 ",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 4,
+      "name": "Monitor1",
+      "type": "Monitor"
+    },
+    {
+      "posX": 80,
+      "posY": 408,
+      "objIndex": 1,
+      "name": "Keboard2",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 216,
+      "posY": 304,
+      "objIndex": 2,
+      "name": "FDat3",
+      "type": "FDat"
+    }
+  ],
+  [
+    [
+      1,
+      1,
+      2,
+      0,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      -65536
+    ],
+    [
+      0,
+      2,
+      2,
+      0,
+      -16711936
+    ]
+  ]
+]

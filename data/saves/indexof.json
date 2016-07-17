@@ -1,0 +1,117 @@
+[
+  [
+    {
+      "posX": 376,
+      "posY": 80,
+      "objIndex": 0,
+      "monitorLines": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 0,
+      "name": "Monitor1",
+      "type": "Monitor"
+    },
+    {
+      "posX": 272,
+      "posY": 248,
+      "objIndex": 1,
+      "name": "FDat2",
+      "type": "FDat"
+    },
+    {
+      "posX": 272,
+      "posY": 168,
+      "objIndex": 2,
+      "name": "Data3",
+      "type": "Data",
+      "dataContents": ""
+    },
+    {
+      "posX": 376,
+      "posY": 328,
+      "objIndex": 3,
+      "name": "IndexOf4",
+      "operatorType": 7,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 256,
+      "posY": 400,
+      "objIndex": 4,
+      "name": "Keboard5",
+      "type": "Keyboard"
+    }
+  ],
+  [
+    [
+      2,
+      0,
+      3,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      0,
+      3,
+      1,
+      -65536
+    ],
+    [
+      1,
+      0,
+      3,
+      4,
+      -16776961
+    ],
+    [
+      1,
+      0,
+      3,
+      3,
+      -16711936
+    ],
+    [
+      0,
+      2,
+      1,
+      0,
+      -16711936
+    ],
+    [
+      1,
+      0,
+      4,
+      1,
+      -16776961
+    ],
+    [
+      3,
+      0,
+      4,
+      0,
+      -65536
+    ]
+  ]
+]

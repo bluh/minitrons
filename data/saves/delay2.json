@@ -1,0 +1,177 @@
+[
+  [
+    {
+      "posX": 280,
+      "posY": 208,
+      "objIndex": 0,
+      "name": "Delay1",
+      "type": "Delay"
+    },
+    {
+      "posX": 240,
+      "posY": 360,
+      "buttonType": 3,
+      "objIndex": 1,
+      "name": "Button2",
+      "type": "Button"
+    },
+    {
+      "posX": 168,
+      "posY": 216,
+      "objIndex": 2,
+      "name": "Data3",
+      "type": "Data",
+      "dataContents": "0.25"
+    },
+    {
+      "posX": 392,
+      "posY": 160,
+      "objIndex": 3,
+      "name": "Add4",
+      "operatorType": 0,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 352,
+      "posY": 240,
+      "objIndex": 4,
+      "monitorLines": [
+        "10.0 ",
+        "11.0 ",
+        "12.0 ",
+        "13.0 ",
+        "14.0 ",
+        "15.0 ",
+        "16.0 ",
+        "17.0 ",
+        "18.0 ",
+        "19.0 ",
+        "20.0 ",
+        "21.0 ",
+        "22.0 ",
+        "23.0 ",
+        "24.0 ",
+        "25.0 ",
+        "26.0 ",
+        "27.0 ",
+        "28.0 ",
+        "29.0 ",
+        "30.0 ",
+        ""
+      ],
+      "monitorLineNumber": 21,
+      "name": "Monitor5",
+      "type": "Monitor"
+    },
+    {
+      "posX": 272,
+      "posY": 472,
+      "objIndex": 5,
+      "name": "Data6",
+      "type": "Data",
+      "dataContents": "30.0"
+    },
+    {
+      "posX": 280,
+      "posY": 80,
+      "objIndex": 6,
+      "name": "Data8",
+      "type": "Data",
+      "dataContents": "1"
+    },
+    {
+      "posX": 696,
+      "posY": 304,
+      "objIndex": 7,
+      "name": "Delay8",
+      "type": "Delay"
+    },
+    {
+      "posX": 608,
+      "posY": 352,
+      "objIndex": 8,
+      "name": "Data9",
+      "type": "Data",
+      "dataContents": "1.0"
+    }
+  ],
+  [
+    [
+      3,
+      2,
+      6,
+      0,
+      -16711936
+    ],
+    [
+      0,
+      1,
+      2,
+      0,
+      -16711936
+    ],
+    [
+      4,
+      1,
+      7,
+      0,
+      -65536
+    ],
+    [
+      7,
+      1,
+      8,
+      0,
+      -16711936
+    ],
+    [
+      0,
+      2,
+      3,
+      0,
+      -65536
+    ],
+    [
+      3,
+      1,
+      4,
+      0,
+      -65536
+    ],
+    [
+      3,
+      4,
+      5,
+      0,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      -65536
+    ],
+    [
+      3,
+      0,
+      7,
+      2,
+      -65536
+    ],
+    [
+      4,
+      2,
+      5,
+      0,
+      -16711936
+    ],
+    [
+      3,
+      3,
+      5,
+      0,
+      -16711936
+    ]
+  ]
+]

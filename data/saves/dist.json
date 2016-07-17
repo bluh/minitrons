@@ -1,0 +1,373 @@
+[
+  [
+    {
+      "posX": 304,
+      "posY": 160,
+      "objIndex": 0,
+      "rotation": 0,
+      "name": "Distance1",
+      "operatorType": 7,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 192,
+      "posY": 352,
+      "objIndex": 1,
+      "rotation": 0,
+      "name": "Keboard2",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 352,
+      "posY": 32,
+      "objIndex": 2,
+      "monitorLines": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 0,
+      "rotation": 0,
+      "name": "Monitor3",
+      "type": "Monitor"
+    },
+    {
+      "posX": 368,
+      "posY": 352,
+      "objIndex": 3,
+      "rotation": 0,
+      "name": "Keboard4",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 200,
+      "posY": 256,
+      "objIndex": 4,
+      "rotation": 0,
+      "name": "Data5",
+      "type": "Data",
+      "dataContents": ""
+    },
+    {
+      "posX": 352,
+      "posY": 256,
+      "objIndex": 5,
+      "rotation": 0,
+      "name": "Data6",
+      "type": "Data",
+      "dataContents": ""
+    },
+    {
+      "posX": 464,
+      "posY": 264,
+      "objIndex": 6,
+      "rotation": 0,
+      "name": "And9",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 288,
+      "posY": 288,
+      "objIndex": 7,
+      "rotation": 0,
+      "name": "FDat10",
+      "type": "FDat"
+    },
+    {
+      "posX": 464,
+      "posY": 344,
+      "objIndex": 8,
+      "rotation": 0,
+      "name": "Data11",
+      "type": "Data",
+      "dataContents": "The distance between "
+    },
+    {
+      "posX": 616,
+      "posY": 176,
+      "objIndex": 9,
+      "rotation": 0,
+      "name": "FDat12",
+      "type": "FDat"
+    },
+    {
+      "posX": 552,
+      "posY": 264,
+      "objIndex": 10,
+      "rotation": 0,
+      "name": "And13",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 552,
+      "posY": 352,
+      "objIndex": 11,
+      "rotation": 0,
+      "name": "Data14",
+      "type": "Data",
+      "dataContents": ", and "
+    },
+    {
+      "posX": 656,
+      "posY": 264,
+      "objIndex": 12,
+      "rotation": 0,
+      "name": "And15",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 744,
+      "posY": 264,
+      "objIndex": 13,
+      "rotation": 0,
+      "name": "And16",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 832,
+      "posY": 264,
+      "objIndex": 14,
+      "rotation": 0,
+      "name": "And17",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 728,
+      "posY": 352,
+      "objIndex": 15,
+      "rotation": 0,
+      "name": "Data19",
+      "type": "Data",
+      "dataContents": " is "
+    }
+  ],
+  [
+    [
+      13,
+      1,
+      14,
+      0,
+      -65536
+    ],
+    [
+      9,
+      0,
+      12,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      3,
+      0,
+      -65536
+    ],
+    [
+      9,
+      0,
+      14,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      4,
+      7,
+      0,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      -65536
+    ],
+    [
+      6,
+      1,
+      10,
+      0,
+      -65536
+    ],
+    [
+      7,
+      0,
+      14,
+      3,
+      -16711936
+    ],
+    [
+      10,
+      3,
+      11,
+      0,
+      -16711936
+    ],
+    [
+      9,
+      0,
+      13,
+      2,
+      -16711936
+    ],
+    [
+      5,
+      0,
+      12,
+      3,
+      -16711936
+    ],
+    [
+      6,
+      2,
+      8,
+      0,
+      -16711936
+    ],
+    [
+      9,
+      0,
+      12,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      2,
+      4,
+      0,
+      -16711936
+    ],
+    [
+      4,
+      0,
+      6,
+      3,
+      -16711936
+    ],
+    [
+      9,
+      0,
+      14,
+      2,
+      -16711936
+    ],
+    [
+      9,
+      0,
+      13,
+      4,
+      -16776961
+    ],
+    [
+      1,
+      1,
+      4,
+      0,
+      -16776961
+    ],
+    [
+      2,
+      0,
+      14,
+      1,
+      -65536
+    ],
+    [
+      2,
+      2,
+      9,
+      0,
+      -16711936
+    ],
+    [
+      12,
+      1,
+      13,
+      0,
+      -65536
+    ],
+    [
+      9,
+      0,
+      10,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      3,
+      5,
+      0,
+      -16711936
+    ],
+    [
+      9,
+      0,
+      10,
+      2,
+      -16711936
+    ],
+    [
+      6,
+      4,
+      9,
+      0,
+      -16776961
+    ],
+    [
+      3,
+      1,
+      5,
+      0,
+      -16776961
+    ],
+    [
+      0,
+      1,
+      6,
+      0,
+      -65536
+    ],
+    [
+      10,
+      1,
+      12,
+      0,
+      -65536
+    ],
+    [
+      13,
+      3,
+      15,
+      0,
+      -16711936
+    ]
+  ]
+]

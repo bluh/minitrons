@@ -1,0 +1,104 @@
+[
+  [
+    {
+      "posX": 344,
+      "posY": 176,
+      "objIndex": 0,
+      "monitorLines": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 0,
+      "name": "Monitor2",
+      "type": "Monitor"
+    },
+    {
+      "posX": 256,
+      "posY": 456,
+      "objIndex": 1,
+      "name": "Data3",
+      "type": "Data",
+      "dataContents": "1"
+    },
+    {
+      "posX": 189,
+      "posY": 251,
+      "buttonType": 2,
+      "objIndex": 2,
+      "name": "Button4",
+      "type": "Button"
+    },
+    {
+      "posX": 272,
+      "posY": 368,
+      "objIndex": 3,
+      "name": "Operator6",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    }
+  ],
+  [
+    [
+      1,
+      0,
+      3,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      0,
+      3,
+      1,
+      -65536
+    ],
+    [
+      1,
+      0,
+      3,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      2,
+      1,
+      0,
+      -16711936
+    ],
+    [
+      2,
+      0,
+      3,
+      0,
+      -65536
+    ],
+    [
+      1,
+      0,
+      3,
+      3,
+      -16711936
+    ]
+  ]
+]

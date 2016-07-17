@@ -1,0 +1,118 @@
+[
+  [
+    {
+      "posX": 312,
+      "posY": 304,
+      "objIndex": 0,
+      "name": "Data1",
+      "type": "Data",
+      "dataContents": "2.9899828"
+    },
+    {
+      "posX": 216,
+      "posY": 304,
+      "objIndex": 1,
+      "name": "Keboard2",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 192,
+      "posY": 256,
+      "objIndex": 2,
+      "name": "Data3",
+      "type": "Data",
+      "dataContents": "You typed: "
+    },
+    {
+      "posX": 312,
+      "posY": 248,
+      "objIndex": 3,
+      "name": "Operator20",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 384,
+      "posY": 120,
+      "objIndex": 4,
+      "monitorLines": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 0,
+      "name": "Monitor22",
+      "type": "Monitor"
+    }
+  ],
+  [
+    [
+      0,
+      0,
+      1,
+      1,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      3,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      0,
+      4,
+      2,
+      -16711936
+    ],
+    [
+      3,
+      1,
+      4,
+      0,
+      -65536
+    ],
+    [
+      1,
+      0,
+      3,
+      0,
+      -65536
+    ],
+    [
+      2,
+      0,
+      3,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      0,
+      3,
+      3,
+      -16711936
+    ]
+  ]
+]

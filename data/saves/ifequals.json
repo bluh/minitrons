@@ -1,0 +1,191 @@
+[
+  [
+    {
+      "posX": 208,
+      "posY": 376,
+      "objIndex": 0,
+      "name": "Comparison1",
+      "type": "ComparisonTronic",
+      "comparisonType": 0
+    },
+    {
+      "posX": 104,
+      "posY": 336,
+      "objIndex": 1,
+      "name": "Data3",
+      "type": "Data",
+      "dataContents": "fart"
+    },
+    {
+      "posX": 160,
+      "posY": 480,
+      "objIndex": 2,
+      "name": "Keboard6",
+      "type": "Keyboard"
+    },
+    {
+      "posX": 288,
+      "posY": 472,
+      "objIndex": 3,
+      "name": "FDat7",
+      "type": "FDat"
+    },
+    {
+      "posX": 432,
+      "posY": 264,
+      "objIndex": 4,
+      "monitorLines": [
+        "that is incorrect. ",
+        "correct! ",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "monitorLineNumber": 2,
+      "name": "Monitor9",
+      "type": "Monitor"
+    },
+    {
+      "posX": 280,
+      "posY": 328,
+      "objIndex": 5,
+      "name": "Operator13",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 280,
+      "posY": 408,
+      "objIndex": 6,
+      "name": "Operator21",
+      "operatorType": 4,
+      "type": "OperatorTronic"
+    },
+    {
+      "posX": 344,
+      "posY": 408,
+      "objIndex": 7,
+      "name": "Data22",
+      "type": "Data",
+      "dataContents": "correct!"
+    },
+    {
+      "posX": 344,
+      "posY": 328,
+      "objIndex": 8,
+      "name": "Data23",
+      "type": "Data",
+      "dataContents": "that is incorrect."
+    }
+  ],
+  [
+    [
+      0,
+      4,
+      5,
+      0,
+      -65536
+    ],
+    [
+      2,
+      1,
+      3,
+      0,
+      -16776961
+    ],
+    [
+      0,
+      2,
+      3,
+      0,
+      -16711936
+    ],
+    [
+      3,
+      0,
+      6,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      3,
+      6,
+      0,
+      -65536
+    ],
+    [
+      4,
+      0,
+      6,
+      1,
+      -65536
+    ],
+    [
+      4,
+      0,
+      5,
+      1,
+      -65536
+    ],
+    [
+      3,
+      0,
+      5,
+      4,
+      -16776961
+    ],
+    [
+      0,
+      1,
+      1,
+      0,
+      -16711936
+    ],
+    [
+      3,
+      0,
+      4,
+      2,
+      -16711936
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      -65536
+    ],
+    [
+      5,
+      2,
+      8,
+      0,
+      -16711936
+    ],
+    [
+      6,
+      2,
+      7,
+      0,
+      -16711936
+    ]
+  ]
+]
