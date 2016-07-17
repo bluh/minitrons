@@ -60,6 +60,12 @@ class OperatorTronic extends Tronic implements InFlow{
                 result = "A%B";
                 break;
             case 7:
+                setSprite(loadImage("assets/distance.png"));
+                a = "A";
+                b = "B";
+                result = "||B-A||";
+                break;
+            case 8:
                 setSprite(loadImage("assets/indexof.png"));
                 a = "A";
                 b = "B";
@@ -138,6 +144,45 @@ class OperatorTronic extends Tronic implements InFlow{
                     result = Double.toString(numA % numB);
                     break;
                 case 7:
+                    if(b.indexOf("v") == 0){
+                        String[] bVals = b.split(",");
+                        if(bVals.length == 3){
+                            try{
+                                double bX = Double.valueOf(bVals[0].substring(1));
+                                double bY = Double.valueOf(bVals[1]);
+                                double bZ = Double.valueOf(bVals[2]);
+                                double aX = 0.0;
+                                double aY = 0.0; //default values for a, in case the input is blank or invalid
+                                double aZ = 0.0;
+                                if(a.indexOf("v") == 0){
+                                    String[] aVals = a.split(",");
+                                    if(aVals.length == 3){
+                                        try{
+                                            aX = Double.valueOf(aVals[0].substring(1));
+                                            aY = Double.valueOf(aVals[1]);
+                                            aZ = Double.valueOf(aVals[2]);
+                                        }catch(Exception e){
+                                            //invalid, keep the 0,0,0
+                                        }
+                                    }
+                                }
+                                //ok now find the distance...
+                                result = Double.toString(Math.sqrt(
+                                    Math.pow(bX - aX,2) + 
+                                    Math.pow(bY - aY,2) + 
+                                    Math.pow(bZ - aZ,2)
+                                ));
+                            }catch(Exception e){
+                                result = "";
+                            }
+                        }else{
+                            result = "";
+                        }
+                    }else{
+                        result = "";
+                    }
+                    break;
+                case 8:
                     if(a.indexOf("|") > -1){
                         String[] array = a.split("\\|");
                         if((int)numB >= array.length){

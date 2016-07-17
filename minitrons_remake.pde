@@ -50,10 +50,11 @@ void setup(){
     menuOpen = false;
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
-        "data", "fdat", "and", "add", "subtract", "multi",
-        "divide", "modulo", "ifelse", "ifgt", "random", "delay",
-        "ybutton", "bbutton", "gbutton", "rbutton", "keyboard", "proxy",
-        "monitor","fcall", "fstart", "fend", "fchain", "ifcontains", "indexof"
+        "data", "fdat", "and", "add", "subtract", "multi", 
+        "divide", "modulo", "distance", "ifelse", "ifgt", "random",
+        "delay", "ybutton", "bbutton", "gbutton", "rbutton", "keyboard",
+        "proxy", "monitor","fcall", "fstart", "fend", "fchain",
+        "ifcontains", "indexof"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -399,6 +400,9 @@ void mousePressed(){
                 case "modulo":
                     newTronic = new OperatorTronic(6, screenX + mouseX - 24, screenY + mouseY - 24,"Modulo"+tronicsId);
                     break;
+                case "distance":
+                    newTronic = new OperatorTronic(7, screenX + mouseX - 24, screenY + mouseY - 24,"Distance"+tronicsId);
+                    break;
                 case "ybutton":
                     newTronic = new Button(0, screenX + mouseX - 24, screenY + mouseY - 24,"Button"+tronicsId);
                     break;
@@ -437,7 +441,7 @@ void mousePressed(){
                     newTronic = new FEnd(screenX + mouseX - 24, screenY + mouseY - 24,"FEnd"+tronicsId);
                     break;
                 case "indexof":
-                    newTronic = new OperatorTronic(7, screenX + mouseX - 24, screenY + mouseY - 24,"IndexOf"+tronicsId);
+                    newTronic = new OperatorTronic(8, screenX + mouseX - 24, screenY + mouseY - 24,"IndexOf"+tronicsId);
                     break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
