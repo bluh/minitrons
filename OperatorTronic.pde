@@ -67,9 +67,15 @@ class OperatorTronic extends Tronic implements InFlow{
                 break;
             case 8:
                 setSprite(loadImage("assets/indexof.png"));
-                a = "A";
-                b = "B";
-                result = "A[B]";
+                a = "Array";
+                b = "Index";
+                result = "Array[Index]";
+                break;
+            case 9:
+                setSprite(loadImage("assets/set.png"));
+                a = "Index";
+                b = "Value";
+                result = "Array";
                 break;
             default:
                 setSprite(loadImage("assets/add.png"));
@@ -185,16 +191,62 @@ class OperatorTronic extends Tronic implements InFlow{
                 case 8:
                     if(a.indexOf("|") > -1){
                         String[] array = a.split("\\|");
-                        if((int)numB >= array.length){
-                            result = "";
-                        }else{
-                            result = array[(int)numB];
+                        int localIndex = 0;
+                        result = "";
+                        for(String value: array){
+                            String[] valueSplit = value.split(":",2);
+                            if(valueSplit.length > 1){
+                                if(b.equals(valueSplit[0])){
+                                    result = valueSplit[1];
+                                    break;
+                                }
+                            }else{
+                                localIndex++;
+                                if(localIndex == (int) numB){
+                                    result = value;
+                                    break;
+                                }
+                            }
                         }
                     }else{
                         if((int) numB >= a.length() || (int) numB < 0){
                             result = "";
                         }else{
                             result = a.substring((int) numB, (int) numB + 1);
+                        }
+                    }
+                    break;
+                case 9:
+                    String array = flow.getData(dataNode);
+                    if(array.indexOf("|") > -1){
+                        int localIndex = 0;
+                        result = "";
+                        for(String value: array.split("\\|")){
+                            String[] valueSplit = value.split(":",2);
+                            if(valueSplit.length > 1){
+                                if(a.equals(valueSplit[0])){
+                                    result+= valueSplit[0] + ":" + b + "|";
+                                }else{
+                                    result+= value + "|";
+                                }
+                                println(result);
+                            }else{
+                                localIndex++;
+                                if(localIndex == (int) numA){
+                                    result+= b + "|";
+                                }else{
+                                    result+= value + "|";
+                                }
+                                println(result);
+                            }
+                        }
+                        result = result.substring(0,result.length() - 1);
+                        println(result);
+                    }else{
+                        if(!a.equals("") && array.indexOf(a) > -1){
+                            result = array.substring(0, array.indexOf(a)) + b + array.substring(array.indexOf(a) + a.length());
+                        }else{
+                            result = array;
                         }
                     }
                     break;

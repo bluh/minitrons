@@ -9,6 +9,7 @@ float zoom;
 String[] MODES;
 String[] TRONICS;
 PImage[] TRONICSIMG;
+String VERSION;
 String messageText;
 String fileName;
 PFont font8;
@@ -54,13 +55,14 @@ void setup(){
         "divide", "modulo", "distance", "ifelse", "ifgt", "random",
         "delay", "ybutton", "bbutton", "gbutton", "rbutton", "keyboard",
         "proxy", "monitor","fcall", "fstart", "fend", "fchain",
-        "ifcontains", "indexof"
+        "ifcontains", "indexof", "set"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
     for(int i = 0; i < TRONICS.length;i++){
         TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
+    VERSION = "0.8";
     messageText = "NEW FILE";
     fileName = "";
     println("Initializing objects...");
@@ -224,7 +226,7 @@ void keyPressed(){
                     }
                     output.setJSONArray(0, tronicsOutput);
                     output.setJSONArray(1, wiresOutput);
-                    saveJSONArray(output, "/saves/" + contents + ".json");
+                    saveJSONArray(output, "data/saves/" + contents + ".json");
                     messageText = "SAVED";
                     fileName = contents;
                     mode = 0;
@@ -249,7 +251,7 @@ void keyPressed(){
                 if(!contents.equals("")){
                     JSONArray input = null;
                     try{
-                        input = loadJSONArray("/saves/" + contents + ".json");
+                        input = loadJSONArray("data/saves/" + contents + ".json");
                     }catch(Exception e){
                         messageText = "FILE DOES NOT EXIST";
                         mode = 0;
@@ -442,6 +444,9 @@ void mousePressed(){
                     break;
                 case "indexof":
                     newTronic = new OperatorTronic(8, screenX + mouseX - 24, screenY + mouseY - 24,"IndexOf"+tronicsId);
+                    break;
+                case "set":
+                    newTronic = new OperatorTronic(9, screenX + mouseX - 24, screenY + mouseY - 24,"Set"+tronicsId);
                     break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
@@ -835,4 +840,6 @@ void draw(){
     text("MODE: " + MODES[mode] + "", 204, height - 4);
     text("TOTAL: " + tronics.size() + "", 404, height - 4);
     text(messageText, 604, height - 4);
+    fill(#000000);
+    text(VERSION, width - textWidth(VERSION) - 4, 12);
 }
