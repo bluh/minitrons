@@ -77,6 +77,18 @@ class OperatorTronic extends Tronic implements InFlow{
                 b = "Value";
                 result = "Array";
                 break;
+            case 10:
+                setSprite(loadImage("assets/remove.png"));
+                a = "Array";
+                b = "Index";
+                result = "Modified Array";
+                break;
+            case 11:
+                setSprite(loadImage("assets/replace.png"));
+                a = "String";
+                b = "Value";
+                result = "Array";
+                break;
             default:
                 setSprite(loadImage("assets/add.png"));
                 a = "A";
@@ -217,8 +229,9 @@ class OperatorTronic extends Tronic implements InFlow{
                     }
                     break;
                 case 9:
+                case 11:
                     String array = flow.getData(dataNode);
-                    if(array.indexOf("|") > -1){
+                    if(array.indexOf("|") > -1){ //the procedure for arrays for both Set and Replace are the same
                         int localIndex = 0;
                         result = "";
                         for(String value: array.split("\\|")){
@@ -237,16 +250,49 @@ class OperatorTronic extends Tronic implements InFlow{
                                 }else{
                                     result+= value + "|";
                                 }
-                                println(result);
                             }
                         }
                         result = result.substring(0,result.length() - 1);
-                        println(result);
                     }else{
-                        if(!a.equals("") && array.indexOf(a) > -1){
-                            result = array.substring(0, array.indexOf(a)) + b + array.substring(array.indexOf(a) + a.length());
+                        if(type == 11){ //Replace code
+                            if(!a.equals("") && array.indexOf(a) > -1){
+                                result = array.substring(0, array.indexOf(a)) + b + array.substring(array.indexOf(a) + a.length());
+                            }else{
+                                result = array;
+                            }
+                        }else{ //Set code
+                            if(numA > 0 && numA <= array.length()){
+                                result = array.substring(0, (int)numA - 1) + b + array.substring((int)numA);
+                            }else{
+                                result = array;
+                            }
+                        }
+                    }
+                    break;
+                case 10:
+                    if(a.indexOf("|") > -1){
+                        int localIndex = 0;
+                        result = "";
+                        for(String value: a.split("\\|")){
+                            String[] valueSplit = value.split(":",2);
+                            if(valueSplit.length > 1){
+                                if(!b.equals(valueSplit[0])){
+                                    result+= value + "|";
+                                }
+                                println(result);
+                            }else{
+                                localIndex++;
+                                if(localIndex != (int) numB){
+                                    result+= value + "|";
+                                }
+                            }
+                        }
+                        result = result.substring(0,result.length() - 1);
+                    }else{
+                        if(!a.equals("") && a.indexOf(b) > -1){
+                            result = a.substring(0, a.indexOf(b)) + a.substring(a.indexOf(b) + b.length());
                         }else{
-                            result = array;
+                            result = a;
                         }
                     }
                     break;

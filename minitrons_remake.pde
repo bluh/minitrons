@@ -55,7 +55,7 @@ void setup(){
         "divide", "modulo", "distance", "ifelse", "ifgt", "random",
         "delay", "ybutton", "bbutton", "gbutton", "rbutton", "keyboard",
         "proxy", "monitor","fcall", "fstart", "fend", "fchain",
-        "ifcontains", "indexof", "set"
+        "ifcontains", "indexof", "set", "time", "remove", "replace"
     };
     TRONICSIMG = new PImage[TRONICS.length];
     println("Loading tronic icons...");
@@ -447,6 +447,15 @@ void mousePressed(){
                     break;
                 case "set":
                     newTronic = new OperatorTronic(9, screenX + mouseX - 24, screenY + mouseY - 24,"Set"+tronicsId);
+                    break;
+                case "time":
+                    newTronic = new TimeTronic(screenX + mouseX - 24, screenY + mouseY - 24,"Time"+tronicsId);
+                    break;
+                case "remove":
+                    newTronic = new OperatorTronic(10, screenX + mouseX - 24, screenY + mouseY - 24,"Remove"+tronicsId);
+                    break;
+                case "replace":
+                    newTronic = new OperatorTronic(11, screenX + mouseX - 24, screenY + mouseY - 24,"Replace"+tronicsId);
                     break;
                 default:
                     newTronic = new Data(screenX + mouseX - 24, screenY + mouseY - 24,"Data"+tronicsId);
