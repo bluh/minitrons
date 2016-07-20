@@ -22,7 +22,7 @@ class TimeTronic extends Tronic implements InFlow{
             java.util.Calendar c = java.util.Calendar.getInstance();
             result = year() + "|" + month() + "|" + c.get(java.util.Calendar.DAY_OF_WEEK) + "|" + hour() + "|" + minute() + "|" + second();
         }else{
-            result = "SOMEDAY|" + (int)((dt / 24) % 24) + "|" + (int)(dt * 2);
+            result = "SOMEDAY|" + (int)((dt / 30) % 24) + "|" + (int)((dt * 2) % 60);
         }
         flow.setData(outputNode, result);
         return outNode;

@@ -15,10 +15,7 @@ class Monitor extends Tronic implements InFlow{
         outNode = new Node(this, 3, 137, 218, 1, 0, "FlowOut");
         dataNode = new Node(this, 1, 125, 224, 0, 1, "DisplayData");
         text = new String[22];
-        for(int i = 0; i < text.length; i++){
-            text[i] = "";
-        }
-        lines = 0;
+        clearScreen();
     }
     
     public void addLine(){
@@ -32,15 +29,30 @@ class Monitor extends Tronic implements InFlow{
         }
     }
     
+    public void clearScreen(){
+        for(int i = 0; i < text.length; i++){
+            text[i] = "";
+        }
+        lines = 0;
+    }
+    
     public void processString(String input){
-        for(String bit: input.split("\n|(/n)")){
-            String tempBit = new String(bit);
-            while(tempBit.length() >= 31){
-                text[lines] += tempBit.substring(0, 30);
-                tempBit = tempBit.substring(30);
-                addLine();
+        for(String longBit: input.split("\n|(/n)")){
+            if(longBit.indexOf("/c") > -1){
+                longBit = longBit.substring(longBit.indexOf("/c") + 2);
+                clearScreen();
             }
-            text[lines] += tempBit + " ";
+            for(String bit: longBit.split("\\s")){
+                while(bit.length() >= 31){
+                    text[lines] += bit.substring(0, 30);
+                    bit = bit.substring(30);
+                    addLine();
+                }
+                if(text[lines].length() + bit.length() > 30){
+                    addLine();
+                }
+                text[lines] += bit + " ";
+            }
             addLine();
         }
     }
