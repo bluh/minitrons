@@ -132,7 +132,11 @@ class OperatorTronic extends Tronic implements InFlow{
             String result;
             switch(type){
                 case 0:
-                    result = Double.toString(numA + numB);
+                    if(b.equals("")){
+                        result = a;
+                    }else{
+                        result = Double.toString(numA + numB);
+                    }
                     break;
                 case 1:
                     result = Double.toString(numA - numB);

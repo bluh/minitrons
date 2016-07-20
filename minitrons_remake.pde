@@ -62,7 +62,7 @@ void setup(){
     for(int i = 0; i < TRONICS.length;i++){
         TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
-    VERSION = "0.8";
+    VERSION = "0.9";
     messageText = "NEW FILE";
     fileName = "";
     println("Initializing objects...");
@@ -335,6 +335,21 @@ void keyPressed(){
                     messageText = "LOADING CANCELED";
                     mode = 0;
                 }
+            }
+        }).showWindow();
+    }else if(ctrlDown && keyCode == 73 && mode == 0){
+        ctrlDown = false;
+        messageText = "IMPORTING...";
+        mode = 3;
+        menu.deselectAll();
+        new SmallTextEntry("","Import", new SmallTextEntryEvent(){
+            public void canceled(){
+                messageText = "IMPORTING CANCELED";
+                mode = 0;
+            }
+            
+            public void saved(String contents){
+                (new Importer()).importN8(contents);
             }
         }).showWindow();
     }else if(keyCode == SHIFT){
@@ -728,8 +743,13 @@ void draw(){
     }
     
     strokeWeight(6);
-    for(Wire wire: wires){
-        wire.render(screenX, screenY, (wire.getActivated() ? #FFFFFF : wire.getWireColor()));
+    try{
+        for(Wire wire: wires){
+            wire.render(screenX, screenY, (wire.getActivated() ? #FFFFFF : wire.getWireColor()));
+        }
+    }catch(java.util.ConcurrentModificationException e){
+        //hiccups when loading/importing
+        println("ConcurrentModificationException on wire render.");
     }
     if(mode == 2 && wireStart != null){
         wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), screenX, screenY);
