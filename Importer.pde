@@ -29,6 +29,7 @@ class Importer{
         println("importing... " + file);
         int state = 0;
         String[] lines = loadStrings("data/n8saves/" + file + ".ncd");
+        String tempLine = "";
         for(String line: lines){
             if(state == 0){
                 if(line.equals("tronics")){
@@ -38,124 +39,140 @@ class Importer{
                 if(line.equals("attach")){
                     state = 2;
                 }else{
-                    String properties[] = line.split(":", 7);
-                    int id = Integer.parseInt(properties[0]);
-                    String type = properties[1];
-                    String name = properties[2];
-                    String data = properties[5];
-                    String[] location = properties[3].split(",");
-                    int x = (int)(Double.parseDouble(location[0]) * 2.5);
-                    int y = (int)(Double.parseDouble(location[2]) * 2.5);
-                    y+= 600;
-                    x+= 300;
-                    Tronic newTronic = null;
-                    switch(type){
-                        case "cdata":
-                            newTronic = new Data(x, y, name);
-                            ((Data)newTronic).setData(data);
-                            break;
-                        case "cfdat":
-                            newTronic = new FDat(x, y, name);
-                            break;
-                        case "cifequal":
-                            newTronic = new ComparisonTronic(0, x, y, name);
-                            break;
-                        case "cifgreat":
-                            newTronic = new ComparisonTronic(1, x, y, name);
-                            break;
-                        case "cContains":
-                            newTronic = new ComparisonTronic(2, x, y, name);
-                            break;
-                        case "cand":
-                            newTronic = new OperatorTronic(4, x, y, name);
-                            break;
-                        case "cplus":
-                            newTronic = new OperatorTronic(0, x, y, name);
-                            break;
-                        case "cminus":
-                            newTronic = new OperatorTronic(1, x, y, name);
-                            break;
-                        case "cmulti":
-                            newTronic = new OperatorTronic(2, x, y, name);
-                            break;
-                        case "cdiv":
-                        case "cdivide":
-                            newTronic = new OperatorTronic(3, x, y, name);
-                            break;
-                        case "crandom":
-                            newTronic = new OperatorTronic(5, x, y, name);
-                            break;
-                        case "cModulos":
-                            newTronic = new OperatorTronic(6, x, y, name);
-                            break;
-                        case "cdistance":
-                            newTronic = new OperatorTronic(7, x, y, name);
-                            break;
-                        case "ryellowswitch":
-                            newTronic = new Button(0, x, y, name);
-                            break;
-                        case "rblueswitch":
-                            newTronic = new Button(1, x, y, name);
-                            break;
-                        case "rgreenswitch":
-                            newTronic = new Button(2, x, y, name);
-                            break;
-                        case "rswitch":
-                            newTronic = new Button(3, x, y, name);
-                            break;
-                        case "rproximity":
-                            newTronic = new Button(4, x, y, name);
-                            break;
-                        case "rmicrophone":
-                            warnings.add("REPLACE - A Microphone tronic named " + name + " was replaced with a Keyboard at location (" + x + ", " + y + ")");
-                        case "rkeyboard":
-                            newTronic = new Keyboard(x, y, name);
-                            break;
-                        case "tspeaker":
-                            warnings.add("REPLACE - A Speaker tronic named " + name + " was replaced with a Monitor at location (" + x + ", " + y + ")");
-                        case "tdisplay":
-                            newTronic = new Monitor(x, y, name);
-                            break;
-                        case "cdelay":
-                            newTronic = new Delay(x, y, name);
-                            break;
-                        case "fChain":
-                            newTronic = new DataChain(x, y, name);
-                            break;
-                        case "fCall":
-                            newTronic = new Function(x, y, name);
-                            break;
-                        case "LfStart":
-                            warnings.add("REPLACE - A Ludus Function Start tronic named " + name + " was replaced with a Function Start at location (" + x + ", " + y + ")");
-                        case "fStart":
-                            newTronic = new FStart(x, y, name);
-                            functions.add((FStart)newTronic);
-                            break;
-                        case "fEnd":
-                            newTronic = new FEnd(x, y, name);
-                            break;
-                        case "cGet": //no.
-                            newTronic = new OperatorTronic(8, x, y, name);
-                            break;
-                        case "cSet":
-                            newTronic = new OperatorTronic(9, x, y, name);
-                            break;
-                        case "cTime":
-                            newTronic = new TimeTronic(x, y, name);
-                            break;
-                        case "cRemove":
-                            newTronic = new OperatorTronic(10, x, y, name);
-                            break;
-                        case "cReplace":
-                            newTronic = new OperatorTronic(11, x, y, name);
-                            break;
-                        default:
-                            warnings.add("REMOVE - A " + getName(type) + " tronic named " + name + " at location (" + x + ", " + y + ") was not placed.");
-                            break;
-                    }
-                    if(newTronic != null){
-                        localTronics.put(id, newTronic);
-                        tronics.add(newTronic);
+                    if(!line.substring(line.length() - 1).equals(":")){
+                        tempLine = tempLine + line;
+                    }else{
+                        String properties[] = (tempLine + line).split(":", 7);
+                        tempLine = "";
+                        int id = Integer.parseInt(properties[0]);
+                        String type = properties[1];
+                        String name = properties[2];
+                        String bigData = properties[5];
+                        char splitter = (char)0x0008;
+                        String data = "";
+                        for(String split: bigData.split(Character.toString(splitter))){
+                            data+= split + ":";
+                        }
+                        data = data.substring(0, data.length() - 1);
+                        String[] location = properties[3].split(",");
+                        int x = (int)(Double.parseDouble(location[0]) * 2.5) + width/2;
+                        int y = (int)(Double.parseDouble(location[2]) * 2.5) + height/2;
+                        if(Double.parseDouble(location[1]) < 1999){
+                            Tronic newTronic = null;
+                            switch(type){
+                                case "cdata":
+                                    newTronic = new Data(x, y, name);
+                                    ((Data)newTronic).setData(data);
+                                    break;
+                                case "cfdat":
+                                    newTronic = new FDat(x, y, name);
+                                    break;
+                                case "cifequal":
+                                    newTronic = new ComparisonTronic(0, x, y, name);
+                                    break;
+                                case "cifgreat":
+                                    newTronic = new ComparisonTronic(1, x, y, name);
+                                    break;
+                                case "cIfContains":
+                                    newTronic = new ComparisonTronic(2, x, y, name);
+                                    break;
+                                case "cand":
+                                    newTronic = new OperatorTronic(4, x, y, name);
+                                    break;
+                                case "cplus":
+                                    newTronic = new OperatorTronic(0, x, y, name);
+                                    break;
+                                case "cminus":
+                                    newTronic = new OperatorTronic(1, x, y, name);
+                                    break;
+                                case "cmulti":
+                                    newTronic = new OperatorTronic(2, x, y, name);
+                                    break;
+                                case "cdiv":
+                                case "cdivide":
+                                    newTronic = new OperatorTronic(3, x, y, name);
+                                    break;
+                                case "crandom":
+                                    newTronic = new OperatorTronic(5, x, y, name);
+                                    break;
+                                case "cModulos":
+                                    newTronic = new OperatorTronic(6, x, y, name);
+                                    break;
+                                case "cdistance":
+                                    newTronic = new OperatorTronic(7, x, y, name);
+                                    break;
+                                case "ryellowswitch":
+                                    newTronic = new Button(0, x, y, name);
+                                    break;
+                                case "rblueswitch":
+                                    newTronic = new Button(1, x, y, name);
+                                    break;
+                                case "rgreenswitch":
+                                    newTronic = new Button(2, x, y, name);
+                                    break;
+                                case "rswitch":
+                                    newTronic = new Button(3, x, y, name);
+                                    break;
+                                case "rproximity":
+                                    newTronic = new Button(4, x, y, name);
+                                    break;
+                                case "rmicrophone":
+                                    warnings.add("REPLACE - A Microphone tronic named " + name + " was replaced with a Keyboard at location (" + x + ", " + y + ")");
+                                case "rkeyboard":
+                                    newTronic = new Keyboard(x, y, name);
+                                    break;
+                                case "tspeaker":
+                                    warnings.add("REPLACE - A Speaker tronic named " + name + " was replaced with a Monitor at location (" + x + ", " + y + ")");
+                                case "tdisplay":
+                                    newTronic = new Monitor(x, y, name);
+                                    for(String monitorLine: data.split("\t")){
+                                        ((Monitor)newTronic).processString(monitorLine);
+                                    }
+                                    break;
+                                case "cdelay":
+                                    newTronic = new Delay(x, y, name);
+                                    break;
+                                case "fChain":
+                                    newTronic = new DataChain(x, y, name);
+                                    break;
+                                case "fCall":
+                                    newTronic = new Function(x, y, name);
+                                    break;
+                                case "LfStart":
+                                    warnings.add("REPLACE - A Ludus Function Start tronic named " + name + " was replaced with a Function Start at location (" + x + ", " + y + ")");
+                                case "fStart":
+                                    newTronic = new FStart(x, y, name);
+                                    functions.add((FStart)newTronic);
+                                    break;
+                                case "fEnd":
+                                    newTronic = new FEnd(x, y, name);
+                                    break;
+                                case "cGet": //no.
+                                    newTronic = new OperatorTronic(8, x, y, name);
+                                    break;
+                                case "cSet":
+                                    newTronic = new OperatorTronic(9, x, y, name);
+                                    break;
+                                case "cTime":
+                                    newTronic = new TimeTronic(x, y, name);
+                                    break;
+                                case "cRemove":
+                                    newTronic = new OperatorTronic(10, x, y, name);
+                                    break;
+                                case "cReplace":
+                                    newTronic = new OperatorTronic(11, x, y, name);
+                                    break;
+                                default:
+                                    warnings.add("REMOVE - A " + getName(type) + " tronic named " + name + " at location (" + x + ", " + y + ") was not placed. ID: " + id + ".");
+                                    break;
+                            }
+                            if(newTronic != null){
+                                localTronics.put(id, newTronic);
+                                tronics.add(newTronic);
+                            }
+                        }else{
+                            warnings.add("REMOVE - A tronic named " + name + " had a Y position of above 1990 and was removed. ID: " + id + ".");
+                        }
                     }
                 }
             }else if(state == 2){
@@ -190,7 +207,7 @@ class Importer{
                         warnings.add("WIRE ERROR - A wire tried to exist between NodeID " + nid1 + " on a " + localTronics.get(id1).getClass().getSimpleName() + ((node1 == null) ? " (NULL) " : " ") + "and NodeID " + nid2 + " on a " + localTronics.get(id2).getClass().getSimpleName() + ((node2 == null) ? " (NULL)." : "."));
                     }
                 }else{
-                    warnings.add("WIRE ERROR - A wire tried to exist between two nonexistant tronics.");
+                    warnings.add("WIRE ERROR - A wire tried to exist between two nonexistant tronics with ids: " + id1 + (localTronics.containsKey(id1) ? " and " : " (NULL) and ") + id2 + (localTronics.containsKey(id2) ? "." : " (NULL)."));
                 }
             }
         }
@@ -305,6 +322,14 @@ class Importer{
                 nodeId = 2;
             }else if(id == 1){
                 nodeId = 3;
+            }
+        }else if(tron instanceof Delay){
+            if(id == 0){
+                nodeId = 0;
+            }else if(id == 3){
+                nodeId = 1;
+            }else if(id == 1){
+                nodeId = 2;
             }
         }
         if(nodeId >= 0){
