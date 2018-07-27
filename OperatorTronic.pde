@@ -159,7 +159,7 @@ class OperatorTronic extends Tronic implements InFlow{
                     if(a.equals("") && b.equals("")){
                         result = Double.toString(random(1.0));
                     }else{
-                        result = Integer.toString((int) random((float) numA,(float)  numB));
+                        result = Double.toString(random((float) numA,(float)  numB));
                     }
                     break;
                 case 6:

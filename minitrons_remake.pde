@@ -25,13 +25,14 @@ MenuDisplay menu;
 DataEntry dataEntry;
 boolean showHint;
 boolean showLoadWarnings;
+boolean displayDebug;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
 boolean menuOpen;
 
 void setup(){
-    size(800,600,P2D);
+    size(800,600);
     surface.setResizable(true);
     println("Loading fonts...");
     font8 = loadFont("neverfont8.vlw");
@@ -45,6 +46,7 @@ void setup(){
     menuX = 16;
     zoom = 1;
     showHint = false;
+    displayDebug = false;
     shiftDown = false;
     ctrlDown = false;
     altDown = false;
@@ -111,7 +113,9 @@ void setup(){
 
 void keyPressed(){
     mouseTime = 0;
-    if(keyCode == 82){ //r = 82
+    if(keyCode == 36){
+        displayDebug = !displayDebug;
+    }else if(keyCode == 82){ //r = 82
         screenX = 0;
         screenY = 0;
         zoom = 1.0;
@@ -700,6 +704,7 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
 }
 
 void draw(){
+    long start_time = System.nanoTime()/1000;
     dt += (1.0/frameRate) % 2.5;
     background(#E5E5E5);
     if(mousePressed && mouseButton == RIGHT){
@@ -716,6 +721,7 @@ void draw(){
         }
         dragTronic.moveTronic((int)((screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) - (screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)((screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) - (screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
     }
+    long drag_time = System.nanoTime()/1000;
     menu.renderHighlights(dt, screenX, screenY, zoom);
     fill(#FF0000);
     strokeWeight(0);
@@ -725,12 +731,14 @@ void draw(){
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);
+    long hilit_time = System.nanoTime()/1000;
     for(int x = (int) ((-screenX % 16) * zoom); x < width; x += (16 * zoom)){
         line(x,0,x,height);
     }
     for(int y = (int) ((-screenY % 16) * zoom); y < height; y += (16 * zoom)){
         line(0, y, width, y);
     }
+    long bg_time = System.nanoTime()/1000;
     
     pushMatrix();
     scale(zoom);
@@ -741,6 +749,7 @@ void draw(){
             c--;
         }
     }
+    long circle_time = System.nanoTime()/1000;
     
     strokeWeight(6);
     try{
@@ -754,6 +763,7 @@ void draw(){
     if(mode == 2 && wireStart != null){
         wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), screenX, screenY);
     }
+    long wire_time = System.nanoTime()/1000;
     pushMatrix();
     if(zoom == 1.0){
         textFont(font8, 16);
@@ -776,6 +786,7 @@ void draw(){
     popMatrix();
     
     popMatrix();
+    long trons_time = System.nanoTime()/1000;
     
     if(mode == 0 && dragTronic == null && !altDown){
         menu.renderMenu(screenX, screenY, mouseX, mouseY, zoom);
@@ -794,6 +805,7 @@ void draw(){
     }else{
         mouseTime = 0;
     }
+    long event_time = System.nanoTime()/1000;
     if(mouseTime > .5){
         boolean stop = false;
         for(Tronic tron: tronics){
@@ -846,6 +858,7 @@ void draw(){
             popMatrix();
         }
     }
+    long mouse_time = System.nanoTime()/1000;
     
     stroke(#404040);
     strokeWeight(1);
@@ -871,4 +884,34 @@ void draw(){
     text(messageText, 604, height - 4);
     fill(#000000);
     text(VERSION, width - textWidth(VERSION) - 4, 12);
+    
+    long ui_time = System.nanoTime()/1000;
+    long total_time = ui_time - start_time;
+    if(displayDebug){
+        fill(#606060,175);
+        rect(width - 362, 20, 300, 102);
+        fill(#FFFFFF);
+        
+        ui_time = ui_time - mouse_time;
+        mouse_time = mouse_time - event_time;
+        event_time = event_time - trons_time;
+        trons_time = trons_time - wire_time;
+        wire_time = wire_time - circle_time;
+        circle_time = circle_time - bg_time;
+        bg_time = bg_time - hilit_time;
+        hilit_time = hilit_time - drag_time;
+        drag_time = drag_time - start_time;
+        
+        text("Drag Time:        "+drag_time+" ms ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
+        text("Hilight Time:     "+hilit_time+" ms ("+floor((hilit_time*100.0)/total_time)+"%)",width - 360, 40);
+        text("Background Time:  "+bg_time+" ms ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 50);
+        text("Cirlce Time:      "+circle_time+" ms ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
+        text("Wire Time:        "+wire_time+" ms ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
+        text("Tronics Time      "+trons_time+" ms ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 80);
+        text("Event Time:       "+wire_time+" ms ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 90);
+        text("Mouse Time:       "+mouse_time+" ms ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 100);
+        text("UI Time:          "+ui_time+" ms ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 110);
+        text("Total Time:       "+total_time+" ms ("+floor(frameRate)+")",width - 360, 120);
+    }
+    
 }
