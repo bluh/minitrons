@@ -14,6 +14,7 @@ PImage[] TRONICSIMG;
 String VERSION;
 String messageText;
 String fileName;
+String author;
 PFont font8;
 PFont font16;
 ArrayList<Tronic> tronics;
@@ -66,9 +67,10 @@ void setup(){
     for(int i = 0; i < TRONICS.length;i++){
         TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
-    VERSION = "0.9";
+    VERSION = "1.0";
     messageText = "NEW FILE";
     fileName = "";
+    author="Default";
     println("Initializing objects...");
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
@@ -94,7 +96,7 @@ void setup(){
         String[] lines = loadStrings("config.txt");
         println("Config loaded:" + lines.length);
         for(String line: lines){
-            String[] split = line.split(":\\s*");
+            String[] split = line.split(":\\s*",2);
             if(split[0].equals("showHint")){
                 if(split[1].equals("true")){
                     showHint = true;
@@ -105,6 +107,9 @@ void setup(){
                     showLoadWarnings = true;
                     println("CONFIG: Showing loading warnings...");
                 }
+            }else if(split[0].equals("author")){
+                author = split[1];
+                println("CONFIG: Author is \""+author+"\"");
             }
         }
     }catch(Exception e){
@@ -179,7 +184,7 @@ void keyPressed(){
             
             public void saved(String contents){
                 if(!contents.equals("")){
-                    JSONArray output = new JSONArray();
+                    JSONObject output = new JSONObject();
                     JSONArray tronicsOutput = new JSONArray();
                     int objs = 0;
                     HashMap<Wire, Integer[]> wireDetails = new HashMap<Wire, Integer[]>();
@@ -239,9 +244,11 @@ void keyPressed(){
                             println("Invalid wire array?");
                         }
                     }
-                    output.setJSONArray(0, tronicsOutput);
-                    output.setJSONArray(1, wiresOutput);
-                    saveJSONArray(output, "data/saves/" + contents + ".json");
+                    output.setJSONArray("wires", wiresOutput);
+                    output.setJSONArray("tronics", tronicsOutput);
+                    output.setString("version",VERSION);
+                    output.setString("author",author);
+                    saveJSONObject(output, "data/saves/" + contents + ".json");
                     messageText = "SAVED";
                     fileName = contents;
                     mode = 0;
@@ -264,16 +271,21 @@ void keyPressed(){
             
             public void saved(String contents){
                 if(!contents.equals("")){
-                    JSONArray input = null;
+                    JSONObject input = null;
                     try{
-                        input = loadJSONArray("data/saves/" + contents + ".json");
+                        input = loadJSONObject("data/saves/" + contents + ".json");
                     }catch(Exception e){
                         messageText = "FILE DOES NOT EXIST";
                         mode = 0;
                         return;
                     }
-                    JSONArray tronicsInput = input.getJSONArray(0);
-                    JSONArray wiresInput = input.getJSONArray(1);
+                    if(input.isNull("version") || !input.getString("version").equals(VERSION)){
+                        messageText = "INCOMPATABLE SAVE";
+                        mode = 0;
+                        return;
+                    }
+                    JSONArray tronicsInput = input.getJSONArray("tronics");
+                    JSONArray wiresInput = input.getJSONArray("wires");
                     HashMap<Integer, Tronic> tronicDetails = new HashMap<Integer, Tronic>();
                     tronicsId = 0;
                     messageText = "LOADING... (TRONICS)";
