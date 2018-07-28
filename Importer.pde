@@ -29,6 +29,12 @@ class Importer{
         println("importing... " + file);
         int state = 0;
         String[] lines = loadStrings("data/n8saves/" + file + ".ncd");
+        if(lines == null){
+            messageText = "FILE DOES NOT EXIST";
+            mode = 0;
+            return;
+        }
+        mode = 3;
         String tempLine = "";
         for(String line: lines){
             if(state == 0){

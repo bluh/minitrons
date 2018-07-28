@@ -817,7 +817,7 @@ void draw(){
         mouseTime = 0;
     }
     long event_time = System.nanoTime()/1000;
-    if(mouseTime > .5){
+    if(mouseTime > .5 && mode != 3){
         boolean stop = false;
         for(Tronic tron: tronics){
             for(Node node: tron.getNodes()){
