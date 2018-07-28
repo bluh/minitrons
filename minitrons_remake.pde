@@ -3,6 +3,8 @@ int screenY;
 int mode;
 int tronicsId;
 int menuX;
+int loggingSamps;
+long loggingUS;
 float dt;
 float mouseTime;
 float zoom;
@@ -92,7 +94,7 @@ void setup(){
         String[] lines = loadStrings("config.txt");
         println("Config loaded:" + lines.length);
         for(String line: lines){
-            String[] split = line.split(":");
+            String[] split = line.split(":\\s*");
             if(split[0].equals("showHint")){
                 if(split[1].equals("true")){
                     showHint = true;
@@ -115,6 +117,15 @@ void keyPressed(){
     mouseTime = 0;
     if(keyCode == 36){
         displayDebug = !displayDebug;
+        if(displayDebug){
+            loggingUS = 0;
+            loggingSamps = 0;
+        }else{
+            println("Log:");
+            println("Number of samples: " + loggingSamps);
+            println("Total time: " + loggingUS + "us");
+            println("Total average us per frame: " + (loggingUS / loggingSamps));
+        }
     }else if(keyCode == 82){ //r = 82
         screenX = 0;
         screenY = 0;
@@ -902,16 +913,18 @@ void draw(){
         hilit_time = hilit_time - drag_time;
         drag_time = drag_time - start_time;
         
-        text("Drag Time:        "+drag_time+" ms ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
-        text("Hilight Time:     "+hilit_time+" ms ("+floor((hilit_time*100.0)/total_time)+"%)",width - 360, 40);
-        text("Background Time:  "+bg_time+" ms ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 50);
-        text("Cirlce Time:      "+circle_time+" ms ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
-        text("Wire Time:        "+wire_time+" ms ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
-        text("Tronics Time      "+trons_time+" ms ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 80);
-        text("Event Time:       "+wire_time+" ms ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 90);
-        text("Mouse Time:       "+mouse_time+" ms ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 100);
-        text("UI Time:          "+ui_time+" ms ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 110);
-        text("Total Time:       "+total_time+" ms ("+floor(frameRate)+")",width - 360, 120);
+        text("Drag Time:        "+drag_time+" us ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
+        text("Hilight Time:     "+hilit_time+" us ("+floor((hilit_time*100.0)/total_time)+"%)",width - 360, 40);
+        text("Background Time:  "+bg_time+" us ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 50);
+        text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
+        text("Wire Time:        "+wire_time+" us ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
+        text("Tronics Time      "+trons_time+" us ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 80);
+        text("Event Time:       "+wire_time+" us ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 90);
+        text("Mouse Time:       "+mouse_time+" us ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 100);
+        text("UI Time:          "+ui_time+" us ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 110);
+        text("Total Time:       "+total_time+" us ("+floor(1.0 / total_time * 1000000)+")",width - 360, 120);
+        loggingSamps++;
+        loggingUS+=total_time;
     }
     
 }
