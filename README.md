@@ -13,13 +13,26 @@ By default, not moving your mouse for a short time while in COMPUTE mode will sh
 * Space: Switches from COMPUTE to EDIT mode or EDIT to COMPUTE mode.
  
 ### EDIT Mode Controls
-* Left-click: Displays the menu on a single tronic.
-* Shift + Left-click: Includes the clicked-on tronic in the menu (used to decouple two wires).
-* Ctrl + Left-click: Moves the selected tronics or the just clicked-on tronic (if none are selected).
-* Alt + Left-click: Rotates the clicked-on tronic.
-* E: Opens or closes the Tronic menu.
+* E: Opens or closes Tronic Menu.
 * Ctrl + S: Saves a tronic contraption in the /data/saves folder.
 * Ctrl + L: Loads a tronic contraption from the /data/saves folder.
+* Ctrl + I: Imports tronics from a Neverdaunt save in the /data/n8saves folder.
+* When no tronics are selected:
+  * Left-click: Selects a single tronic. The menu is displayed.
+  * Ctrl + Left-click: Move a single tronic.
+  * Alt + Left-click: Rotate a single tronic.
+* When at least one tronic is selected:
+  * Alt: Hides the menu
+  * Shift + Left-click: Includes the tronic in the selection.
+  * Ctrl + Left-click: Moves the selected tronics.
+
+#### Menu Controls
+* Deselect: Deselects all tronics and closes the menu.
+* Pick up: Moves the selected tronics.
+* Delete: Deletes all selected tronics.
+* Rename: Renames all selected tronics.
+* Data Entry: Only available when one tronic is selected. If the selected tronic is a Data tronic, opens the Data Entry window (if not open), and connects it to the selected Data tronic.
+* Decouple: Only available when more than one tronic is selected. If the selected tronics have a connected wire, the wire is deleted.
 
 ### COMPUTE Mode Controls
 * Left-click: Activates a tronic, if clickable (such as Buttons or a Keyboard).
@@ -30,3 +43,5 @@ An editable configuration file can be found at /data/config.txt and contains the
 * showHints
   * If enabled, shows the controls hint in EDIT mode or the buttons hint in COMPUTE mode. Enabled by default.
   * Accepts: "true" or "false"
+* author
+  * Signs saves made under this name, "Default" by default.
