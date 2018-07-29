@@ -75,8 +75,8 @@ class Monitor extends Tronic implements InFlow{
         return lines;
     }
     
-    public void renderTronic(int screenX, int screenY){
-        super.renderTronic(screenX, screenY);
+    public void renderTronic(int screenX, int screenY, float dt){
+        super.renderTronic(screenX, screenY, dt);
         fill(#FFFFFF);
         int x = (getX() - screenX) * 2;
         int y = (getY() - screenY) * 2;

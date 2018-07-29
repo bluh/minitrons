@@ -7,6 +7,7 @@ public abstract class Tronic{
     final int HEIGHT;
     String name;
     boolean enabled;
+    boolean highlighted;
     
     public Tronic(int x, int y, int w, int h, String name){
         this(x, y, w, h, name, null);
@@ -21,6 +22,7 @@ public abstract class Tronic{
         this.HEIGHT = h;
         this.name = name;
         this.enabled = true;
+        this.highlighted = false;
     }
     
     void setSprite(PImage sprite){
@@ -60,13 +62,15 @@ public abstract class Tronic{
         this.y = y;
     }
     
+    public void setHighlight(boolean h){
+        highlighted = h;
+    }
+    
     public boolean containsPoint(int px, int py){
-        int thisX1 = x;
-        int thisY1 = y;
-        int thisX2 = x + WIDTH;
-        int thisY2 = x + HEIGHT;
+        int thisX1, thisY1, thisX2, thisY2;
         switch(rotation){
             case 0:
+            default:
                 thisX1 = x;
                 thisY1 = y;
                 thisX2 = x + WIDTH;
@@ -114,10 +118,32 @@ public abstract class Tronic{
         this.name = name;
     }
     
-    public void renderTronic(int screenX, int screenY){
+    public void renderTronic(int screenX, int screenY, float dt){
         int x = (getX() - screenX) * 2;
         int y = (getY() - screenY) * 2;
         rotate(rotation * (PI / 2.0));
+        if(highlighted){
+            pushMatrix();
+            noStroke();
+            fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80), 155);
+            int menuX = x - 6;
+            int menuY = y - 6;
+            switch(rotation){
+                case 0:
+                    rect(menuX, menuY, WIDTH * 2 + 12, HEIGHT * 2+ 12);
+                    break;
+                case 1:
+                    rect(menuY, -menuX - (WIDTH - HEIGHT) * 2, WIDTH * 2 + 12, -(HEIGHT + 12) * 2);
+                    break;
+                case 2:
+                    rect(-menuX, -menuY, -(WIDTH * 2 + 12), -(HEIGHT * 2 + 12));
+                    break;
+                case 3:
+                    rect(-menuY + (WIDTH - HEIGHT) * 2, menuX, -(WIDTH * 2 + 12), HEIGHT * 2 + 12);
+                    break;
+            }
+            popMatrix();
+        }
         switch(rotation){
             case 0:
                 image(sprite, x, y);

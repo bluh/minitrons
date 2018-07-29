@@ -69,6 +69,7 @@ class MenuDisplay{
     public void select(Tronic tron){
         if(!tronics.contains(tron)){
             tronics.add(tron);
+            tron.setHighlight(true);
         }
         selectWires();
         calculatePosition();
@@ -78,6 +79,7 @@ class MenuDisplay{
     public void deselect(Tronic tron){
         if(tronics.contains(tron)){
             tronics.remove(tron);
+            tron.setHighlight(false);
         }
         selectWires();
         calculatePosition();
@@ -87,8 +89,10 @@ class MenuDisplay{
     public void toggle(Tronic tron){
         if(tronics.contains(tron)){
             tronics.remove(tron);
+            tron.setHighlight(false);
         }else{
             tronics.add(tron);
+            tron.setHighlight(true);
         }
         selectWires();
         calculatePosition();
@@ -100,6 +104,9 @@ class MenuDisplay{
     }
     
     public void deselectAll(){
+        for(Tronic tron: tronics){
+            tron.setHighlight(false);
+        }
         tronics.clear();
         wires.clear();
     }
@@ -121,45 +128,6 @@ class MenuDisplay{
             return (int) (y - (this.y * zoom + OFFSET - screenY * zoom)) / 17;
         }
         return -1;
-    }
-    
-    public void renderHighlights(float dt, int screenX, int screenY, float zoom){
-        if(tronics.size() > 0){
-            pushMatrix();
-            scale(zoom);
-            noStroke();
-            fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
-            for(Tronic tron: tronics){
-                pushMatrix();
-                int x = tron.getX() - screenX - 6;
-                int y = tron.getY() - screenY - 6;
-                rotate(tron.getRotation() * (PI / 2.0));
-                switch(tron.getRotation()){
-                    case 0:
-                        rect(x, y, tron.getWidth() + 12, tron.getHeight() + 12);
-                        //image(sprite, x, y);
-                        break;
-                    case 1:
-                        rect(y, -x - (tron.getWidth() - tron.getHeight()), tron.getWidth() + 12, -(tron.getHeight() + 12));
-                        //image(sprite, y, -x - WIDTH * 2);
-                        break;
-                    case 2:
-                        rect(-x, -y, -(tron.getWidth() + 12), -(tron.getHeight() + 12));
-                        //image(sprite, -x - WIDTH * 2, -y - HEIGHT * 2);
-                        break;
-                    case 3:
-                        rect(-y + (tron.getWidth() - tron.getHeight()), x, -(tron.getWidth() + 12), tron.getHeight() + 12);
-                        //image(sprite, -y - HEIGHT * 2, x);
-                        break;
-                }
-                popMatrix();
-            }
-            strokeWeight(12);
-            for(Wire wire: wires){
-                wire.render(screenX, screenY, color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
-            }
-            popMatrix();
-        }
     }
     
     public void renderMenu(int screenX, int screenY, int mouseX, int mouseY, float zoom){

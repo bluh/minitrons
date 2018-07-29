@@ -785,16 +785,17 @@ void draw(){
         dragTronic.moveTronic((int)((screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) - (screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)((screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) - (screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
     }
     long drag_time = System.nanoTime()/1000;
-    menu.renderHighlights(dt, screenX, screenY, zoom);
     fill(#FF0000);
     strokeWeight(0);
     if(dataEntry.getTronic() != null){
+        pushMatrix();
+        scale(zoom);
         rect(dataEntry.getTronic().getX() - 2 - screenX, dataEntry.getTronic().getY() - 2 - screenY, dataEntry.getTronic().getWidth() + 4, dataEntry.getTronic().getHeight() + 4);
+        popMatrix();
     }
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);
-    long hilit_time = System.nanoTime()/1000;
     for(int x = (int) ((-screenX % 16) * zoom); x < width; x += (16 * zoom)){
         line(x,0,x,height);
     }
@@ -835,7 +836,7 @@ void draw(){
     }
     scale(.5);
     for(int i = tronics.size() - 1; i >= 0; i--){
-        tronics.get(i).renderTronic(screenX, screenY);
+        tronics.get(i).renderTronic(screenX, screenY, dt);
         if(tronics.get(i) instanceof Clickable
             && sqrt(pow((screenX + mouseX / zoom) - (tronics.get(i).getX() + tronics.get(i).getWidth() * .5),2) + pow((screenY + mouseY / zoom) - (tronics.get(i).getY() + tronics.get(i).getHeight() * .5),2)) < 50){
             ((Clickable)tronics.get(i)).mouseNearby(mouseX, mouseY, zoom);
@@ -972,12 +973,10 @@ void draw(){
         trons_time = trons_time - wire_time;
         wire_time = wire_time - circle_time;
         circle_time = circle_time - bg_time;
-        bg_time = bg_time - hilit_time;
-        hilit_time = hilit_time - drag_time;
+        bg_time = bg_time - drag_time;
         drag_time = drag_time - start_time;
         
         text("Drag Time:        "+drag_time+" us ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
-        text("Hilight Time:     "+hilit_time+" us ("+floor((hilit_time*100.0)/total_time)+"%)",width - 360, 40);
         text("Background Time:  "+bg_time+" us ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 50);
         text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
         text("Wire Time:        "+wire_time+" us ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
