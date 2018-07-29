@@ -963,7 +963,7 @@ void draw(){
     long total_time = ui_time - start_time;
     if(displayDebug){
         fill(#606060,200);
-        rect(width - 362, 20, 300, 112);
+        rect(width - 362, 20, 300, 102);
         fill(#FFFFFF);
         
         ui_time = ui_time - mouse_time;
@@ -977,15 +977,15 @@ void draw(){
         drag_time = drag_time - start_time;
         
         text("Drag Time:        "+drag_time+" us ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
-        text("Background Time:  "+bg_time+" us ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 50);
-        text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
-        text("Wire Time:        "+wire_time+" us ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
-        text("Tronics Time      "+trons_time+" us ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 80);
-        text("Menu Time         "+menu_time+" us ("+floor((menu_time*100.0)/total_time)+"%)",width - 360, 90);
-        text("Event Time:       "+wire_time+" us ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 100);
-        text("Mouse Time:       "+mouse_time+" us ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 110);
-        text("UI Time:          "+ui_time+" us ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 120);
-        text("Total Time:       "+total_time+" us ("+floor(1.0 / total_time * 1000000)+")",width - 360, 130);
+        text("Background Time:  "+bg_time+" us ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 40);
+        text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 50);
+        text("Wire Time:        "+wire_time+" us ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 60);
+        text("Tronics Time      "+trons_time+" us ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 70);
+        text("Menu Time         "+menu_time+" us ("+floor((menu_time*100.0)/total_time)+"%)",width - 360, 80);
+        text("Event Time:       "+wire_time+" us ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 90);
+        text("Mouse Time:       "+mouse_time+" us ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 100);
+        text("UI Time:          "+ui_time+" us ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 110);
+        text("Total Time:       "+total_time+" us ("+floor(1.0 / total_time * 1000000)+")",width - 360, 120);
         loggingSamps++;
         loggingUS+=total_time;
     }
