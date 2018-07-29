@@ -168,3 +168,12 @@ public abstract class Tronic{
     }
     abstract Node[] getNodes();
 }
+
+interface InFlow{
+    public Node getFlow(FlowDetails flow);
+}
+
+interface Clickable{
+    void clicked(int x, int y, float zoom);
+    void mouseNearby(int x, int y, float zoom);
+}

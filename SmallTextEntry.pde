@@ -152,3 +152,8 @@ class SmallTextEntry extends JFrame{
         textArea.requestFocusInWindow();
     }
 }
+
+interface SmallTextEntryEvent{
+    public void canceled();
+    public void saved(String contents);
+}
