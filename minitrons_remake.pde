@@ -4,6 +4,10 @@ int mode;
 int tronicsId;
 int menuX;
 int loggingSamps;
+int multiStartX;
+int multiStartY;
+int multiEndX;
+int multiEndY;
 long loggingUS;
 float dt;
 float mouseTime;
@@ -22,6 +26,7 @@ ArrayList<Wire> wires;
 ArrayList<QueuedWrapper> events;
 ArrayList<Circle> circles;
 ArrayList<FStart> functions;
+ArrayList<Tronic> multiSelected;
 Tronic dragTronic;
 MouseWire wireStart;
 MenuDisplay menu;
@@ -29,6 +34,7 @@ DataEntry dataEntry;
 boolean showHint;
 boolean showLoadWarnings;
 boolean displayDebug;
+boolean multiSelect;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
@@ -77,6 +83,7 @@ void setup(){
     events = new ArrayList<QueuedWrapper>();
     circles = new ArrayList<Circle>();
     functions = new ArrayList<FStart>();
+    multiSelected = new ArrayList<Tronic>();
     menu = new MenuDisplay();
     dataEntry = new DataEntry();
     dataEntry.addWindowListener(new java.awt.event.WindowListener() {
@@ -598,7 +605,18 @@ void mousePressed(){
                 return;
             }
         }
-        menu.deselectAll(); //deselect if they clicked nothing
+        if(shiftDown){
+            if(!ctrlDown){
+                menu.deselectAll();
+            }
+            multiSelect = true;
+            multiStartX = mouseX;
+            multiStartY = mouseY;
+            multiEndX = multiStartX;
+            multiEndY = multiStartY;
+        }else{
+            menu.deselectAll(); //deselect if they clicked nothing
+        }
     }else if(mode == 1){
         for(Tronic tron: tronics){
             if(tron instanceof Clickable){
@@ -656,6 +674,28 @@ void mouseReleased(){
     if(dragTronic != null){
         menu.calculatePosition();
         dragTronic = null;
+    }
+    if(multiSelect){
+        multiSelect = false;
+        multiStartX = (int) (screenX + multiStartX/zoom);
+        multiStartY = (int) (screenY + multiStartY/zoom);
+        multiEndX = (int) (screenX + multiEndX/zoom);
+        multiEndY = (int) (screenY + multiEndY/zoom);
+        for(Tronic tron: tronics){
+            if(tron.getX() > min(multiStartX,multiEndX)
+            && tron.getX() + tron.getWidth() < max(multiStartX,multiEndX)
+            && tron.getY() > min(multiStartY,multiEndY)
+            && tron.getY() + tron.getHeight() < max(multiStartY,multiEndY)){
+                menu.toggle(tron);
+            }
+        }
+    }
+}
+
+void mouseDragged(MouseEvent evt){
+    if(evt.getButton() == LEFT && multiSelect){
+        multiEndX = mouseX;
+        multiEndY = mouseY;
     }
 }
 
@@ -811,9 +851,19 @@ void draw(){
     popMatrix();
     long trons_time = System.nanoTime()/1000;
     
+    if(multiSelect){
+        pushMatrix();
+        strokeWeight(2);
+        stroke(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
+        fill(#606060, 175);
+        rect(multiStartX, multiStartY, multiEndX-multiStartX,multiEndY-multiStartY);
+        popMatrix();
+    }
+    
     if(mode == 0 && dragTronic == null && !altDown){
         menu.renderMenu(screenX, screenY, mouseX, mouseY, zoom);
     }
+    long menu_time = System.nanoTime()/1000;
     
     for(int i = 0; i < events.size(); i++){
         if(events.get(i).tick(1.0 / frameRate)){
@@ -911,13 +961,14 @@ void draw(){
     long ui_time = System.nanoTime()/1000;
     long total_time = ui_time - start_time;
     if(displayDebug){
-        fill(#606060,175);
-        rect(width - 362, 20, 300, 102);
+        fill(#606060,200);
+        rect(width - 362, 20, 300, 112);
         fill(#FFFFFF);
         
         ui_time = ui_time - mouse_time;
         mouse_time = mouse_time - event_time;
-        event_time = event_time - trons_time;
+        event_time = event_time - menu_time;
+        menu_time = menu_time - trons_time;
         trons_time = trons_time - wire_time;
         wire_time = wire_time - circle_time;
         circle_time = circle_time - bg_time;
@@ -931,10 +982,11 @@ void draw(){
         text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 60);
         text("Wire Time:        "+wire_time+" us ("+floor((wire_time*100.0)/total_time)+"%)",width - 360, 70);
         text("Tronics Time      "+trons_time+" us ("+floor((trons_time*100.0)/total_time)+"%)",width - 360, 80);
-        text("Event Time:       "+wire_time+" us ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 90);
-        text("Mouse Time:       "+mouse_time+" us ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 100);
-        text("UI Time:          "+ui_time+" us ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 110);
-        text("Total Time:       "+total_time+" us ("+floor(1.0 / total_time * 1000000)+")",width - 360, 120);
+        text("Menu Time         "+menu_time+" us ("+floor((menu_time*100.0)/total_time)+"%)",width - 360, 90);
+        text("Event Time:       "+wire_time+" us ("+floor((event_time*100.0)/total_time)+"%)",width - 360, 100);
+        text("Mouse Time:       "+mouse_time+" us ("+floor((mouse_time*100.0)/total_time)+"%)",width - 360, 110);
+        text("UI Time:          "+ui_time+" us ("+floor((ui_time*100.0)/total_time)+"%)",width - 360, 120);
+        text("Total Time:       "+total_time+" us ("+floor(1.0 / total_time * 1000000)+")",width - 360, 130);
         loggingSamps++;
         loggingUS+=total_time;
     }
