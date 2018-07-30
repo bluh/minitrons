@@ -123,17 +123,17 @@ class MenuDisplay{
         return items;
     }
     
-    public int containsPoint(int x, int y, int screenX, int screenY, float zoom){
-        if(x > (this.x * zoom) + OFFSET - (screenX * zoom) && x < (this.x * zoom) + OFFSET + WIDTH - (screenX * zoom) && y > (this.y * zoom) + OFFSET - (screenY * zoom)){
-            return (int) (y - (this.y * zoom + OFFSET - screenY * zoom)) / 17;
+    public int containsMouse(){
+        if(mouseX > (x * zoom) + OFFSET - (screenX * zoom) && mouseX < (x * zoom) + OFFSET + WIDTH - (screenX * zoom) && mouseY > (y * zoom) + OFFSET - (screenY * zoom)){
+            return (int) (mouseY - (y * zoom + OFFSET - screenY * zoom)) / 17;
         }
         return -1;
     }
     
-    public void renderMenu(int screenX, int screenY, int mouseX, int mouseY, float zoom){
+    public void renderMenu(){
         if(tronics.size() > 0){
             strokeWeight(1);
-            int mousePoint = containsPoint(mouseX, mouseY, screenX, screenY, zoom);
+            int mousePoint = containsMouse();
             for(MenuItem item: items){
                 item.render((int) (x * zoom), (int) (y * zoom), (int) (screenX * zoom), (int) (screenY * zoom), mousePoint);
             }

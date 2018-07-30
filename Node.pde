@@ -63,7 +63,7 @@ class Node{
         return x >= (getX() + tronicX) - 5 && x <= (getX() + WIDTH + tronicX) + 5 && y >= (getY() + tronicY) - 5 && y <= (getY() + HEIGHT + tronicY) + 5;
     }
     
-    public void render(int mouseX, int mouseY, int screenX, int screenY, int tronicX, int tronicY, float zoom, boolean highlight){
+    public void render(int tronicX, int tronicY, boolean highlight){
         if(highlight && containsPoint(screenX + (int)(mouseX / zoom), screenY + (int)(mouseY / zoom), tronicX, tronicY)){
             fill(#D0D0D0);
         }else{

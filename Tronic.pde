@@ -118,7 +118,7 @@ public abstract class Tronic{
         this.name = name;
     }
     
-    public void renderTronic(int screenX, int screenY, float dt){
+    public void renderTronic(float dt){
         int x = (getX() - screenX) * 2;
         int y = (getY() - screenY) * 2;
         rotate(rotation * (PI / 2.0));
@@ -126,24 +126,25 @@ public abstract class Tronic{
             pushMatrix();
             noStroke();
             fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80), 155);
-            int menuX = x - 6;
-            int menuY = y - 6;
+            int menuX = x/2 - 6;
+            int menuY = y/2 - 6;
             switch(rotation){
                 case 0:
-                    rect(menuX, menuY, WIDTH * 2 + 12, HEIGHT * 2+ 12);
+                    rect(menuX, menuY, WIDTH + 12, HEIGHT+ 12);
                     break;
                 case 1:
-                    rect(menuY, -menuX - (WIDTH - HEIGHT) * 2, WIDTH * 2 + 12, -(HEIGHT + 12) * 2);
+                    rect(menuY, -menuX - (WIDTH - HEIGHT), WIDTH + 12, -(HEIGHT + 12));
                     break;
                 case 2:
-                    rect(-menuX, -menuY, -(WIDTH * 2 + 12), -(HEIGHT * 2 + 12));
+                    rect(-menuX, -menuY, -(WIDTH + 12), -(HEIGHT + 12));
                     break;
                 case 3:
-                    rect(-menuY + (WIDTH - HEIGHT) * 2, menuX, -(WIDTH * 2 + 12), HEIGHT * 2 + 12);
+                    rect(-menuY + (WIDTH - HEIGHT), menuX, -(WIDTH + 12), HEIGHT + 12);
                     break;
             }
             popMatrix();
         }
+        scale(.5);
         switch(rotation){
             case 0:
                 image(sprite, x, y);
@@ -158,12 +159,14 @@ public abstract class Tronic{
                 image(sprite, -y - HEIGHT * 2, x);
                 break;
         }
+        //reverse transformations
+        scale(2);
         rotate(rotation * (PI / -2.0));
     }
     
-    public void renderNodes(int mouseX, int mouseY, int screenX, int screenY, float zoom, boolean highlight){
+    public void renderNodes(){
         for(Node node: getNodes()){
-            node.render(mouseX, mouseY, screenX, screenY, getX(), getY(), zoom, highlight);
+            node.render(getX(), getY(),(mode != 1));
         }
     }
     abstract Node[] getNodes();

@@ -14,12 +14,8 @@ class Wire{
         this.wireColor = wireColor;
     }
     
-    public void render(int screenX, int screenY){
-        render(screenX, screenY, wireColor);
-    }
-    
-    public void render(int screenX, int screenY, color thisColor){
-        stroke(thisColor);
+    public void render(){
+        stroke(getActivated() ? #FFFFFF : wireColor);
         strokeCap(SQUARE);
         noFill();
         int tronicX1 = firstTronic.getX() - screenX;
@@ -80,7 +76,7 @@ class MouseWire{
         this.wireColor = wireColor;
     }
     
-    public void render(int mouseX, int mouseY, int screenX, int screenY){
+    public void render(){
         stroke(wireColor);
         strokeWeight(6);
         strokeCap(SQUARE);
@@ -89,10 +85,10 @@ class MouseWire{
         int tronicY = firstTronic.getY() - screenY;
         int pointX = firstPoint.getX() + 3;
         int pointY = firstPoint.getY() + 3;
-        int distance = (int) sqrt(pow((tronicX + pointX) - mouseX,2) + pow((tronicY + pointY) - mouseY,2)) / 2; 
+        int distance = (int) sqrt(pow((tronicX + pointX) - mouseX/zoom,2) + pow((tronicY + pointY) - mouseY/zoom,2)) / 2; 
         int dirX = firstPoint.getDirX() * distance;
         int dirY = firstPoint.getDirY() * distance;
-        bezier(tronicX + pointX, tronicY + pointY, tronicX + pointX + dirX, tronicY + pointY + dirY, mouseX - dirX + 3, mouseY - dirY + 3, mouseX + 3, mouseY + 3);
+        bezier(tronicX + pointX, tronicY + pointY, tronicX + pointX + dirX, tronicY + pointY + dirY, mouseX/zoom - dirX + 3, mouseY/zoom - dirY + 3, mouseX/zoom + 3, mouseY/zoom + 3);
     }
     
     public boolean canConnectTo(Node nextPoint){
@@ -105,10 +101,10 @@ class MouseWire{
         }else if(type1 == 0 && type2 == 4){ //dataout -> data
             for(int i = 0; i < firstPoint.getNumWires(); i++){
                 if(firstPoint.getWire(i).getOtherNode(firstPoint) == nextPoint){
-                    return false; //maybe... not so infinite
+                    return false;
                 }
             }
-            return true; //infinite wires!!!!!!!!!! :-)
+            return true;
         }else if(type1 == 4 && type2 == 0){ //data -> dataout
             for(int i = 0; i < nextPoint.getNumWires(); i++){
                 if(nextPoint.getWire(i).getOtherNode(nextPoint) == firstPoint){
@@ -123,7 +119,7 @@ class MouseWire{
         }else if((type1 == 5 && type2 == 6) || (type1 == 6 && type2 == 5)){ //chainin -> chainout || chainout -> chainin
             return firstPoint.getNumWires() == 0 && nextPoint.getNumWires() == 0;
         }
-        return false; //yeah!!! FUCK 'EM!!!
+        return false;
     }
     
     public Node getFirstPoint(){

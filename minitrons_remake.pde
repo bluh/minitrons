@@ -44,8 +44,8 @@ void setup(){
     size(800,600);
     surface.setResizable(true);
     println("Loading fonts...");
-    font8 = loadFont("neverfont8.vlw");
     font16 = loadFont("neverfont16.vlw");
+    textFont(font16,8);
     screenX = 0;
     screenY = 0;
     mode = 0;
@@ -519,7 +519,7 @@ void mousePressed(){
     }
     if(mouseButton == LEFT && mode == 0){
         if(menu.getSelected().size() > 0){
-            int mouseIndex = menu.containsPoint(mouseX, mouseY, screenX, screenY, zoom);
+            int mouseIndex = menu.containsMouse();
             MenuDisplay.MenuItem[] items = menu.getItems();
             if(!altDown && mouseIndex >= 0 && items.length > mouseIndex){
                 String action = items[mouseIndex].getAction();
@@ -770,10 +770,14 @@ void draw(){
     long start_time = System.nanoTime()/1000;
     dt += (1.0/frameRate) % 2.5;
     background(#E5E5E5);
+    
+    //Move screenX & screenY
     if(mousePressed && mouseButton == RIGHT){
         screenX += (pmouseX - mouseX) / zoom;
         screenY += (pmouseY - mouseY) / zoom;
     }
+    
+    //Update dragTronic
     if(dragTronic != null){
         for(Tronic tron: menu.getSelected()){
             if(tron != dragTronic){
@@ -785,6 +789,8 @@ void draw(){
         dragTronic.moveTronic((int)((screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) - (screenX + (mouseX) / zoom - dragTronic.getWidth() / 2) % 8), (int)((screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) - (screenY + (mouseY) / zoom - dragTronic.getHeight() / 2) % 8));
     }
     long drag_time = System.nanoTime()/1000;
+    
+    //Draw dataEntry highlight
     fill(#FF0000);
     strokeWeight(0);
     if(dataEntry.getTronic() != null){
@@ -793,6 +799,8 @@ void draw(){
         rect(dataEntry.getTronic().getX() - 2 - screenX, dataEntry.getTronic().getY() - 2 - screenY, dataEntry.getTronic().getWidth() + 4, dataEntry.getTronic().getHeight() + 4);
         popMatrix();
     }
+    
+    //Draw background
     fill(#000000);
     stroke(#000000);
     strokeWeight(1);
@@ -804,74 +812,73 @@ void draw(){
     }
     long bg_time = System.nanoTime()/1000;
     
-    pushMatrix();
+    //Rendering on-screen elements requires a scale
     scale(zoom);
     
+    //Render circles
     for(int c = 0; c < circles.size(); c++){
-        if(!circles.get(c).render(zoom)){
+        if(!circles.get(c).render()){
             circles.remove(c);
             c--;
         }
     }
     long circle_time = System.nanoTime()/1000;
     
+    //Render wires
     strokeWeight(6);
     try{
         for(Wire wire: wires){
-            wire.render(screenX, screenY, (wire.getActivated() ? #FFFFFF : wire.getWireColor()));
+            wire.render();
         }
     }catch(java.util.ConcurrentModificationException e){
         //hiccups when loading/importing
         println("ConcurrentModificationException on wire render.");
     }
+    
+    //Render mouseWire
     if(mode == 2 && wireStart != null){
-        wireStart.render((int) (mouseX / zoom), (int)(mouseY / zoom), screenX, screenY);
+        wireStart.render();
     }
     long wire_time = System.nanoTime()/1000;
-    pushMatrix();
-    if(zoom == 1.0){
-        textFont(font8, 16);
-    }else{
-        textFont(font16, 16);
-    }
-    scale(.5);
+    
+    //Render tronics
     for(int i = tronics.size() - 1; i >= 0; i--){
-        tronics.get(i).renderTronic(screenX, screenY, dt);
+        tronics.get(i).renderTronic(dt);
         if(tronics.get(i) instanceof Clickable
             && sqrt(pow((screenX + mouseX / zoom) - (tronics.get(i).getX() + tronics.get(i).getWidth() * .5),2) + pow((screenY + mouseY / zoom) - (tronics.get(i).getY() + tronics.get(i).getHeight() * .5),2)) < 50){
             ((Clickable)tronics.get(i)).mouseNearby(mouseX, mouseY, zoom);
         }
-        pushMatrix();
-        scale(2);
-        tronics.get(i).renderNodes(mouseX, mouseY, screenX, screenY, zoom, (mode != 1));
-        popMatrix();
+        tronics.get(i).renderNodes();
     }
-    textFont(font8, 8);
-    popMatrix();
-    
-    popMatrix();
     long trons_time = System.nanoTime()/1000;
     
+    //Rendering UI elements requires a reversal of scale
+    scale(1/zoom);
+    
+    //Render multiSelect
     if(multiSelect){
-        pushMatrix();
         strokeWeight(2);
         stroke(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80));
         fill(#606060, 175);
         rect(multiStartX, multiStartY, multiEndX-multiStartX,multiEndY-multiStartY);
-        popMatrix();
     }
     
+    //Render menu
     if(mode == 0 && dragTronic == null && !altDown){
-        menu.renderMenu(screenX, screenY, mouseX, mouseY, zoom);
+        menu.renderMenu();
     }
     long menu_time = System.nanoTime()/1000;
     
+    //Handle events
     for(int i = 0; i < events.size(); i++){
         if(events.get(i).tick(1.0 / frameRate)){
             events.remove(i);
             i--;
         }
     }
+    long event_time = System.nanoTime()/1000;
+    
+    //Handle mouse events
     if(pmouseX == mouseX && pmouseY == mouseY){
         if(mouseTime < .5){
             mouseTime += (1.0/frameRate);
@@ -879,7 +886,6 @@ void draw(){
     }else{
         mouseTime = 0;
     }
-    long event_time = System.nanoTime()/1000;
     if(mouseTime > .5 && mode != 3){
         boolean stop = false;
         for(Tronic tron: tronics){
@@ -906,7 +912,7 @@ void draw(){
         if(mode == 1 && showHint){
             int charWidth = (int) textWidth("1") + 3;
             pushMatrix();
-                noStroke();
+            noStroke();
             fill(#FFD919);
             rect(charWidth * -2 + mouseX, mouseY + 32, charWidth, charWidth);
             fill(#088DFF);
@@ -934,9 +940,11 @@ void draw(){
     }
     long mouse_time = System.nanoTime()/1000;
     
+    //Set style to draw UI
     stroke(#404040);
     strokeWeight(1);
     
+    //Draw Tronic Menu
     fill(#606060);
     rect(0,height - 16, width - 1, 16);
     if(menuOpen){
@@ -952,20 +960,19 @@ void draw(){
     }
     fill(#FFFFFF);
     text((menuOpen ? "<\n<\n<" : ">\n>\n>"),-8 + menuX,height / 2 - 16);
+    
+    //Draw status bars
     text("(" + screenX + ", " + screenY + ")", 4, height - 4); 
     text("MODE: " + MODES[mode] + "", 204, height - 4);
     text("TOTAL: " + tronics.size() + "", 404, height - 4);
     text(messageText, 604, height - 4);
     fill(#000000);
     text(VERSION, width - textWidth(VERSION) - 4, 12);
-    
     long ui_time = System.nanoTime()/1000;
+    
+    //Calculate render times
     long total_time = ui_time - start_time;
     if(displayDebug){
-        fill(#606060,200);
-        rect(width - 362, 20, 300, 102);
-        fill(#FFFFFF);
-        
         ui_time = ui_time - mouse_time;
         mouse_time = mouse_time - event_time;
         event_time = event_time - menu_time;
@@ -976,6 +983,10 @@ void draw(){
         bg_time = bg_time - drag_time;
         drag_time = drag_time - start_time;
         
+        //Draw render stats
+        fill(#606060,200);
+        rect(width - 362, 20, 300, 102);
+        fill(#FFFFFF);
         text("Drag Time:        "+drag_time+" us ("+floor((drag_time*100.0)/total_time)+"%)",width - 360, 30);
         text("Background Time:  "+bg_time+" us ("+floor((bg_time*100.0)/total_time)+"%)",width - 360, 40);
         text("Cirlce Time:      "+circle_time+" us ("+floor((circle_time*100.0)/total_time)+"%)",width - 360, 50);

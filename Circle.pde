@@ -17,7 +17,7 @@ class Circle{
         this.radius = radius;
     }
     
-    boolean render(float zoom){
+    boolean render(){
         transparency -= 5;
         pushStyle();
         stroke(thisColor);

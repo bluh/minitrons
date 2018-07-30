@@ -75,11 +75,11 @@ class Monitor extends Tronic implements InFlow{
         return lines;
     }
     
-    public void renderTronic(int screenX, int screenY, float dt){
-        super.renderTronic(screenX, screenY, dt);
+    public void renderTronic(float dt){
+        super.renderTronic(dt);
         fill(#FFFFFF);
-        int x = (getX() - screenX) * 2;
-        int y = (getY() - screenY) * 2;
+        int x = (getX() - screenX);
+        int y = (getY() - screenY);
         int thisX = x;
         int thisY = y;
         rotate(rotation * (PI / 2.0));
@@ -90,19 +90,19 @@ class Monitor extends Tronic implements InFlow{
                 break;
             case 1:
                 thisX = y;
-                thisY = -x - WIDTH * 2;
+                thisY = -x - WIDTH;
                 break;
             case 2:
-                thisX = -x - WIDTH * 2;
-                thisY = -y - HEIGHT * 2 + 1;
+                thisX = -x - WIDTH;
+                thisY = -y - HEIGHT + 1;
                 break;
             case 3:
-                thisX = -y - HEIGHT * 2;
+                thisX = -y - HEIGHT;
                 thisY = x;
                 break;
         }
         for(int i = 0; i < lines; i++){
-            text(text[i], 18 + thisX, 24 + i * 20 + thisY);
+            text(text[i], 9 + thisX, 12 + i * 10 + thisY);
         }
         rotate(rotation * (PI / -2.0));
     }
