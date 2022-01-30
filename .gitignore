@@ -8,3 +8,5 @@ application.windows64
 application.macosx
 data/saves/*
 data/n8saves/*
+out/*
+.vscode

@@ -13,12 +13,13 @@ class Function extends Tronic implements InFlow{
     }
     
     public Node getFlow(FlowDetails details){
-        String name = toString();
+        String name = getName();
         FStart funct = findFunction(name);
         if(funct == null){
             return outNode;
         }else{
-            details.addFunction(this);
+            int currentStackIndex = details.getStackIndex();
+            int nextStackIndex = details.addFunction(this);
             Node thisNode = chainInNode;
             Node corrNode = funct.getChainNode();
             while(thisNode != null && thisNode.getNumWires() > 0 && corrNode != null && corrNode.getNumWires() > 0){
@@ -27,7 +28,7 @@ class Function extends Tronic implements InFlow{
                 corrNode = corrNode.getWire(0).getOtherNode(corrNode);
                 Tronic corrTron = corrNode.getParent();
                 if(thisTron instanceof DataChain && corrTron instanceof DataChain){
-                    details.setData(((DataChain)corrTron).getDataNode(),details.getData(((DataChain)thisTron).getDataNode()));
+                    details.setData(((DataChain)corrTron).getDataNode(), details.getData(((DataChain)thisTron).getDataNode(), currentStackIndex), nextStackIndex);
                     thisNode = ((DataChain)thisTron).getOtherNode(thisNode);
                     corrNode = ((DataChain)corrTron).getOtherNode(corrNode);
                 }else{
@@ -49,5 +50,9 @@ class Function extends Tronic implements InFlow{
     
     public Node getChainNode(){
         return chainOutNode;
+    }
+
+    public String toString() {
+        return "FCall [" + name + "]";
     }
 }

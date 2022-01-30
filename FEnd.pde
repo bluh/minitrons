@@ -11,7 +11,9 @@ class FEnd extends Tronic implements InFlow{
     }
     
     public Node getFlow(FlowDetails details){
-        Function next = details.popFunction();
+        int currentStackIndex = details.getStackIndex();
+        Function next = details.peekFunction();
+        int nextStackIndex = details.peekStackIndex();
         if(next == null){
             return null;
         }
@@ -23,14 +25,17 @@ class FEnd extends Tronic implements InFlow{
             corrNode = corrNode.getWire(0).getOtherNode(corrNode);
             Tronic corrTron = corrNode.getParent();
             if(thisTron instanceof DataChain && corrTron instanceof DataChain){
-                details.setData(((DataChain)corrTron).getDataNode(),details.getData(((DataChain)thisTron).getDataNode()));
+                details.setData(((DataChain)corrTron).getDataNode(), details.getData(((DataChain)thisTron).getDataNode(), currentStackIndex), nextStackIndex);
                 thisNode = ((DataChain)thisTron).getOtherNode(thisNode);
                 corrNode = ((DataChain)corrTron).getOtherNode(corrNode);
             }else{
-                thisNode = null;
+                thisNode = null; 
                 corrTron = null;
             }
         }
+
+        details.popFunction();
+
         return next.getOutNode();
     }
     

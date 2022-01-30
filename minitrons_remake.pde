@@ -73,7 +73,7 @@ void setup(){
     for(int i = 0; i < TRONICS.length;i++){
         TRONICSIMG[i] = loadImage("assets/icons/" + TRONICS[i] + ".png");
     }
-    VERSION = "1.0";
+    VERSION = "1.1";
     messageText = "NEW FILE";
     fileName = "";
     author="Default";
@@ -127,7 +127,7 @@ void setup(){
 
 void keyPressed(){
     mouseTime = 0;
-    if(keyCode == 36){
+    if(keyCode == 36){ //home = 36
         displayDebug = !displayDebug;
         if(displayDebug){
             loggingUS = 0;
@@ -151,6 +151,7 @@ void keyPressed(){
     }else if(keyCode == 67){ //c = 67
         menu.deselectAll();
         tronics.clear();
+        functions.clear();
         wires.clear();
     }else if(keyCode == 69 && mode == 0){ //e = 69
         menuOpen = !menuOpen;
@@ -700,12 +701,12 @@ void mouseDragged(MouseEvent evt){
 }
 
 void addCircle(int x, int y, color circleColor, int size){
-        circles.add(new Circle(circleColor, x, y, size));
+    circles.add(new Circle(circleColor, x, y, size));
 }
 
 FStart findFunction(String name){
     for(FStart tron: functions){
-        if(tron.toString().equals(name)){
+        if(tron.getName().equals(name)){
             return tron;
         }
     }

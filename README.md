@@ -17,6 +17,7 @@ By default, not moving your mouse for a short time while in COMPUTE mode will sh
 * Ctrl + S: Saves a tronic contraption in the /data/saves folder.
 * Ctrl + L: Loads a tronic contraption from the /data/saves folder.
 * Ctrl + I: Imports tronics from a Neverdaunt save in the /data/n8saves folder.
+* Shift + Left-mouse-drag: Selects multiple tronics
 * When no tronics are selected:
   * Left-click: Selects a single tronic. The menu is displayed.
   * Ctrl + Left-click: Move a single tronic.
