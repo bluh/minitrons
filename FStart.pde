@@ -21,8 +21,4 @@ class FStart extends Tronic{
     public Node getChainNode(){
         return chainNode;
     }
-
-    public String toString() {
-        return "FStart [" + name + "]";
-    }
 }

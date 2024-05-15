@@ -127,7 +127,6 @@ public abstract class Tronic{
         int y = (getY() - screenY) * 2;
         rotate(rotation * (PI / 2.0));
         if(highlighted){
-            pushMatrix();
             noStroke();
             fill(color(255, (int) (sin(TWO_PI * dt / 2.5) * 15) + 215, (int) (sin(TWO_PI * dt / 2.5) * 60) + 80), 155);
             int menuX = x/2 - 6;
@@ -146,7 +145,6 @@ public abstract class Tronic{
                     rect(-menuY + (WIDTH - HEIGHT), menuX, -(WIDTH + 12), HEIGHT + 12);
                     break;
             }
-            popMatrix();
         }
         scale(.5);
         switch(rotation){

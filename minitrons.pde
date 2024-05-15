@@ -33,16 +33,19 @@ MenuDisplay menu;
 DataEntry dataEntry;
 boolean showHint;
 boolean showLoadWarnings;
+boolean darkMode;
 boolean displayDebug;
 boolean multiSelect;
 boolean shiftDown;
 boolean ctrlDown;
 boolean altDown;
+boolean deleteDown;
 boolean menuOpen;
 
 void setup(){
     size(800,600);
-    surface.setResizable(true);
+    noSmooth();
+    windowResizable(true);
     println("Loading fonts...");
     font16 = loadFont("neverfont16.vlw");
     textFont(font16,8);
@@ -60,6 +63,7 @@ void setup(){
     ctrlDown = false;
     altDown = false;
     menuOpen = false;
+    deleteDown = false;
     MODES = new String[]{"EDIT", "COMPUTE", "WIRE", "FILE"};
     TRONICS = new String[]{
         "data", "fdat", "and", "add", "subtract", "multi", 
@@ -77,6 +81,8 @@ void setup(){
     messageText = "NEW FILE";
     fileName = "";
     author="Default";
+    showLoadWarnings = true;
+    darkMode = false;
     println("Initializing objects...");
     tronics = new ArrayList<Tronic>();
     wires = new ArrayList<Wire>();
@@ -86,39 +92,20 @@ void setup(){
     multiSelected = new ArrayList<Tronic>();
     menu = new MenuDisplay();
     dataEntry = new DataEntry();
-    dataEntry.addWindowListener(new java.awt.event.WindowListener() {
-       public void windowOpened(java.awt.event.WindowEvent e) {}
-       public void windowIconified(java.awt.event.WindowEvent e) {}
-       public void windowDeiconified(java.awt.event.WindowEvent e) {}
-       public void windowDeactivated(java.awt.event.WindowEvent e) {}
-       public void windowClosing(java.awt.event.WindowEvent e) {
-           dataEntry.setVisible(false);
-           dataEntry.setTronic(null);
-       }
-       public void windowClosed(java.awt.event.WindowEvent e) {}
-       public void windowActivated(java.awt.event.WindowEvent e) {}
-    });
     println("Loading config...");
     try{
-        String[] lines = loadStrings("config.txt");
-        println("Config loaded:" + lines.length);
-        for(String line: lines){
-            String[] split = line.split(":\\s*",2);
-            if(split[0].equals("showHint")){
-                if(split[1].equals("true")){
-                    showHint = true;
-                    println("CONFIG: Showing hints...");
-                }
-            }else if(split[0].equals("supressLoadWarnings")){
-                if(split[1].equals("true")){
-                    showLoadWarnings = true;
-                    println("CONFIG: Showing loading warnings...");
-                }
-            }else if(split[0].equals("author")){
-                author = split[1];
-                println("CONFIG: Author is \""+author+"\"");
-            }
-        }
+        JSONObject configFile = loadJSONObject("config.json");
+        showHint = configFile.getBoolean("showHint", showHint);
+        println(showHint ? "CONFIG: Showing hints..." : "CONFIG: Hiding hints...");
+        
+        showLoadWarnings = configFile.getBoolean("showLoadWarnings", showLoadWarnings);
+        println(showLoadWarnings ? "CONFIG: Showing loading warnings..." : "CONFIG: Hiding loading warnings...");
+        
+        author = configFile.getString("author", author);
+        println("CONFIG: Author is \""+author+"\"");
+        
+        darkMode = configFile.getBoolean("darkMode", darkMode);
+        println(darkMode ? "CONFIG: Dark mode on..." : "CONFIG: Dark mode off...");
     }catch(Exception e){
         println("Could not load config.txt! Resorting to default configuration...");
     }
@@ -155,30 +142,6 @@ void keyPressed(){
         wires.clear();
     }else if(keyCode == 69 && mode == 0){ //e = 69
         menuOpen = !menuOpen;
-    }else if(mode == 1 && (key == '1' || key == '2' || key == '3' || key == '4')){
-        int type = Character.getNumericValue(key) - 1;
-        for(Tronic tron: tronics){
-            if(tron instanceof Button && ((Button)tron).getType() == type && sqrt(pow((tron.getX() + tron.getWidth()/2) - (mouseX/zoom + screenX), 2) + pow((tron.getY() + tron.getHeight()/2) - (mouseY/zoom + screenY), 2)) <= 150){
-                ((Clickable)tron).clicked(mouseX, mouseY, zoom);
-            }
-        }
-        color circleColor;
-        switch(type){
-            case 0:
-            default:
-                circleColor = #FFD919;
-                break;
-            case 1:
-                circleColor = #088DFF;
-                break;
-            case 2:
-                circleColor = #08FF19;
-                break;
-            case 3:
-                circleColor = #FB0302;
-                break;
-        }
-        circles.add(new Circle(circleColor, mouseX, mouseY));
     }else if(keyCode == 83 && ctrlDown && mode == 0){ //s = 83
         ctrlDown = false;
         messageText = "SAVING...";
@@ -393,6 +356,36 @@ void keyPressed(){
         ctrlDown = true;
     }else if(keyCode == ALT){
         altDown = true;
+    }else if(keyCode == DELETE){
+        deleteDown = true;
+    }else if(mode == 1){
+        char trigger = Character.toUpperCase(key);
+        println("Using " + trigger);
+        if((key == '1' || key == '2' || key == '3' || key == '4')){
+            int type = Character.getNumericValue(key) - 1;
+            color circleColor;
+            switch(type){
+                case 0:
+                default:
+                    circleColor = #FFD919;
+                    break;
+                case 1:
+                    circleColor = #088DFF;
+                    break;
+                case 2:
+                    circleColor = #08FF19;
+                    break;
+                case 3:
+                    circleColor = #FB0302;
+                    break;
+            }
+            circles.add(new Circle(circleColor, mouseX, mouseY));
+        }
+        for(Tronic tron: tronics){
+            if(tron instanceof Button && ((Button)tron).getTrigger() == trigger && sqrt(pow((tron.getX() + tron.getWidth()/2) - (mouseX/zoom + screenX), 2) + pow((tron.getY() + tron.getHeight()/2) - (mouseY/zoom + screenY), 2)) <= 150){
+                ((Clickable)tron).clicked(mouseX, mouseY, zoom);
+            }
+        }
     }
 }
 
@@ -403,6 +396,8 @@ void keyReleased(){
         ctrlDown = false;
     }else if(keyCode == ALT){
         altDown = false;
+    }else if(keyCode == DELETE){
+        deleteDown = false;
     }
 }
     
@@ -553,8 +548,8 @@ void mousePressed(){
                         wires.remove(wire);
                     }
                 }else if(action == "DATAENTRY"){
-                    if(menu.getSelected().get(0) instanceof Data){
-                        dataEntry.setTronic((Data)menu.getSelected().get(0));
+                    if(menu.getSelected().get(0) instanceof Data || menu.getSelected().get(0) instanceof Button){
+                        dataEntry.setTronic(menu.getSelected().get(0));
                         dataEntry.showWindow();
                     }
                 }else if(action == "RENAME"){
@@ -734,7 +729,7 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
                 this.thisWire = thisWire;
                 this.startingTronic = startingTronic;
                 this.thisDetails = thisDetails;
-                this.waitTime = (thisNode.getParent() instanceof Delay ? ((Delay) thisNode.getParent()).getDelay() : (thisDetails.isLudus() ? 0 : 0.25));
+                this.waitTime = (thisNode.getParent() instanceof Delay ? ((Delay) thisNode.getParent()).getDelay() : (thisDetails.isLudus() ? 0 : 0.05));
                 return this;
             }
             
@@ -748,7 +743,7 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
                 Node nextNode;
                 if(nextTronic instanceof InFlow){
                     nextNode = ((InFlow) nextTronic).getFlow(thisDetails);
-                    if(nextNode != null){
+                    if(nextNode != null && !deleteDown){
                         println("Sending flow: " + nextNode.getParent() + " S: " + startingTronic);
                         startFlow(nextNode, startingTronic, thisDetails);
                     }else{
@@ -770,7 +765,7 @@ void startFlow(Node outNode, Tronic startingTronic, FlowDetails flow){
 void draw(){
     long start_time = System.nanoTime()/1000;
     dt += (1.0/frameRate) % 2.5;
-    background(#E5E5E5);
+    background(darkMode ? #202020 : #E5E5E5);
     
     //Move screenX & screenY
     if(mousePressed && mouseButton == RIGHT){
@@ -803,7 +798,7 @@ void draw(){
     
     //Draw background
     fill(#000000);
-    stroke(#000000);
+    stroke(darkMode ? #C0C0C0 : #000000);
     strokeWeight(1);
     for(int x = (int) ((-screenX % 16) * zoom); x < width; x += (16 * zoom)){
         line(x,0,x,height);

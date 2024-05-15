@@ -51,8 +51,4 @@ class Function extends Tronic implements InFlow{
     public Node getChainNode(){
         return chainOutNode;
     }
-
-    public String toString() {
-        return "FCall [" + name + "]";
-    }
 }

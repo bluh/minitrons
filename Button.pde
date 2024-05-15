@@ -1,6 +1,7 @@
 class Button extends Tronic implements Clickable{
     int type;
     boolean cooldown;
+    char trigger;
     
     Node outNode;
     
@@ -11,6 +12,7 @@ class Button extends Tronic implements Clickable{
     public Button(int type, int x, int y, String name){
         super(x, y, 48, 48, name);
         this.type = type;
+        this.trigger = Integer.toString(type + 1).charAt(0);
         switch(type){
             case 0:
                 setSprite(loadImage("assets/ybutton.png"));
@@ -52,6 +54,29 @@ class Button extends Tronic implements Clickable{
             });
         }
     }
+
+    public void setTrigger(char trig){
+        this.trigger = Character.toUpperCase(trig);
+        println("Set to " + trig);
+    }
+
+    public char getTrigger(){
+        return this.trigger;
+    }
+
+    public void renderTronic(float dt){
+        super.renderTronic(dt);
+        push();
+        
+        fill(0, 150);
+        textAlign(CENTER, CENTER);
+        textSize(this.HEIGHT * 0.25);
+        int x = (getX() - screenX);
+        int y = (getY() - screenY);
+        text(Character.toString(this.trigger), x, y, this.WIDTH, this.HEIGHT);
+        
+        pop();
+    }
     
     public void mouseNearby(int x, int y, float zoom){
         if(type == 4 && mode == 1){
@@ -73,4 +98,3 @@ class Button extends Tronic implements Clickable{
         return new Node[]{outNode};
     }
 }
-        

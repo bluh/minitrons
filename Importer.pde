@@ -168,6 +168,11 @@ class Importer{
                                 case "cReplace":
                                     newTronic = new OperatorTronic(11, x, y, name);
                                     break;
+                                case "LDeLudus":
+                                case "LInLudus":
+                                    warnings.add("REPLACE - A Ludus In/Out tronic named " + name + " was replaced with a Delay Tronic at location (" + x + ", " + y + ")");
+                                    newTronic = new Delay(x, y, name);
+                                    break;
                                 default:
                                     warnings.add("REMOVE - A " + getName(type) + " tronic named " + name + " at location (" + x + ", " + y + ") was not placed. ID: " + id + ".");
                                     break;
@@ -217,7 +222,7 @@ class Importer{
                 }
             }
         }
-        if(warnings.size() > 0){
+        if(warnings.size() > 0 && showLoadWarnings){
             showWarning();
         }
         mode = 0;

@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 class DataEntry extends JFrame{
-    Data tronic;
+    Tronic tronic;
     JTextArea textArea;
     JPopupMenu popup;
     java.awt.Font psn;
@@ -90,14 +90,22 @@ class DataEntry extends JFrame{
         getData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if(tronic != null){
-                    textArea.setText(tronic.getData());
+                    if(tronic instanceof Data){
+                        textArea.setText(((Data)tronic).getData());
+                    }else if(tronic instanceof Button){
+                        textArea.setText(Character.toString(((Button)tronic).getTrigger()));
+                    }
                 }
             }
         });
         setData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 if(tronic != null){
-                    tronic.setData(textArea.getText());
+                    if(tronic instanceof Data){
+                        ((Data)tronic).setData(textArea.getText());
+                    }else if(tronic instanceof Button && textArea.getText().length() == 1){
+                        ((Button)tronic).setTrigger(textArea.getText().charAt(0));
+                    }
                 }
             }
         });
@@ -132,6 +140,19 @@ class DataEntry extends JFrame{
         
         pack();
         setSize(500, 600);
+        
+        addWindowListener(new java.awt.event.WindowListener() {
+           public void windowOpened(java.awt.event.WindowEvent e) {}
+           public void windowIconified(java.awt.event.WindowEvent e) {}
+           public void windowDeiconified(java.awt.event.WindowEvent e) {}
+           public void windowDeactivated(java.awt.event.WindowEvent e) {}
+           public void windowClosing(java.awt.event.WindowEvent e) {
+               setVisible(false);
+               setTronic(null);
+           }
+           public void windowClosed(java.awt.event.WindowEvent e) {}
+           public void windowActivated(java.awt.event.WindowEvent e) {}
+        });
     }
     
     public void showWindow(){
@@ -140,7 +161,7 @@ class DataEntry extends JFrame{
         textArea.requestFocusInWindow();
     }
     
-    public void setTronic(Data tronic){
+    public void setTronic(Tronic tronic){
         this.tronic = tronic;
         if(tronic != null){
             setTitle("Data Entry: " + tronic);
@@ -149,7 +170,7 @@ class DataEntry extends JFrame{
         }
     }
     
-    public Data getTronic(){
+    public Tronic getTronic(){
         return tronic;
     }
 }
